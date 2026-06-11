@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>捨てロボット犬を拾った話 — クイズゲーム</title>
+<title>捨てロボット犬を拾った話 — テキストゲーム</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Fira+Code:wght@400;700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
@@ -15,561 +15,712 @@ body{
 }
 /* ─── header ─── */
 .header{
-  background:#11111b;padding:14px 24px;
+  background:#11111b;padding:10px 24px;
   display:flex;justify-content:space-between;align-items:center;
-  border-bottom:2px solid #45475a;
+  border-bottom:2px solid #45475a;flex-shrink:0;
 }
-.header h1{font-size:16px;color:#89b4fa}
-.header .score{font-size:14px;color:#a6e3a1}
-/* ─── main ─── */
-.container{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;gap:24px}
-/* ─── stage map ─── */
-.stage-map{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:600px}
+.header h1{font-size:15px;color:#89b4fa}
+.header .stats{font-size:13px;color:#6c7086;display:flex;gap:16px}
+.header .stats span{color:#a6e3a1}
+/* ─── main area ─── */
+.main{flex:1;display:flex;flex-direction:column;position:relative;overflow:hidden}
+/* ─── stage map (default view) ─── */
+.stage-map{
+  display:flex;flex-wrap:wrap;gap:10px;justify-content:center;
+  align-items:center;padding:40px 20px;
+  position:absolute;inset:0;z-index:10;
+  background:#1e1e2e;
+  transition:opacity .4s;
+}
+.stage-map.hidden{opacity:0;pointer-events:none}
+.stage-map h2{width:100%;text-align:center;font-size:18px;color:#89b4fa;margin-bottom:12px}
+.stage-grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:460px}
 .stage-btn{
-  width:52px;height:52px;border-radius:12px;
+  width:56px;height:56px;border-radius:14px;
   border:2px solid #45475a;background:#181825;
-  color:#6c7086;font-size:13px;font-weight:700;
+  color:#6c7086;font-size:14px;font-weight:700;
   cursor:pointer;transition:all .2s;
   display:flex;align-items:center;justify-content:center;
 }
-.stage-btn.locked{opacity:.4;cursor:not-allowed}
+.stage-btn.locked{opacity:.35;cursor:not-allowed}
 .stage-btn.cleared{background:#a6e3a1;color:#1e1e2e;border-color:#a6e3a1}
-.stage-btn.current{background:#89b4fa;color:#1e1e2e;border-color:#89b4fa;transform:scale(1.1)}
+.stage-btn.current{background:#89b4fa;color:#1e1e2e;border-color:#89b4fa;transform:scale(1.08)}
 .stage-btn:hover:not(.locked){transform:scale(1.05)}
-/* ─── quiz card ─── */
-.quiz-card{
-  background:#181825;border-radius:16px;padding:32px;
-  max-width:640px;width:100%;border:1px solid #313244;
-  display:none;
+/* ─── story-teller view ─── */
+.story-view{
+  position:absolute;inset:0;z-index:20;
+  display:none;flex-direction:column;
+  background:linear-gradient(180deg,#1e1e2e 0%,#11111b 100%);
 }
-.quiz-card.active{display:block;animation:fadeIn .3s}
-@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.quiz-card .chapter-label{
-  font-size:12px;color:#6c7086;margin-bottom:4px;
+.story-view.active{display:flex}
+.story-bg{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  padding:24px;position:relative;
 }
-.quiz-card .question{
+.story-chapter-label{
+  position:absolute;top:16px;left:24px;
+  font-size:12px;color:#6c7086;letter-spacing:2px;
+}
+/* visual-novel style text box */
+.story-textbox{
+  background:rgba(17,17,27,.92);border-top:2px solid #45475a;
+  padding:20px 28px;min-height:140px;max-height:200px;
+  cursor:pointer;position:relative;
+  backdrop-filter:blur(8px);
+  display:flex;flex-direction:column;justify-content:center;
+}
+.story-textbox .line{
+  font-size:17px;line-height:1.9;
+  min-height:2em;color:#cdd6f4;
+}
+.story-textbox .line .cursor{
+  display:inline-block;width:2px;height:1.1em;
+  background:#89b4fa;margin-left:2px;
+  vertical-align:text-bottom;animation:blink .8s infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.story-textbox .advance-hint{
+  font-size:12px;color:#6c7086;text-align:right;
+  margin-top:4px;opacity:0;transition:opacity .3s;
+}
+.story-textbox .advance-hint.show{opacity:1}
+/* ─── quiz view ─── */
+.quiz-view{
+  position:absolute;inset:0;z-index:30;
+  display:none;flex-direction:column;
+  background:#1e1e2e;padding:32px 24px;
+  overflow-y:auto;
+}
+.quiz-view.active{display:flex}
+.quiz-view .chapter-label{font-size:12px;color:#6c7086;margin-bottom:4px}
+.quiz-view .question{
   font-size:17px;font-weight:700;line-height:1.7;margin-bottom:20px;
-  min-height:3em;
 }
-.quiz-card .options{display:flex;flex-direction:column;gap:10px}
-.quiz-card .opt{
+.quiz-view .options{display:flex;flex-direction:column;gap:10px;max-width:640px}
+.quiz-view .opt{
   padding:14px 18px;border-radius:10px;
-  background:#1e1e2e;border:2px solid #313244;
+  background:#181825;border:2px solid #313244;
   color:#cdd6f4;font-size:15px;cursor:pointer;
   transition:all .2s;text-align:left;font-family:inherit;
 }
-.quiz-card .opt:hover:not(.disabled){border-color:#89b4fa;background:#313244}
-.quiz-card .opt.correct{border-color:#a6e3a1;background:#1e3a2f;color:#a6e3a1}
-.quiz-card .opt.wrong{border-color:#f38ba8;background:#3a1e2f;color:#f38ba8}
-.quiz-card .opt.disabled{cursor:default;opacity:.7}
-.quiz-card .result{
+.quiz-view .opt:hover:not(.disabled){border-color:#89b4fa;background:#313244}
+.quiz-view .opt.correct{border-color:#a6e3a1;background:#1e3a2f;color:#a6e3a1}
+.quiz-view .opt.wrong{border-color:#f38ba8;background:#3a1e2f;color:#f38ba8}
+.quiz-view .opt.disabled{cursor:default;opacity:.7}
+.quiz-view .result{
   margin-top:16px;padding:12px 16px;border-radius:10px;
-  font-size:14px;display:none;
+  font-size:14px;display:none;max-width:640px;
 }
-.quiz-card .result.show{display:block}
-.quiz-card .result.correct{background:#1e3a2f;color:#a6e3a1;border:1px solid #a6e3a1}
-.quiz-card .result.wrong{background:#3a1e2f;color:#f38ba8;border:1px solid #f38ba8}
-.quiz-card .next-btn{
+.quiz-view .result.show{display:block}
+.quiz-view .result.correct{background:#1e3a2f;color:#a6e3a1;border:1px solid #a6e3a1}
+.quiz-view .result.wrong{background:#3a1e2f;color:#f38ba8;border:1px solid #f38ba8}
+.quiz-view .next-btn{
   margin-top:16px;padding:12px 24px;border:none;
   border-radius:10px;background:#89b4fa;color:#1e1e2e;
-  font-size:15px;font-weight:700;cursor:pointer;
-  display:none;transition:background .2s;
+  font-size:15px;font-weight:700;cursor:pointer;display:none;
+  max-width:200px;transition:background .2s;
 }
-.quiz-card .next-btn:hover{background:#b4d0fb}
+.quiz-view .next-btn:hover{background:#b4d0fb}
 /* ─── completion ─── */
-.completion{display:none;text-align:center}
-.completion.active{display:block;animation:fadeIn .5s}
-.completion h2{font-size:28px;margin-bottom:12px;color:#a6e3a1}
-.completion p{font-size:16px;color:#bac2de;margin-bottom:8px}
-.completion .final-score{font-size:48px;font-weight:900;color:#f9e2af;margin:16px 0}
-.completion .play-again{
-  margin-top:20px;padding:14px 32px;border:none;
+.completion-view{
+  position:absolute;inset:0;z-index:40;
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  background:#1e1e2e;padding:24px;text-align:center;
+}
+.completion-view.active{display:flex}
+.completion-view h2{font-size:26px;margin-bottom:12px;color:#a6e3a1}
+.completion-view p{font-size:15px;color:#bac2de;margin-bottom:4px}
+.completion-view .final-score{font-size:48px;font-weight:900;color:#f9e2af;margin:16px 0}
+.completion-view .play-again{
+  margin-top:24px;padding:14px 36px;border:none;
   border-radius:12px;background:#a6e3a1;color:#1e1e2e;
   font-size:16px;font-weight:700;cursor:pointer;
 }
-/* ─── chapter intro overlay ─── */
-.intro-overlay{
-  position:fixed;inset:0;background:rgba(17,17,27,.95);
-  display:none;align-items:center;justify-content:center;z-index:100;
-  flex-direction:column;gap:16px;text-align:center;padding:24px;
-}
-.intro-overlay.active{display:flex;animation:fadeIn .3s}
-.intro-overlay h2{font-size:24px;color:#89b4fa}
-.intro-overlay .story-quote{
-  max-width:500px;font-size:15px;line-height:1.8;
-  color:#bac2de;padding:16px;background:#181825;border-radius:12px;
-  border-left:4px solid #f9e2af;
-}
-.intro-overlay .start-btn{
-  padding:14px 40px;border:none;border-radius:12px;
-  background:#89b4fa;color:#1e1e2e;
-  font-size:16px;font-weight:700;cursor:pointer;
+/* ─── responsiveness ─── */
+@media(max-width:600px){
+  .story-textbox{padding:16px 20px;min-height:120px}
+  .story-textbox .line{font-size:15px}
+  .quiz-view{padding:20px 16px}
 }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h1>捨てロボット犬を拾った話 — クイズ</h1>
-  <span class="score" id="totalScore">スコア: 0 / 0</span>
+  <h1>捨てロボット犬を拾った話</h1>
+  <div class="stats">
+    <span id="clearCount">0</span>/11 クリア
+    <span id="scoreDisplay">0</span> pts
+  </div>
 </div>
 
-<div class="container">
-  <!-- stage selector -->
-  <div class="stage-map" id="stageMap"></div>
+<div class="main" id="main">
 
-  <!-- quiz card -->
-  <div class="quiz-card" id="quizCard">
-    <div class="chapter-label" id="chapterLabel">第1話</div>
+  <!-- 1. stage map -->
+  <div class="stage-map" id="stageMap">
+    <h2>— 章を選んで物語を読む —</h2>
+    <div class="stage-grid" id="stageGrid"></div>
+  </div>
+
+  <!-- 2. story-teller -->
+  <div class="story-view" id="storyView">
+    <div class="story-bg">
+      <div class="story-chapter-label" id="storyChapterLabel"></div>
+    </div>
+    <div class="story-textbox" id="storyTextbox">
+      <div class="line" id="storyLine"><span class="cursor"></span></div>
+      <div class="advance-hint" id="advanceHint">▼ クリックで次へ</div>
+    </div>
+  </div>
+
+  <!-- 3. quiz -->
+  <div class="quiz-view" id="quizView">
+    <div class="chapter-label" id="quizChapterLabel"></div>
     <div class="question" id="questionText"></div>
     <div class="options" id="optionsContainer"></div>
     <div class="result" id="resultBox"></div>
     <button class="next-btn" id="nextBtn">次の問題 →</button>
   </div>
 
-  <!-- completion -->
-  <div class="completion" id="completion">
-    <h2>🎉 全章クリア！</h2>
-    <p>あなたはロボット犬マスターだ！</p>
-    <div class="final-score" id="finalScore">0</div>
+  <!-- 4. completion -->
+  <div class="completion-view" id="completionView">
+    <h2>🎉 全章クリア</h2>
+    <p>粗大ゴミの山から始まった旅が、ここに完結した。</p>
+    <div class="final-score" id="finalScore">0 / 33</div>
     <p>正解数 / 全問題数</p>
-    <button class="play-again" onclick="resetGame()">もう一度プレイ</button>
+    <button class="play-again" onclick="Game.reset()">もう一度プレイ</button>
   </div>
 </div>
 
-<!-- chapter intro overlay -->
-<div class="intro-overlay" id="introOverlay">
-  <h2 id="introTitle"></h2>
-  <div class="story-quote" id="introQuote"></div>
-  <button class="start-btn" id="introStart">挑戦する</button>
-</div>
-
 <script>
-// ══════════════════════════════════════════════════
-//  QUIZ DATA
-// ══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
+//  STORYTELLER
+// ═══════════════════════════════════════════════════════
+class StoryTeller {
+  constructor(el, lineEl, hintEl, labelEl) {
+    this.el = el;
+    this.lineEl = lineEl;
+    this.hintEl = hintEl;
+    this.labelEl = labelEl;
+    this.lines = [];
+    this.index = 0;
+    this.callback = null;
+    this._skip = false;
+    this._busy = false;
 
-const CHAPTERS = [
-  {
+    el.addEventListener('click', () => this.next());
+  }
+
+  setLines(lines) {
+    this.lines = lines;
+    return this;
+  }
+
+  start(callback) {
+    this.callback = callback || null;
+    this.index = 0;
+    this.el.classList.add('active');
+    this.hintEl.classList.remove('show');
+    this._showLine();
+  }
+
+  stop() {
+    this.el.classList.remove('active');
+    this.lineEl.textContent = '';
+    this.hintEl.classList.remove('show');
+  }
+
+  _showLine() {
+    if (this.index >= this.lines.length) {
+      this.stop();
+      if (this.callback) this.callback();
+      return;
+    }
+    const text = this.lines[this.index];
+    this._skip = false;
+    this._busy = true;
+    this.hintEl.classList.remove('show');
+    this._typewrite(text, () => {
+      this._busy = false;
+      this.hintEl.classList.add('show');
+    });
+  }
+
+  _typewrite(text, done) {
+    this.lineEl.textContent = '';
+    let i = 0;
+    const chars = [...text];
+    const speed = 24;
+
+    const tick = () => {
+      if (this._skip) {
+        this.lineEl.textContent = text;
+        done();
+        return;
+      }
+      if (i < chars.length) {
+        this.lineEl.textContent += chars[i];
+        i++;
+        // vary speed slightly for natural feel
+        const delay = chars[i-1].match(/[。！？」「\n]/) ? speed * 6 : speed;
+        setTimeout(tick, delay);
+      } else {
+        done();
+      }
+    };
+    tick();
+  }
+
+  next() {
+    if (this._busy) {
+      this._skip = true;
+      return;
+    }
+    this.index++;
+    this._showLine();
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  STORY DATA  (key narrative lines from each chapter)
+// ═══════════════════════════════════════════════════════
+const STORY = [
+  { // 0
     title:'第1話　拾った',
-    quote:'「…捨てるなら、もらっていこう」タクミはロボット犬を抱え上げた。思ったより軽い。',
-    questions:[
-      {
-        q:'タクミはどこでロボット犬を見つけた？',
-        opts:['公園のベンチ','粗大ゴミの集積所','学校の裏庭','川原'],
-        ans:1
-      },
-      {
-        q:'ロボット犬の機種名は？',
-        opts:['AIBO-01','RS-01','PET-101','RT-5000'],
-        ans:1
-      },
-      {
-        q:'起動時に表示されたエラーメッセージは？',
-        opts:['CPU not found','Battery depleted','Main class not found','OS corrupted'],
-        ans:2
-      }
+    lines:[
+      '夏休みの最終日。タクミは粗大ゴミの集積所で、一匹のロボット犬を見つけた。',
+      'ボロボロだった。片耳は取れかけ、塗装は剥げ、動かない。',
+      'でも——目があった気がした。',
+      '「…捨てるなら、もらっていこう」',
+      'タクミはロボット犬を抱え上げた。思ったより軽かった。',
+      '部屋に運び込んで、首の後ろの刻印を読んだ。',
+      '「ION-CORP  RS-01    Java Platform Ready」',
+      '「Java…？」',
+      'シリアル接続して、電源を入れた。',
+      '耳がピクリと動いた。',
+      '表示されたのはエラーメッセージ——「Main class not found」。',
+      '「プログラムが……ない？」'
     ]
   },
-  {
+  { // 1
     title:'第2話　電源を入れた',
-    quote:'タクミはテキストエディタを開いて、打ち込んだ。public class Main { … }',
-    questions:[
-      {
-        q:'Java プログラムの「入口」はどれ？',
-        opts:['public class Main','public static void main(String[] args)','System.out.println','public class RobotDog'],
-        ans:1
-      },
-      {
-        q:'System.out.println の役割は？',
-        opts:['数値を計算する','画面に文字を表示する','ファイルを保存する','ロボットを動かす'],
-        ans:1
-      },
-      {
-        q:'タクミが最初にプログラムを転送した後、ロボット犬はどうなった？',
-        opts:['動かなかった','立ち上がって「起動します」と表示した','音楽を流した','走り出した'],
-        ans:1
-      }
+    lines:[
+      '「Main.class がない……」',
+      'Java のプログラムは .java ファイルを書いて、コンパイルすると .class になる。',
+      'つまり、Main.java を書けばいい。',
+      'タクミはテキストエディタを開いて、打ち込んだ。',
+      'public class Main {\n  public static void main(String[] args) {\n    System.out.println("起動します");\n  }\n}',
+      'コンパイルして、転送して、再起動。',
+      '「--- 起動します ---」',
+      'ロボット犬が立ち上がった。',
+      'そして——こっちを見ている。',
+      'タクミはさらにプログラムを書いた。メソッドというものを使うらしい。',
+      '「動き」をロボット犬に教えてやればいいんだ。'
     ]
   },
-  {
+  { // 2
     title:'第3話　名前をつけた',
-    quote:'「これで……シロが『プログラムの中』に生きてるみたいになった」',
-    questions:[
-      {
-        q:'クラスとは何の例えとして説明された？',
-        opts:['料理のレシピ','設計図','地図','道具箱'],
-        ans:1
-      },
-      {
-        q:'new RobotDog() で何が作られる？',
-        opts:['クラス','メソッド','オブジェクト（インスタンス）','パッケージ'],
-        ans:2
-      },
-      {
-        q:'String name = "シロ"; の name は何と呼ばれる？',
-        opts:['メソッド','クラス','変数','定数'],
-        ans:2
-      }
+    lines:[
+      'タクミは3回目の名前変更でそう思った。',
+      '「毎回 Main.java を書き換えるの、めんどくさい…」',
+      '検索して出てきたのは「変数」という言葉。',
+      'String name = "シロ";',
+      '「これなら、この一行だけ書き換えれば名前が変わる」',
+      'でも、もっと根本的に考え始めた。',
+      '「ロボット犬を——『モノ』としてプログラムで表現できないかな？」',
+      'たどり着いたのは「クラスとオブジェクト」。',
+      'クラスは設計図。オブジェクトは実物。',
+      'new RobotDog() で、シロがプログラムの中に「生きる」。',
+      '「これで……シロが『プログラムの中』にいるみたいになった」'
     ]
   },
-  {
+  { // 3
     title:'第4話　蓋を開けた',
-    quote:'「これ、プログラムも同じじゃないか？ battery って外から適当に触られたら困る…」',
-    questions:[
-      {
-        q:'カプセル化を一言で言うと？',
-        opts:['コードを短く書くこと','データを隠して必要な操作だけ公開すること','プログラムを速くすること','メモリを節約すること'],
-        ans:1
-      },
-      {
-        q:'「外から触れなくする」アクセス修飾子は？',
-        opts:['public','protected','private','static'],
-        ans:2
-      },
-      {
-        q:'ハードウェアでの「カプセル化」に相当するものは？',
-        opts:['USBケーブル','保護カバー','モーター','バッテリー'],
-        ans:1
-      }
+    lines:[
+      '「シロ、お手」',
+      'シロはゆっくりと前脚を上げた。が、途中でガクンと下げた。',
+      '「こりゃあ、ハードウェアから直さないと」',
+      'タクミはドライバーセットを取り出して、シロの背中のネジを外した。',
+      'カバーを開けると、中にはぎっしりと基板と配線が詰まっていた。',
+      'サービスマニュアルには「警告」と書かれていた。',
+      '基板A-3は保護カバーで覆われている。外すな。',
+      '「これ、プログラムも同じじゃないか？」',
+      'battery を private にして、charge() というメソッドを通さないと触れなくする。',
+      '「中身を隠して、必要な操作だけ公開する——それがカプセル化か…」',
+      'カバーを閉めて、電源を入れた。',
+      'シロが立ち上がった。',
+      'そして——「ワン！」',
+      '初めての音声だった。'
     ]
   },
-  {
+  { // 4
     title:'第5話　部品を交換した',
-    quote:'「ベースの機能はそのままに、新しい機能が追加できた！」',
-    questions:[
-      {
-        q:'継承で使うキーワードは？',
-        opts:['implements','extends','inherits','super'],
-        ans:1
-      },
-      {
-        q:'親クラスのメソッドを子クラスで上書きすることを何と呼ぶ？',
-        opts:['オーバーロード','オーバーライド','オーバーフロー','オーバーキル'],
-        ans:1
-      },
-      {
-        q:'親クラスのコンストラクタを呼ぶキーワードは？',
-        opts:['this','parent','super','base'],
-        ans:2
-      }
+    lines:[
+      '「ワン！」',
+      'シロが吠えた。でも、それだけだ。いつも「ワン」。',
+      '「もう少しバリエーションが欲しいな…」',
+      'サービスマニュアルの奥のページに、拡張モジュールの記載があった。',
+      '中古の拡張基板を手に入れて、シロのスロットに差し込んだ。',
+      'カチッ。',
+      '「ベースの機能はそのままに、新しい機能を追加したい」',
+      'それが——継承。',
+      'class SuperRobotDog extends RobotDog { … }',
+      'super() で親を呼び、@Override で上書きする。',
+      '「ガウォーン！！」',
+      '「……ぅ」（小さい声）',
+      '「完璧だ……！」'
     ]
   },
-  {
+  { // 5
     title:'第6話　新しい友達',
-    quote:'「全部『ロボット犬』として同じ操作で動かせないかな…」',
-    questions:[
-      {
-        q:'インターフェースとは何を定義するもの？',
-        opts:['変数の初期値','メソッドの「約束事」','クラスの継承関係','エラーハンドリング'],
-        ans:1
-      },
-      {
-        q:'インターフェースを実装するキーワードは？',
-        opts:['extends','inherits','implements','realizes'],
-        ans:2
-      },
-      {
-        q:'2台目のロボット犬「ベニ」のメーカーは？',
-        opts:['ION-CORP','WAN-WAN Robotics','TATSUMI HEAVY','PET-101 Inc.'],
-        ans:1
-      }
+    lines:[
+      '「タクミ——！」',
+      '友達のアユムが、ロボット犬を抱えて飛び込んできた。',
+      '「うちの物置にあったんだけど、動かなくて！」',
+      '赤いボディ。丸い目。シロとは似ても似つかないデザイン。',
+      'PET-101。メーカーは WAN-WAN Robotics。',
+      '「シロと同じ『犬』として扱いたいのに、設計がぜんぜん違う…」',
+      'そこで——インターフェース。',
+      'interface RobotPet { void bark(); void walk(); void greet(); }',
+      '両方に implements RobotPet をつければ、同じ型として扱える。',
+      'ION_RS01 も WAN_PET101 も、どちらも RobotPet。',
+      '「動いた…！ 2匹とも！」',
+      'シロと赤いロボット犬は、机の上で向かい合った。'
     ]
   },
-  {
+  { // 6
     title:'第7話　友達を増やした',
-    quote:'「すげえ……3匹とも違う動きしてる……！ 呼び出しているプログラムは同じなのに」',
-    questions:[
-      {
-        q:'多態性（ポリモーフィズム）とは？',
-        opts:['同じメソッド名でもオブジェクトによって動きが違うこと','クラスを複数継承すること','メソッドを複数定義すること','変数を多用途に使うこと'],
-        ans:0
-      },
-      {
-        q:'3匹目のロボット犬「ゴウ」の機種は？',
-        opts:['RS-01','PET-101','RT-5000','AIBO'],
-        ans:2
-      },
-      {
-        q:'多態性の3条件に含まれないものは？',
-        opts:['継承またはインターフェース実装','メソッドのオーバーライド','親クラス型で参照する','変数をpublicにする'],
-        ans:3
-      }
+    lines:[
+      'ベニが来てから、タクミの部屋は賑やかになった。',
+      'シロ（ION-CORP RS-01）、ベニ（WAN-WAN PET-101）。',
+      'そして3匹目。タクミ自身がネットオークションで見つけた。',
+      '「ジャンク品・動作未確認・現状渡し」——送料込み500円。',
+      '届いた箱を開けると、中から現れたのは——',
+      '「……でっかい」',
+      'シロの1.5倍。脚は4本とも独立駆動。カメラアイが2つ。',
+      'TATSUMI RT-5000。タツミ重工製。',
+      '3匹をまとめて動かしてみた。',
+      'for (RobotPet p : pets) { p.bark(); p.walk(); }',
+      'シロは「ワン」、ベニは「キャンキャン」、ゴウは「ヴォン」。',
+      '「すげえ……3匹とも違う動きしてる……！」',
+      '呼び出しているプログラムは同じなのに。'
     ]
   },
-  {
+  { // 7
     title:'第8話　頭脳を作り替えた',
-    quote:'「頭脳を変えただけで——行動が変わった……」',
-    questions:[
-      {
-        q:'戦略パターンで「差し替え可能」にしたものは？',
-        opts:['ハードウェア','データベース','アルゴリズム（頭脳）','ユーザーインターフェース'],
-        ans:2
-      },
-      {
-        q:'外部から依存オブジェクトを受け取る設計を何と呼ぶ？',
-        opts:['外部委託','依存性注入（DI）','外部参照','インターフェース継承'],
-        ans:1
-      },
-      {
-        q:'「継承よりコンポジション」の意味は？',
-        opts:['継承は使わないほうがいい','部品を組み合わせるほうが柔軟','コンポジションは遅い','継承よりコンポジションが簡単'],
-        ans:1
-      }
+    lines:[
+      '「みんな『お手』できる。でもさ——」',
+      'タクミは考えた。',
+      '「自分で『何をするか』を決められたら、もっとロボットらしくない？」',
+      '「もっと——『生きてる』みたいに」',
+      '新しい設計図を描き始めた。',
+      'interface Brain { String decide(String situation); }',
+      '頭脳は差し替え可能にする。',
+      'CuriousBrain は「探索する！」、CautiousBrain は「周囲を確認する」。',
+      '身体（RobotDogBody）は頭脳（Brain）を外から受け取る。',
+      '「シロ は 見知らぬ部屋にいる で 探索する！」',
+      '「--- 頭脳交換 ---」',
+      '「シロ は 見知らぬ部屋にいる で 周囲を確認する」',
+      '「頭脳を変えただけで——行動が変わった……」'
     ]
   },
-  {
+  { // 8
     title:'第9話　考えられるようになった',
-    quote:'「未来を予測できればいいのに」',
-    questions:[
-      {
-        q:'世界モデル（World Model）の役割は？',
-        opts:['ロボットの外装デザイン','行動すると状態がどう変わるかを予測する','インターネットに接続する','バッテリーを充電する'],
-        ans:1
-      },
-      {
-        q:'predict と evaluate のうち、evaluate の役割は？',
-        opts:['未来の状態を予測する','予測した状態を点数評価する','行動を実行する','入力を読み取る'],
-        ans:1
-      },
-      {
-        q:'世界モデルが「多態性の現実世界版」と言われる理由は？',
-        opts:['多態性より速いから','同じコマンドでも状況によって最適な行動が変わるから','世界モデルはJavaでしか書けないから','多態性は古い考え方だから'],
-        ans:1
-      }
+    lines:[
+      '頭脳を交換できるようになったシロ。でも、どこか物足りない。',
+      '「シロは『今』のことしか考えてないんだよな…」',
+      'シロがバッテリー残量25%で「探索！」を選ぶ。',
+      '探索中にバッテリーが切れて、動けなくなる。',
+      '「未来を予測できればいいのに」',
+      '世界モデル（World Model）を作り始めた。',
+      'predict() で未来の状態を予測する。',
+      'evaluate() でその状態を評価する。',
+      '一番評価の高い行動を選べば——最適な行動になる。',
+      'シロのバッテリーは25%。',
+      '「予測: WalkAction -> battery=15  評価=-20」',
+      '「予測: ChargeAction -> battery=100  評価=200」',
+      '「選択: ChargeAction」',
+      '「予測してる！ 未来を！」'
     ]
   },
-  {
+  { // 9
     title:'第10話　仲間と会話する',
-    quote:'「シロはベニのことを知らなくていい。ただ『bark』っていうトピックを見てるだけでいい」',
-    questions:[
-      {
-        q:'ROS における「トピック」とは？',
-        opts:['ロボットの部品名','プログラムの設定ファイル','メッセージの通り道','ロボットの名前'],
-        ans:2
-      },
-      {
-        q:'publish と subscribe の説明で正しいのは？',
-        opts:['publishが受信、subscribeが送信','publishが送信、subscribeが受信','どちらも送信','どちらも受信'],
-        ans:1
-      },
-      {
-        q:'「疎結合」とはどういう状態？',
-        opts:['密接に連携している','お互いの存在を知らなくても通信できる','結合が弱くて動かない','一つのプログラムしか動かない'],
-        ans:1
-      }
+    lines:[
+      '「シロが『ボール見つけた』って思っても、ベニとゴウには伝わらない」',
+      'タクミは3匹のロボット犬を見ながらつぶやいた。',
+      '人間で言えば——同じ部屋にいるのに、口をきかないで家具の方向だけ見てるようなものだ。',
+      '調べていくうちに「ROS」という言葉に行き着いた。',
+      'ノード、トピック、publish、subscribe。',
+      '「要するに——掲示板みたいなものか」',
+      'Topic インターフェースと Subscriber インターフェースを作った。',
+      'publish() でメッセージを流し、subscribe() で購読者が受け取る。',
+      'シロが吠えると、ベニとゴウに「聞こえた」と表示された。',
+      '「シロはベニのことを知らなくていい。ただトピックを見てるだけで情報が届く」',
+      'これが——疎結合。'
     ]
   },
-  {
+  { // 10
     title:'第11話　チームで動く',
-    quote:'「3匹が——ひとつのチームになってる」',
-    questions:[
-      {
-        q:'マルチエージェントシステムの特徴は？',
-        opts:['一つのプログラムで全てを制御する','複数の独立したエージェントが協調する','人間が操作する','ロボットが1体だけ'],
-        ans:1
-      },
-      {
-        q:'シロ（探索担当）が見つけたものを知らせるメッセージの種類は？',
-        opts:['danger','help','found_ball','going_to_pickup'],
-        ans:2
-      },
-      {
-        q:'各エージェントが持つべき設計原則は？',
-        opts:['全ての機能を持つ','他のエージェントを直接操作する','自分の役割に集中する','中央管理される'],
-        ans:2
-      }
+    lines:[
+      '「会話はできるようになった。でも——」',
+      'タクミは3匹のロボット犬を見渡した。',
+      '「まだ『協力』はしてないんだよな」',
+      '「ただ『聞こえた』って表示してるだけだ」',
+      'タクミが欲しかったのは——',
+      'シロが見つけた。ベニが回収に行く。ゴウが安全を確保する。',
+      'そんな連携だ。',
+      '3匹に役割を与えた。Explorer、Carrier、Guard。',
+      'メッセージの型を決めて、イベント駆動で動かす。',
+      '「=== ステップ 1 ==="',
+      'シロ：探索中…',
+      'ベニ：ボールを回収に向かう！',
+      'ゴウ：周囲を警戒中…',
+      '「3匹が——ひとつのチームになってる」',
+      'タクミは椅子の背にもたれた。',
+      '机の上にはシロ。その隣でベニが充電中。床にはゴウが鎮座している。',
+      '最初は動かなかったロボットたち。',
+      '拾ってきて、直して、プログラムを書いて——',
+      '「プログラムって——すごいな」'
     ]
   }
 ];
 
-// ══════════════════════════════════════════════════
-//  GAME STATE
-// ══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
+//  QUIZ DATA
+// ═══════════════════════════════════════════════════════
+const QUIZ = [
+  [
+    { q:'タクミはどこでロボット犬を見つけた？', opts:['公園のベンチ','粗大ゴミの集積所','学校の裏庭','川原'], ans:1 },
+    { q:'ロボット犬の機種名は？', opts:['AIBO-01','RS-01','PET-101','RT-5000'], ans:1 },
+    { q:'起動エラーのメッセージは？', opts:['CPU not found','Battery depleted','Main class not found','OS corrupted'], ans:2 }
+  ],[
+    { q:'Java プログラムの「入口」は？', opts:['public class Main','public static void main(String[] args)','System.out.println','new RobotDog()'], ans:1 },
+    { q:'System.out.println の役割は？', opts:['数値を計算','画面に文字表示','ファイル保存','ロボット駆動'], ans:1 },
+    { q:'「メソッド」とは何の例え？', opts:['変数','動き（動作）','クラス','パッケージ'], ans:1 }
+  ],[
+    { q:'クラスとは何の例え？', opts:['料理のレシピ','設計図','地図','道具箱'], ans:1 },
+    { q:'new RobotDog() で作られるのは？', opts:['クラス','メソッド','オブジェクト（インスタンス）','パッケージ'], ans:2 },
+    { q:'String name = "シロ"; の name は？', opts:['メソッド','クラス','変数','定数'], ans:2 }
+  ],[
+    { q:'カプセル化とは？', opts:['コード短縮','データ隠蔽＋必要な操作だけ公開','高速化','メモリ節約'], ans:1 },
+    { q:'「外から触れなくする」アクセス修飾子は？', opts:['public','protected','private','static'], ans:2 },
+    { q:'ハードのカプセル化に相当するものは？', opts:['USBケーブル','保護カバー','モーター','バッテリー'], ans:1 }
+  ],[
+    { q:'継承で使うキーワードは？', opts:['implements','extends','inherits','super'], ans:1 },
+    { q:'親メソッドを上書きすることを何と呼ぶ？', opts:['オーバーロード','オーバーライド','オーバーフロー','オーバーキル'], ans:1 },
+    { q:'親コンストラクタを呼ぶキーワードは？', opts:['this','parent','super','base'], ans:2 }
+  ],[
+    { q:'インターフェースとは？', opts:['変数の初期値','メソッドの「約束事」','クラスの継承関係','エラーハンドリング'], ans:1 },
+    { q:'インターフェースを実装するキーワードは？', opts:['extends','inherits','implements','realizes'], ans:2 },
+    { q:'ベニのメーカーは？', opts:['ION-CORP','WAN-WAN Robotics','TATSUMI HEAVY','PET-101 Inc.'], ans:1 }
+  ],[
+    { q:'多態性（ポリモーフィズム）とは？', opts:['同じメソッドでもオブジェクトによって動きが違う','クラスを複数継承','メソッドを複数定義','変数を多用途に使う'], ans:0 },
+    { q:'ゴウの機種は？', opts:['RS-01','PET-101','RT-5000','AIBO'], ans:2 },
+    { q:'多態性の3条件に含まれないものは？', opts:['継承orインターフェース実装','メソッドのオーバーライド','親クラス型で参照','変数をpublicに'], ans:3 }
+  ],[
+    { q:'戦略パターンで差し替え可能にするのは？', opts:['ハードウェア','データベース','アルゴリズム（頭脳）','UI'], ans:2 },
+    { q:'外部から依存を受け取る設計を何と呼ぶ？', opts:['外部委託','依存性注入（DI）','外部参照','インターフェース継承'], ans:1 },
+    { q:'「継承よりコンポジション」の意味は？', opts:['継承は使わない','部品を組み合わせるほうが柔軟','コンポジションは遅い','継承が簡単'], ans:1 }
+  ],[
+    { q:'世界モデルの役割は？', opts:['外装デザイン','行動→状態変化を予測','インターネット接続','バッテリー充電'], ans:1 },
+    { q:'evaluate の役割は？', opts:['未来状態を予測','予測状態を点数評価','行動を実行','入力を読み取る'], ans:1 },
+    { q:'世界モデルが「多態性の現実版」な理由は？', opts:['多態性より速い','同じコマンドでも状況で最適行動が変わる','Java限定','多態性は古い'], ans:1 }
+  ],[
+    { q:'ROS における「トピック」とは？', opts:['ロボットの部品名','設定ファイル','メッセージの通り道','ロボットの名前'], ans:2 },
+    { q:'publish/subscribe の説明で正しいのは？', opts:['publish受信subscribe送信','publish送信subscribe受信','両方送信','両方受信'], ans:1 },
+    { q:'「疎結合」とは？', opts:['密結合','お互いの存在を知らなくても通信できる','結合が弱い','1プログラムしか動かない'], ans:1 }
+  ],[
+    { q:'マルチエージェントの特徴は？', opts:['1プログラムで全制御','複数エージェントが協調','人間操作','ロボット1体'], ans:1 },
+    { q:'シロが見つけたものを知らせるメッセージ種類は？', opts:['danger','help','found_ball','going_to_pickup'], ans:2 },
+    { q:'エージェントの設計原則は？', opts:['全機能を持つ','他を直接操作','自分の役割に集中','中央管理'], ans:2 }
+  ]
+];
 
-let state = {
-  unlocked:0,       // highest unlocked chapter index
-  cleared:new Set(), // set of cleared chapter indices
-  currentChapter:0,
+// ═══════════════════════════════════════════════════════
+//  GAME
+// ═══════════════════════════════════════════════════════
+const Game = {
+  unlocked:0,
+  cleared:[],
+  answers:{},
+  currentChapter:-1,
   currentQ:0,
-  answers:new Map(), // "ch-q" -> correct/wrong
-  score:0,
-  total:0
-};
 
-function getAnsweredCount(){return state.answers.size}
-function getCorrectCount(){let c=0;for(let v of state.answers.values())if(v)c++;return c}
+  init(){
+    this.unlocked=parseInt(localStorage.getItem('gk_unlocked')||'0');
+    this.cleared=JSON.parse(localStorage.getItem('gk_cleared')||'[]');
+    this.answers=JSON.parse(localStorage.getItem('gk_answers')||'{}');
+    // dom refs
+    this.stageMap=document.getElementById('stageMap');
+    this.stageGrid=document.getElementById('stageGrid');
+    this.storyView=document.getElementById('storyView');
+    this.storyChapterLabel=document.getElementById('storyChapterLabel');
+    this.storyLine=document.getElementById('storyLine');
+    this.advanceHint=document.getElementById('advanceHint');
+    this.quizView=document.getElementById('quizView');
+    this.quizChapterLabel=document.getElementById('quizChapterLabel');
+    this.questionText=document.getElementById('questionText');
+    this.optionsContainer=document.getElementById('optionsContainer');
+    this.resultBox=document.getElementById('resultBox');
+    this.nextBtn=document.getElementById('nextBtn');
+    this.completionView=document.getElementById('completionView');
+    this.finalScore=document.getElementById('finalScore');
+    this.clearCount=document.getElementById('clearCount');
+    this.scoreDisplay=document.getElementById('scoreDisplay');
 
-// ══════════════════════════════════════════════════
-//  DOM REFS
-// ══════════════════════════════════════════════════
+    // story-teller
+    this.teller=new StoryTeller(
+      this.storyView,this.storyLine,this.advanceHint,this.storyChapterLabel
+    );
 
-const stageMap=document.getElementById('stageMap');
-const quizCard=document.getElementById('quizCard');
-const chapterLabel=document.getElementById('chapterLabel');
-const questionText=document.getElementById('questionText');
-const optionsContainer=document.getElementById('optionsContainer');
-const resultBox=document.getElementById('resultBox');
-const nextBtn=document.getElementById('nextBtn');
-const totalScore=document.getElementById('totalScore');
-const completion=document.getElementById('completion');
-const finalScore=document.getElementById('finalScore');
-const introOverlay=document.getElementById('introOverlay');
-const introTitle=document.getElementById('introTitle');
-const introQuote=document.getElementById('introQuote');
-const introStart=document.getElementById('introStart');
+    this.nextBtn.addEventListener('click',()=>this.nextQuestion());
+    this.render();
+  },
 
-// ══════════════════════════════════════════════════
-//  RENDER
-// ══════════════════════════════════════════════════
+  save(){
+    localStorage.setItem('gk_unlocked',this.unlocked);
+    localStorage.setItem('gk_cleared',JSON.stringify(this.cleared));
+    localStorage.setItem('gk_answers',JSON.stringify(this.answers));
+  },
 
-function renderStageMap(){
-  stageMap.innerHTML='';
-  CHAPTERS.forEach((_,i)=>{
-    const btn=document.createElement('button');
-    btn.className='stage-btn';
-    btn.textContent=i+1;
-    if(state.cleared.has(i)){
-      btn.classList.add('cleared');
-      btn.textContent='✓';
-    }else if(i<=state.unlocked){
-      btn.classList.add('current');
-    }else{
-      btn.classList.add('locked');
-      btn.textContent='🔒';
+  getScore(){
+    let c=0;for(let k in this.answers)if(this.answers[k])c++;
+    return c;
+  },
+
+  render(){
+    this.stageGrid.innerHTML='';
+    const total=STORY.length;
+    for(let i=0;i<total;i++){
+      const btn=document.createElement('button');
+      btn.className='stage-btn';
+      if(this.cleared.includes(i)){
+        btn.classList.add('cleared');
+        btn.textContent='✓';
+      }else if(i<=this.unlocked){
+        btn.classList.add('current');
+        btn.textContent=i+1;
+      }else{
+        btn.classList.add('locked');
+        btn.textContent='🔒';
+      }
+      if(i<=this.unlocked)btn.onclick=()=>this.startChapter(i);
+      this.stageGrid.appendChild(btn);
     }
-    if(i<=state.unlocked){
-      btn.onclick=()=>startChapter(i);
+    this.clearCount.textContent=this.cleared.length;
+    this.scoreDisplay.textContent=this.getScore();
+    if(this.cleared.length===total){
+      this.completionView.classList.add('active');
+      this.finalScore.textContent=`${this.getScore()} / ${total*3}`;
     }
-    stageMap.appendChild(btn);
-  });
-  updateScore();
-}
+  },
 
-function updateScore(){
-  const c=getCorrectCount();
-  const t=getAnsweredCount();
-  totalScore.textContent=`スコア: ${c} / ${t}`;
-}
+  startChapter(idx){
+    if(idx>this.unlocked)return;
+    this.currentChapter=idx;
+    this.currentQ=0;
+    this.quizView.classList.remove('active');
+    this.completionView.classList.remove('active');
+    this.stageMap.classList.add('hidden');
 
-function showCompletion(){
-  quizCard.classList.remove('active');
-  completion.classList.add('active');
-  const c=getCorrectCount();
-  const t=CHAPTERS.reduce((sum,ch)=>sum+ch.questions.length,0);
-  finalScore.textContent=`${c} / ${t}`;
-}
+    const ch=STORY[idx];
+    this.storyChapterLabel.textContent=ch.title;
+    this.teller.setLines(ch.lines);
+    this.teller.start(()=>{
+      this.startQuiz();
+    });
+  },
 
-function resetGame(){
-  state={unlocked:0,cleared:new Set(),currentChapter:0,currentQ:0,answers:new Map(),score:0,total:0};
-  completion.classList.remove('active');
-  startChapter(0);
-}
+  startQuiz(){
+    this.currentQ=0;
+    this.quizView.classList.add('active');
+    this.showQuestion();
+  },
 
-// ══════════════════════════════════════════════════
-//  CHAPTER / QUIZ FLOW
-// ══════════════════════════════════════════════════
+  showQuestion(){
+    const qData=QUIZ[this.currentChapter][this.currentQ];
+    if(!qData){this.chapterCleared();return;}
+    this.quizChapterLabel.textContent=STORY[this.currentChapter].title;
+    this.questionText.textContent=qData.q;
+    this.optionsContainer.innerHTML='';
+    this.resultBox.classList.remove('show','correct','wrong');
+    this.nextBtn.style.display='none';
 
-function startChapter(idx){
-  state.currentChapter=idx;
-  state.currentQ=0;
-  completion.classList.remove('active');
-  quizCard.classList.remove('active');
-  const ch=CHAPTERS[idx];
-  introTitle.textContent=ch.title;
-  introQuote.textContent='「'+ch.quote+'」';
-  introOverlay.classList.add('active');
-  introStart.onclick=()=>{
-    introOverlay.classList.remove('active');
-    showQuestion();
-  };
-}
+    const key=`${this.currentChapter}-${this.currentQ}`;
+    const prev=this.answers[key];
 
-function showQuestion(){
-  const ch=CHAPTERS[state.currentChapter];
-  const qData=ch.questions[state.currentQ];
-  if(!qData){chapterCleared();return;}
-  chapterLabel.textContent=ch.title;
-  questionText.textContent=qData.q;
-  optionsContainer.innerHTML='';
-  resultBox.classList.remove('show','correct','wrong');
-  resultBox.textContent='';
-  nextBtn.style.display='none';
-
-  const key=`${state.currentChapter}-${state.currentQ}`;
-  const prev=state.answers.get(key);
-
-  qData.opts.forEach((opt,i)=>{
-    const btn=document.createElement('button');
-    btn.className='opt';
-    btn.textContent=opt;
-    btn.onclick=()=>selectAnswer(i,btn);
+    qData.opts.forEach((opt,i)=>{
+      const btn=document.createElement('button');
+      btn.className='opt';
+      btn.textContent=opt;
+      btn.onclick=()=>this.selectAnswer(i,btn);
+      if(prev!==undefined){
+        btn.classList.add('disabled');
+        if(i===qData.ans)btn.classList.add('correct');
+        else if(i===prev)btn.classList.add('wrong');
+      }
+      this.optionsContainer.appendChild(btn);
+    });
     if(prev!==undefined){
-      btn.classList.add('disabled');
-      if(i===qData.ans)btn.classList.add('correct');
-      else if(i===prev)btn.classList.add('wrong');
+      this.resultBox.classList.add('show',prev===qData.ans?'correct':'wrong');
+      this.resultBox.textContent=prev===qData.ans?'✅ 正解！':`❌ 不正解。「${qData.opts[qData.ans]}」`;
+      this.nextBtn.style.display='block';
+      const ch=QUIZ[this.currentChapter];
+      this.nextBtn.textContent=this.currentQ<ch.length-1?'次の問題 →':'章クリア！';
     }
-    optionsContainer.appendChild(btn);
-  });
+  },
 
-  if(prev!==undefined){
-    resultBox.classList.add('show',prev===qData.ans?'correct':'wrong');
-    resultBox.textContent=prev===qData.ans?'✅ 正解！':`❌ 不正解。正解は「${qData.opts[qData.ans]}」`;
-    nextBtn.style.display='block';
-    nextBtn.textContent=state.currentQ<ch.questions.length-1?'次の問題 →':'章クリア！次へ';
-  }
-  quizCard.classList.add('active');
-}
+  selectAnswer(idx,btn){
+    const qData=QUIZ[this.currentChapter][this.currentQ];
+    const key=`${this.currentChapter}-${this.currentQ}`;
+    if(this.answers[key]!==undefined)return;
+    const correct=idx===qData.ans;
+    this.answers[key]=correct;
+    btn.classList.add(correct?'correct':'wrong');
+    document.querySelectorAll('.opt').forEach(b=>b.classList.add('disabled'));
+    document.querySelectorAll('.opt')[qData.ans].classList.add('correct');
+    this.resultBox.classList.add('show',correct?'correct':'wrong');
+    this.resultBox.textContent=correct?'✅ 正解！':`❌ 不正解。「${qData.opts[qData.ans]}」`;
+    const ch=QUIZ[this.currentChapter];
+    this.nextBtn.style.display='block';
+    this.nextBtn.textContent=this.currentQ<ch.length-1?'次の問題 →':'章クリア！';
+    this.save();
+    this.render();
+  },
 
-function selectAnswer(idx,btn){
-  const ch=CHAPTERS[state.currentChapter];
-  const qData=ch.questions[state.currentQ];
-  const key=`${state.currentChapter}-${state.currentQ}`;
-  if(state.answers.has(key))return;
+  nextQuestion(){
+    const ch=QUIZ[this.currentChapter];
+    this.currentQ++;
+    if(this.currentQ>=ch.length){this.chapterCleared();}
+    else{this.showQuestion();}
+  },
 
-  state.answers.set(key,idx===qData.ans);
-  const correct=idx===qData.ans;
-  btn.classList.add(correct?'correct':'wrong');
-  document.querySelectorAll('.opt').forEach(b=>b.classList.add('disabled'));
-  // highlight correct
-  document.querySelectorAll('.opt')[qData.ans].classList.add('correct');
+  chapterCleared(){
+    const idx=this.currentChapter;
+    if(!this.cleared.includes(idx))this.cleared.push(idx);
+    if(idx+1<STORY.length&&idx+1>this.unlocked)this.unlocked=idx+1;
+    this.save();
+    this.render();
+    this.quizView.classList.remove('active');
+    this.stageMap.classList.remove('hidden');
+  },
 
-  resultBox.classList.add('show',correct?'correct':'wrong');
-  resultBox.textContent=correct?'✅ 正解！':`❌ 不正解。正解は「${qData.opts[qData.ans]}」`;
-  nextBtn.style.display='block';
-  nextBtn.textContent=state.currentQ<ch.questions.length-1?'次の問題 →':'章クリア！次へ';
-  updateScore();
-}
-
-function chapterCleared(){
-  const idx=state.currentChapter;
-  state.cleared.add(idx);
-  if(idx+1<CHAPTERS.length && idx+1>state.unlocked)state.unlocked=idx+1;
-  renderStageMap();
-  quizCard.classList.remove('active');
-  if(state.cleared.size===CHAPTERS.length){
-    showCompletion();
-  }else{
-    startChapter(Math.min(idx+1,CHAPTERS.length-1));
-  }
-}
-
-nextBtn.onclick=()=>{
-  const ch=CHAPTERS[state.currentChapter];
-  state.currentQ++;
-  if(state.currentQ>=ch.questions.length){
-    chapterCleared();
-  }else{
-    showQuestion();
+  reset(){
+    localStorage.removeItem('gk_unlocked');
+    localStorage.removeItem('gk_cleared');
+    localStorage.removeItem('gk_answers');
+    this.unlocked=0;this.cleared=[];this.answers={};
+    this.completionView.classList.remove('active');
+    this.quizView.classList.remove('active');
+    this.stageMap.classList.remove('hidden');
+    this.render();
   }
 };
 
-// ══════════════════════════════════════════════════
-//  INIT
-// ══════════════════════════════════════════════════
-
-renderStageMap();
-startChapter(0);
+// ═══════════════════════════════════════════════════════
+//  START
+// ═══════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>Game.init());
 </script>
 </body>
 </html>
