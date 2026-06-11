@@ -121,6 +121,15 @@ body{
   max-width:200px;transition:background .2s;
 }
 .quiz-view .next-btn:hover{background:#b4d0fb}
+.quiz-view .input-area{margin-top:12px;display:flex;flex-direction:column;gap:4px;max-width:640px}
+.quiz-view .input-hint{font-size:11px;color:#6c7086}
+.quiz-view .text-input{
+  padding:10px 14px;border-radius:8px;border:2px solid #45475a;
+  background:#181825;color:#cdd6f4;font-size:15px;font-family:inherit;
+  outline:none;transition:border-color .2s;width:100%;max-width:400px;
+}
+.quiz-view .text-input:focus{border-color:#89b4fa}
+.quiz-view .text-input.disabled{opacity:.5;pointer-events:none}
 /* ─── completion ─── */
 .completion-view{
   position:absolute;inset:0;z-index:40;
@@ -178,6 +187,10 @@ body{
     <div class="chapter-label" id="quizChapterLabel"></div>
     <div class="question" id="questionText"></div>
     <div class="options" id="optionsContainer"></div>
+    <div class="input-area" id="inputArea">
+      <div class="input-hint">または直接入力（Enterで決定）</div>
+      <input type="text" class="text-input" id="textInput" placeholder="答えを入力…" autocomplete="off">
+    </div>
     <div class="result" id="resultBox"></div>
     <button class="next-btn" id="nextBtn">次の問題 →</button>
   </div>
@@ -209,6 +222,14 @@ class StoryTeller {
     this._busy = false;
 
     el.addEventListener('click', () => this.next());
+    el.addEventListener('touchend', (e) => { e.preventDefault(); this.next(); });
+    document.addEventListener('keydown', (e) => {
+      if (!this.el.classList.contains('active')) return;
+      if (e.code === 'Space' || e.code === 'Enter' || e.code === 'ArrowDown' || e.code === 'ArrowRight') {
+        e.preventDefault();
+        this.next();
+      }
+    });
   }
 
   setLines(lines) {
@@ -561,6 +582,8 @@ const Game = {
     this.quizChapterLabel=document.getElementById('quizChapterLabel');
     this.questionText=document.getElementById('questionText');
     this.optionsContainer=document.getElementById('optionsContainer');
+    this.textInput=document.getElementById('textInput');
+    this.inputArea=document.getElementById('inputArea');
     this.resultBox=document.getElementById('resultBox');
     this.nextBtn=document.getElementById('nextBtn');
     this.completionView=document.getElementById('completionView');
@@ -574,6 +597,34 @@ const Game = {
     );
 
     this.nextBtn.addEventListener('click',()=>this.nextQuestion());
+    document.addEventListener('keydown',(e)=>{
+      if(this.stageMap.classList.contains('hidden')&&!this.quizView.classList.contains('active')){
+        if(e.code==='Space'||e.code==='Enter'){e.preventDefault();this.teller.next();}
+        return;
+      }
+      if(!this.quizView.classList.contains('active')&&!this.stageMap.classList.contains('hidden')){
+        if(e.code==='ArrowRight'||e.code==='Enter'){
+          const unlocked=this.stageGrid.querySelectorAll('.current:not(.locked)');
+          if(unlocked.length>0)unlocked[0].click();
+        }
+        return;
+      }
+      if(this.quizView.classList.contains('active')){
+        const qData=QUIZ[this.currentChapter]?.[this.currentQ];
+        if(!qData)return;
+        if(e.code==='Escape'){this.quizView.classList.remove('active');this.stageMap.classList.remove('hidden');return;}
+        if(this.nextBtn.style.display!='none'&&(e.code==='Space'||e.code==='Enter')){
+          e.preventDefault();this.nextBtn.click();return;
+        }
+        const key=`${this.currentChapter}-${this.currentQ}`;
+        if(this.answers[key]!==undefined)return;
+        const num=parseInt(e.key);
+        if(num>=1&&num<=qData.opts.length){
+          const btns=this.optionsContainer.querySelectorAll('.opt');
+          if(btns[num-1])btns[num-1].click();
+        }
+      }
+    });
     this.render();
   },
 
@@ -645,6 +696,8 @@ const Game = {
     this.optionsContainer.innerHTML='';
     this.resultBox.classList.remove('show','correct','wrong');
     this.nextBtn.style.display='none';
+    this.textInput.value='';this.textInput.disabled=false;
+    this.inputArea.style.display='';
 
     const key=`${this.currentChapter}-${this.currentQ}`;
     const prev=this.answers[key];
@@ -652,7 +705,7 @@ const Game = {
     qData.opts.forEach((opt,i)=>{
       const btn=document.createElement('button');
       btn.className='opt';
-      btn.textContent=opt;
+      btn.textContent=`${i+1}. ${opt}`;
       btn.onclick=()=>this.selectAnswer(i,btn);
       if(prev!==undefined){
         btn.classList.add('disabled');
@@ -661,26 +714,42 @@ const Game = {
       }
       this.optionsContainer.appendChild(btn);
     });
+
+    this.textInput.onkeydown=(e)=>{
+      if(e.code!=='Enter'||this.textInput.disabled)return;
+      e.preventDefault();
+      const val=this.textInput.value.trim();
+      if(!val)return;
+      const correctIdx=qData.opts.findIndex(o=>o.includes(val)||val.includes(o));
+      if(correctIdx>=0){this.selectAnswer(correctIdx,document.querySelectorAll('.opt')[correctIdx]);}
+      else{this.selectAnswer(-1,null,val);}
+    };
+
     if(prev!==undefined){
       this.resultBox.classList.add('show',prev===qData.ans?'correct':'wrong');
       this.resultBox.textContent=prev===qData.ans?'✅ 正解！':`❌ 不正解。「${qData.opts[qData.ans]}」`;
       this.nextBtn.style.display='block';
       const ch=QUIZ[this.currentChapter];
       this.nextBtn.textContent=this.currentQ<ch.length-1?'次の問題 →':'章クリア！';
+    }else{
+      setTimeout(()=>this.textInput.focus(),100);
     }
   },
 
-  selectAnswer(idx,btn){
+  selectAnswer(idx,btn,rawVal){
     const qData=QUIZ[this.currentChapter][this.currentQ];
     const key=`${this.currentChapter}-${this.currentQ}`;
     if(this.answers[key]!==undefined)return;
     const correct=idx===qData.ans;
     this.answers[key]=correct;
-    btn.classList.add(correct?'correct':'wrong');
+    this.textInput.disabled=true;
+    this.textInput.classList.add('disabled');
+    if(btn){btn.classList.add(correct?'correct':'wrong');}
     document.querySelectorAll('.opt').forEach(b=>b.classList.add('disabled'));
-    document.querySelectorAll('.opt')[qData.ans].classList.add('correct');
+    const correctBtn=document.querySelectorAll('.opt')[qData.ans];
+    if(correctBtn)correctBtn.classList.add('correct');
     this.resultBox.classList.add('show',correct?'correct':'wrong');
-    this.resultBox.textContent=correct?'✅ 正解！':`❌ 不正解。「${qData.opts[qData.ans]}」`;
+    this.resultBox.textContent=correct?'✅ 正解！':(rawVal?`❌「${rawVal}」→ 正解は「${qData.opts[qData.ans]}」`:`❌ 不正解。「${qData.opts[qData.ans]}」`);
     const ch=QUIZ[this.currentChapter];
     this.nextBtn.style.display='block';
     this.nextBtn.textContent=this.currentQ<ch.length-1?'次の問題 →':'章クリア！';
