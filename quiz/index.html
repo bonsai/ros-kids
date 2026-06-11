@@ -12,6 +12,7 @@ body{
   background:#1e1e2e;color:#cdd6f4;
   min-height:100vh;display:flex;flex-direction:column;
   background-image:radial-gradient(circle at 20% 50%,#313244 0%,#1e1e2e 70%);
+  padding-bottom:50px;
 }
 /* ─── header ─── */
 .header{
@@ -88,7 +89,7 @@ body{
 .quiz-view{
   position:absolute;inset:0;z-index:30;
   display:none;flex-direction:column;
-  background:#1e1e2e;padding:32px 24px;
+  background:#1e1e2e;padding:32px 24px 60px;
   overflow-y:auto;
 }
 .quiz-view.active{display:flex}
@@ -130,6 +131,18 @@ body{
 }
 .quiz-view .text-input:focus{border-color:#89b4fa}
 .quiz-view .text-input.disabled{opacity:.5;pointer-events:none}
+.cert-banner{
+  padding:10px 16px;background:#1e1e2e;border-top:1px solid #313244;
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  font-size:12px;color:#6c7086;justify-content:center;
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+}
+.cert-banner a{color:#89b4fa;text-decoration:none}
+.cert-banner a:hover{text-decoration:underline}
+.cert-banner-label{
+  display:inline-block;padding:2px 8px;border-radius:4px;
+  background:#313244;color:#a6adc8;font-size:10px;font-weight:700;
+}
 /* ─── completion ─── */
 .completion-view{
   position:absolute;inset:0;z-index:40;
@@ -203,6 +216,18 @@ body{
     <p>正解数 / 全問題数</p>
     <button class="play-again" onclick="Game.reset()">もう一度プレイ</button>
   </div>
+</div>
+
+<div class="cert-banner">
+  <span>📘</span>
+  <span>
+    このクイズの内容は
+    <a href="https://robotmate-hub.com/r-certification/" target="_blank" rel="noopener">R検定（ロボ基礎）</a>
+    ／
+    <a href="https://www.jdla.org/certificate/general/" target="_blank" rel="noopener">G検定（ジェネラリスト）</a>
+    の出題範囲の一部に対応しています
+  </span>
+  <span class="cert-banner-label">つまみ食いOK</span>
 </div>
 
 <script>
