@@ -1,0 +1,453 @@
+{
+  "total": 16,
+  "byChapter": {
+    "1": [
+      {
+        "chapter": 1,
+        "type": "multiple",
+        "difficulty": "basic",
+        "tags": "[クラス, オブジェクト]",
+        "q": "問題文",
+        "opts": [
+          "選択肢A",
+          "選択肢B",
+          "選択肢C ← 正解は末尾に ← を付ける",
+          "選択肢D"
+        ],
+        "answer": 2
+      },
+      {
+        "chapter": 1,
+        "type": "multiple",
+        "difficulty": "basic",
+        "tags": "[ストーリー, RS-01]",
+        "q": "タクミがロボット犬を見つけた場所はどこ？",
+        "opts": [
+          "公園",
+          "粗大ゴミの集積所",
+          "学校の教室",
+          "自動販売機の横"
+        ],
+        "answer": 1
+      },
+      {
+        "chapter": 1,
+        "type": "text",
+        "difficulty": "basic",
+        "tags": "[エラー, Main]",
+        "q": "起動時に表示されたエラーメッセージは？",
+        "opts": [],
+        "answer": 0,
+        "answerText": "Main class not found"
+      }
+    ],
+    "2": [
+      {
+        "chapter": 2,
+        "type": "multiple",
+        "difficulty": "basic",
+        "tags": "[mainメソッド]",
+        "q": "Java プログラムの実行が始まるメソッドは？",
+        "opts": [
+          "public static void main(String[] args)",
+          "public void start()",
+          "public static void run()",
+          "void execute()"
+        ],
+        "answer": 0
+      },
+      {
+        "chapter": 2,
+        "type": "code",
+        "difficulty": "basic",
+        "tags": "[println]",
+        "q": "画面に「起動します」と表示するコードを書け",
+        "opts": [],
+        "answer": 0,
+        "answerText": "System.out.println(\"起動します\");"
+      }
+    ],
+    "3": [
+      {
+        "chapter": 3,
+        "type": "multiple",
+        "difficulty": "basic",
+        "tags": "[クラス, オブジェクト]",
+        "q": "クラスとは何の例えか？",
+        "opts": [
+          "料理のレシピ",
+          "設計図",
+          "住所録",
+          "電話帳"
+        ],
+        "answer": 1
+      },
+      {
+        "chapter": 3,
+        "type": "text",
+        "difficulty": "basic",
+        "tags": "[インスタンス]",
+        "q": "new RobotDog() で作られるものの名前は？",
+        "opts": [],
+        "answer": 0,
+        "answerText": "オブジェクト"
+      }
+    ],
+    "4": [
+      {
+        "chapter": 4,
+        "type": "multiple",
+        "difficulty": "basic",
+        "tags": "[カプセル化, private]",
+        "q": "カプセル化で使うアクセス修飾子のうち、同じクラスからしかアクセスできないものは？",
+        "opts": [
+          "public",
+          "protected",
+          "private",
+          "static"
+        ],
+        "answer": 2
+      }
+    ],
+    "5": [
+      {
+        "chapter": 5,
+        "type": "multiple",
+        "difficulty": "basic",
+        "tags": "[継承, extends]",
+        "q": "継承で使うキーワードは？",
+        "opts": [
+          "implements",
+          "extends",
+          "inherits",
+          "super"
+        ],
+        "answer": 1
+      },
+      {
+        "chapter": 5,
+        "type": "multiple",
+        "difficulty": "medium",
+        "tags": "[オーバーライド]",
+        "q": "親クラスのメソッドを子クラスで上書きすることを何と呼ぶ？",
+        "opts": [
+          "オーバーロード",
+          "オーバーライド",
+          "オーバーフロー",
+          "オーバーキル"
+        ],
+        "answer": 1
+      }
+    ],
+    "6": [
+      {
+        "chapter": 6,
+        "type": "multiple",
+        "difficulty": "basic",
+        "tags": "[インターフェース, implements]",
+        "q": "インターフェースを実装するときに使うキーワードは？",
+        "opts": [
+          "extends",
+          "implements",
+          "interface",
+          "realize"
+        ],
+        "answer": 1
+      }
+    ],
+    "7": [
+      {
+        "chapter": 7,
+        "type": "multiple",
+        "difficulty": "basic",
+        "tags": "[多態性, ポリモーフィズム]",
+        "q": "多態性（ポリモーフィズム）を一言で言うと？",
+        "opts": [
+          "クラスを複数継承すること",
+          "同じメソッド呼び出しでもオブジェクトによって動きが変わること",
+          "メソッド名を複数定義すること",
+          "変数を自由に変換すること"
+        ],
+        "answer": 1
+      }
+    ],
+    "8": [
+      {
+        "chapter": 8,
+        "type": "multiple",
+        "difficulty": "medium",
+        "tags": "[戦略パターン, DI]",
+        "q": "外部から依存オブジェクトを受け取る設計を何と呼ぶか？",
+        "opts": [
+          "ファクトリパターン",
+          "依存性注入（DI）",
+          "シングルトン",
+          "オブザーバーパターン"
+        ],
+        "answer": 1
+      }
+    ],
+    "9": [
+      {
+        "chapter": 9,
+        "type": "multiple",
+        "difficulty": "medium",
+        "tags": "[世界モデル, predict]",
+        "q": "世界モデルの predict メソッドの役割は？",
+        "opts": [
+          "状態を保存する",
+          "行動の結果を予測する",
+          "ロボットを動かす",
+          "エラーを検出する"
+        ],
+        "answer": 1
+      }
+    ],
+    "10": [
+      {
+        "chapter": 10,
+        "type": "multiple",
+        "difficulty": "medium",
+        "tags": "[ROS, pub/sub]",
+        "q": "ROS において publish と subscribe の正しい組み合わせは？",
+        "opts": [
+          "publish=受信, subscribe=送信",
+          "publish=送信, subscribe=受信",
+          "両方とも送信",
+          "両方とも受信"
+        ],
+        "answer": 1
+      }
+    ],
+    "11": [
+      {
+        "chapter": 11,
+        "type": "multiple",
+        "difficulty": "advanced",
+        "tags": "[マルチエージェント]",
+        "q": "マルチエージェントシステムの特徴として最も適切なものは？",
+        "opts": [
+          "1つのプログラムですべてを制御する",
+          "複数の独立したエージェントが協調して問題を解決する",
+          "人間がすべての操作を行う",
+          "ロボットが1台だけ存在する"
+        ],
+        "answer": 1
+      }
+    ]
+  },
+  "questions": [
+    {
+      "chapter": 1,
+      "type": "multiple",
+      "difficulty": "basic",
+      "tags": "[クラス, オブジェクト]",
+      "q": "問題文",
+      "opts": [
+        "選択肢A",
+        "選択肢B",
+        "選択肢C ← 正解は末尾に ← を付ける",
+        "選択肢D"
+      ],
+      "answer": 2
+    },
+    {
+      "chapter": 1,
+      "type": "multiple",
+      "difficulty": "basic",
+      "tags": "[ストーリー, RS-01]",
+      "q": "タクミがロボット犬を見つけた場所はどこ？",
+      "opts": [
+        "公園",
+        "粗大ゴミの集積所",
+        "学校の教室",
+        "自動販売機の横"
+      ],
+      "answer": 1
+    },
+    {
+      "chapter": 1,
+      "type": "text",
+      "difficulty": "basic",
+      "tags": "[エラー, Main]",
+      "q": "起動時に表示されたエラーメッセージは？",
+      "opts": [],
+      "answer": 0,
+      "answerText": "Main class not found"
+    },
+    {
+      "chapter": 2,
+      "type": "multiple",
+      "difficulty": "basic",
+      "tags": "[mainメソッド]",
+      "q": "Java プログラムの実行が始まるメソッドは？",
+      "opts": [
+        "public static void main(String[] args)",
+        "public void start()",
+        "public static void run()",
+        "void execute()"
+      ],
+      "answer": 0
+    },
+    {
+      "chapter": 2,
+      "type": "code",
+      "difficulty": "basic",
+      "tags": "[println]",
+      "q": "画面に「起動します」と表示するコードを書け",
+      "opts": [],
+      "answer": 0,
+      "answerText": "System.out.println(\"起動します\");"
+    },
+    {
+      "chapter": 3,
+      "type": "multiple",
+      "difficulty": "basic",
+      "tags": "[クラス, オブジェクト]",
+      "q": "クラスとは何の例えか？",
+      "opts": [
+        "料理のレシピ",
+        "設計図",
+        "住所録",
+        "電話帳"
+      ],
+      "answer": 1
+    },
+    {
+      "chapter": 3,
+      "type": "text",
+      "difficulty": "basic",
+      "tags": "[インスタンス]",
+      "q": "new RobotDog() で作られるものの名前は？",
+      "opts": [],
+      "answer": 0,
+      "answerText": "オブジェクト"
+    },
+    {
+      "chapter": 4,
+      "type": "multiple",
+      "difficulty": "basic",
+      "tags": "[カプセル化, private]",
+      "q": "カプセル化で使うアクセス修飾子のうち、同じクラスからしかアクセスできないものは？",
+      "opts": [
+        "public",
+        "protected",
+        "private",
+        "static"
+      ],
+      "answer": 2
+    },
+    {
+      "chapter": 5,
+      "type": "multiple",
+      "difficulty": "basic",
+      "tags": "[継承, extends]",
+      "q": "継承で使うキーワードは？",
+      "opts": [
+        "implements",
+        "extends",
+        "inherits",
+        "super"
+      ],
+      "answer": 1
+    },
+    {
+      "chapter": 5,
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": "[オーバーライド]",
+      "q": "親クラスのメソッドを子クラスで上書きすることを何と呼ぶ？",
+      "opts": [
+        "オーバーロード",
+        "オーバーライド",
+        "オーバーフロー",
+        "オーバーキル"
+      ],
+      "answer": 1
+    },
+    {
+      "chapter": 6,
+      "type": "multiple",
+      "difficulty": "basic",
+      "tags": "[インターフェース, implements]",
+      "q": "インターフェースを実装するときに使うキーワードは？",
+      "opts": [
+        "extends",
+        "implements",
+        "interface",
+        "realize"
+      ],
+      "answer": 1
+    },
+    {
+      "chapter": 7,
+      "type": "multiple",
+      "difficulty": "basic",
+      "tags": "[多態性, ポリモーフィズム]",
+      "q": "多態性（ポリモーフィズム）を一言で言うと？",
+      "opts": [
+        "クラスを複数継承すること",
+        "同じメソッド呼び出しでもオブジェクトによって動きが変わること",
+        "メソッド名を複数定義すること",
+        "変数を自由に変換すること"
+      ],
+      "answer": 1
+    },
+    {
+      "chapter": 8,
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": "[戦略パターン, DI]",
+      "q": "外部から依存オブジェクトを受け取る設計を何と呼ぶか？",
+      "opts": [
+        "ファクトリパターン",
+        "依存性注入（DI）",
+        "シングルトン",
+        "オブザーバーパターン"
+      ],
+      "answer": 1
+    },
+    {
+      "chapter": 9,
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": "[世界モデル, predict]",
+      "q": "世界モデルの predict メソッドの役割は？",
+      "opts": [
+        "状態を保存する",
+        "行動の結果を予測する",
+        "ロボットを動かす",
+        "エラーを検出する"
+      ],
+      "answer": 1
+    },
+    {
+      "chapter": 10,
+      "type": "multiple",
+      "difficulty": "medium",
+      "tags": "[ROS, pub/sub]",
+      "q": "ROS において publish と subscribe の正しい組み合わせは？",
+      "opts": [
+        "publish=受信, subscribe=送信",
+        "publish=送信, subscribe=受信",
+        "両方とも送信",
+        "両方とも受信"
+      ],
+      "answer": 1
+    },
+    {
+      "chapter": 11,
+      "type": "multiple",
+      "difficulty": "advanced",
+      "tags": "[マルチエージェント]",
+      "q": "マルチエージェントシステムの特徴として最も適切なものは？",
+      "opts": [
+        "1つのプログラムですべてを制御する",
+        "複数の独立したエージェントが協調して問題を解決する",
+        "人間がすべての操作を行う",
+        "ロボットが1台だけ存在する"
+      ],
+      "answer": 1
+    }
+  ]
+}
