@@ -2,157 +2,35 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>ROS 風 pub/sub ロボット犬 Java プレイグラウンド</title>
+  <title>ロボット犬で学ぶ Java — 教科書プレイグラウンド</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>ROS 風 pub/sub ロボット犬 Java プレイグラウンド</h1>
-<p>コードを書きかえて「実行」ボタンを押してみよう。</p>
+<div class="header-bar">
+  <h1>🐕 教科書プレイグラウンド</h1>
+  <span class="subtitle">ロボット犬で学ぶ Java & ロボティクス</span>
+</div>
+
+<div class="toolbar">
+  <label>サンプルコードを読み込む：
+    <select id="sampleSelect">
+      <option value="pubsub">[第10課] ROS 風 pub/sub 通信</option>
+      <option value="polymorphism">[第6課] 多態性（ポリモーフィズム）</option>
+      <option value="brain">[第7課] 頭脳差し替え（戦略パターン）</option>
+      <option value="agent">[第8課] AI エージェント</option>
+      <option value="worldmodel">[第9課] 世界モデル</option>
+      <option value="hello">[第0課] Hello World</option>
+    </select>
+  </label>
+  <button id="runButton">▶ 実行</button>
+  <button id="clearButton">クリア</button>
+</div>
 
 <div class="container">
-  <textarea id="code" spellcheck="false">
-// --- ROS 風 pub/sub ロボット犬サンプルコード ---
-
-import java.util.ArrayList;
-import java.util.List;
-
-interface Subscriber {
-    void onMessage(String topicName, String message);
-}
-
-interface Topic {
-    void publish(String message);
-    void subscribe(Subscriber sub);
-}
-
-class BroadcastTopic implements Topic {
-    private List<Subscriber> subs = new ArrayList<>();
-    private String name;
-
-    public BroadcastTopic(String name) { this.name = name; }
-
-    @Override
-    public void publish(String message) {
-        System.out.println("[" + name + "] publish: " + message);
-        for (Subscriber sub : subs) {
-            sub.onMessage(name, message);
-        }
-    }
-
-    @Override
-    public void subscribe(Subscriber sub) {
-        subs.add(sub);
-    }
-}
-
-interface DogNode extends Subscriber {
-    void bark();
-    void walk();
-    String getName();
-}
-
-class RealDogNode implements DogNode {
-    private String name;
-    private Topic barkTopic;
-    private Topic walkTopic;
-
-    public RealDogNode(String name, Topic barkTopic, Topic walkTopic) {
-        this.name = name;
-        this.barkTopic = barkTopic;
-        this.walkTopic = walkTopic;
-    }
-
-    @Override
-    public String getName() { return name; }
-
-    @Override
-    public void bark() {
-        barkTopic.publish(name + ": ワンワン！");
-    }
-
-    @Override
-    public void walk() {
-        walkTopic.publish(name + ": とことこ歩く");
-    }
-
-    @Override
-    public void onMessage(String topic, String message) {
-        System.out.println("  [" + name + " 受信] topic=" + topic + ", msg=" + message);
-    }
-}
-
-class RobotDogNode implements DogNode {
-    private String name;
-    private Topic barkTopic;
-    private Topic walkTopic;
-
-    public RobotDogNode(String name, Topic barkTopic, Topic walkTopic) {
-        this.name = name;
-        this.barkTopic = barkTopic;
-        this.walkTopic = walkTopic;
-    }
-
-    @Override
-    public String getName() { return name; }
-
-    @Override
-    public void bark() {
-        barkTopic.publish(name + ": ピコーン！（吠え音再生）");
-    }
-
-    @Override
-    public void walk() {
-        walkTopic.publish(name + ": モーター駆動で歩行");
-    }
-
-    @Override
-    public void onMessage(String topic, String message) {
-        System.out.println("  [" + name + " 受信] topic=" + topic + ", msg=" + message);
-    }
-}
-
-class DisplayNode implements Subscriber {
-    private String name;
-
-    public DisplayNode(String name) { this.name = name; }
-
-    @Override
-    public void onMessage(String topic, String message) {
-        System.out.println("  [" + name + " 表示] " + topic + " => " + message);
-    }
-}
-
-public class Main {
-    public static void main(String[] args) {
-
-        Topic barkTopic = new BroadcastTopic("bark");
-        Topic walkTopic = new BroadcastTopic("walk");
-
-        DogNode[] dogs = {
-            new RealDogNode("ポチ", barkTopic, walkTopic),
-            new RobotDogNode("Aibo-X", barkTopic, walkTopic)
-        };
-
-        barkTopic.subscribe(new DisplayNode("モニター"));
-
-        for (DogNode d : dogs) {
-            barkTopic.subscribe(d);
-            walkTopic.subscribe(d);
-        }
-
-        for (DogNode dog : dogs) {
-            System.out.println("--- " + dog.getName() + " が動く ---");
-            dog.bark();
-            dog.walk();
-        }
-    }
-}
-  </textarea>
-
+  <textarea id="code" spellcheck="false"></textarea>
   <div class="right">
-    <button id="runButton">実行</button>
-    <pre id="output">// 実行結果がここに表示されます</pre>
+    <pre id="output">コードを書いて「実行」ボタンを押すと結果がここに表示されます。</pre>
   </div>
 </div>
 

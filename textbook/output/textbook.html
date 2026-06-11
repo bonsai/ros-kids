@@ -1,0 +1,3361 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ロボット犬で学ぶ Java & ロボティクス — 教科書</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Fira+Code&display=swap');
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+    font-size: 11pt;
+    line-height: 1.8;
+    color: #1e1e2e;
+    max-width: 210mm;
+    margin: 0 auto;
+    padding: 20mm 15mm;
+    orphans: 3;
+    widows: 3;
+  }
+  h1 { font-size: 20pt; border-bottom: 3px solid #89b4fa; padding-bottom: 6px; margin-top: 48px; page-break-before: always; }
+  h1:first-of-type { page-break-before: avoid; }
+  h2 { font-size: 16pt; color: #1e1e2e; margin-top: 32px; border-left: 4px solid #89b4fa; padding-left: 10px; }
+  h3 { font-size: 13pt; color: #45475a; margin-top: 24px; }
+  pre {
+    background: #1e1e2e; color: #cdd6f4;
+    padding: 12px; border-radius: 6px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 9pt; line-height: 1.5;
+    overflow-x: auto;
+    page-break-inside: avoid;
+  }
+  code { font-family: 'Fira Code', 'Consolas', monospace; font-size: 9pt; background: #e6e9ef; padding: 1px 4px; border-radius: 3px; }
+  pre code { background: transparent; padding: 0; }
+  table { border-collapse: collapse; width: 100%; margin: 16px 0; page-break-inside: avoid; }
+  th, td { border: 1px solid #ccc; padding: 6px 10px; text-align: left; font-size: 10pt; }
+  th { background: #e6e9ef; font-weight: 700; }
+  blockquote { border-left: 4px solid #89b4fa; margin: 16px 0; padding: 8px 16px; background: #f5f5f5; }
+  ul, ol { padding-left: 24px; }
+  li { margin-bottom: 4px; }
+  .cover {
+    text-align: center; padding: 60mm 0;
+    page-break-after: always;
+  }
+  .cover h1 { font-size: 28pt; border: none; margin: 0 0 16px; }
+  .cover .subtitle { font-size: 14pt; color: #666; }
+  .cover .meta { margin-top: 40px; color: #888; font-size: 11pt; }
+  .toc { page-break-after: always; }
+  .toc h2 { border: none; font-size: 18pt; }
+  .toc ul { list-style: none; padding: 0; }
+  .toc li { padding: 4px 0; font-size: 11pt; border-bottom: 1px dotted #ddd; }
+  .toc li span { color: #888; }
+  @media print {
+    body { padding: 0; }
+    pre { white-space: pre-wrap; word-break: break-all; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>ロボット犬で学ぶ</h1>
+  <h1>Java &amp; ロボティクス</h1>
+  <p class="subtitle">コンピュータ授業のための教科書</p>
+  <p class="meta">OOP × ロボット × ROS を一貫したストーリーで学ぶ<br>全11課 + 付録</p>
+</div>
+
+<div class="toc"><h2>目次</h2><ul>
+<li>第0課 Java にようこそ</li>
+<li>第1課 クラスとオブジェクト</li>
+<li>第2課 カプセル化</li>
+<li>第3課 コンストラクタと初期化</li>
+<li>第4課 継承</li>
+<li>第5課 インターフェースによる抽象化</li>
+<li>第6課 多態性（ポリモーフィズム）</li>
+<li>第7課 戦略パターン―頭脳の差し替え</li>
+<li>第8課 ロボットの頭脳を入れ替える</li>
+<li>第9課 世界モデル―状態と行動の予測</li>
+<li>第10課 publish / subscribe 通信</li>
+<li>第11課 マルチエージェントと協調動作</li>
+<li>付録A 用語集</li>
+<li>付録B 演習問題解答</li>
+<li>付録C コード索引</li>
+<li>付録D 教師用ガイド</li>
+</ul></div>
+<h1>シラバス</h1>
+<h1>シラバス</h1>
+<h2>科目名</h2>
+<p><strong>ロボット犬で学ぶ Java &amp; ロボティクス</strong>
+（Java Programming through Robotics）</p>
+<h2>単位数</h2>
+<p>2 単位（講義 15 回 + 演習）</p>
+<h2>対象</h2>
+<p>情報科学科 / 総合科学科 1〜2 年次
+Java 未経験可。プログラミング基礎を履修していることが望ましい。</p>
+<h2>授業計画</h2>
+<table class="syllabus">
+<thead>
+<tr>
+<th>回</th>
+<th>課</th>
+<th>タイトル</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>0</td>
+<td>Java にようこそ</td>
+<td>環境構築、Hello World、変数と型</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
+<td>クラスとオブジェクト</td>
+<td>クラス定義、インスタンス化、メソッド呼び出し</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1</td>
+<td>カプセル化</td>
+<td>private / public、getter / setter、データ保護</td>
+</tr>
+<tr>
+<td>4</td>
+<td>1</td>
+<td>コンストラクタ</td>
+<td>初期化、this、オーバーロード</td>
+</tr>
+<tr>
+<td>5</td>
+<td>2</td>
+<td>継承</td>
+<td>extends、super、メソッドオーバーライド</td>
+</tr>
+<tr>
+<td>6</td>
+<td>2</td>
+<td>インターフェース</td>
+<td>interface、implements、設計の抽象化</td>
+</tr>
+<tr>
+<td>7</td>
+<td>3</td>
+<td>多態性（ポリモーフィズム）</td>
+<td>アップキャスト、動的ディスパッチ</td>
+</tr>
+<tr>
+<td>8</td>
+<td>3</td>
+<td>戦略パターン</td>
+<td>頭脳差し替え、依存性注入</td>
+</tr>
+<tr>
+<td>9</td>
+<td>4</td>
+<td>ロボットの頭脳</td>
+<td>Brain インターフェース、AI エージェント</td>
+</tr>
+<tr>
+<td>10</td>
+<td>4</td>
+<td>世界モデル</td>
+<td>State / Action、予測と意思決定</td>
+</tr>
+<tr>
+<td>11</td>
+<td>5</td>
+<td>pub/sub 通信</td>
+<td>トピック、購読、ブロードキャスト</td>
+</tr>
+<tr>
+<td>12</td>
+<td>5</td>
+<td>マルチエージェント</td>
+<td>複数ノードの協調、同期</td>
+</tr>
+<tr>
+<td>13</td>
+<td>―</td>
+<td>総合演習</td>
+<td>ロボット犬シミュレータの完成</td>
+</tr>
+<tr>
+<td>14</td>
+<td>―</td>
+<td>発表</td>
+<td>自由課題の発表</td>
+</tr>
+<tr>
+<td>15</td>
+<td>―</td>
+<td>まとめ</td>
+<td>総復習と発展</td>
+</tr>
+</tbody></table>
+<h2>評価基準</h2>
+<ul>
+<li>演習問題（各課末）: 40%</li>
+<li>総合演習: 30%</li>
+<li>自由課題発表: 30%</li>
+</ul>
+<h2>使用環境</h2>
+<ul>
+<li>Java 21</li>
+<li>任意の Java IDE（Eclipse / IntelliJ IDEA / VS Code）</li>
+<li>ブラウザ上の Java プレイグラウンド（TeaVM）</li>
+</ul>
+
+<h1>第0課：Java にようこそ</h1>
+<h2>学習目標</h2>
+<ul>
+<li>Java とは何かを説明できる</li>
+<li>はじめての Java プログラムを書いて実行できる</li>
+<li>変数とデータ型を理解する</li>
+<li>プレイグラウンドでコードを動かせる</li>
+</ul>
+<h2>1. Java ってどんな言語？</h2>
+<p>Java は <strong>世界でもっとも使われているプログラミング言語のひとつ</strong> です。</p>
+<ul>
+<li>1995 年に Sun Microsystems が開発</li>
+<li>「Write Once, Run Anywhere」（一度書けばどこでも動く）</li>
+<li>ロボット、スマホアプリ、Web サービス、銀行システムまで幅広く使われる</li>
+</ul>
+<h3>なぜロボティクスに Java なのか？</h3>
+<ul>
+<li>大規模システムに向いている（ロボットは多くの部品が協調して動く）</li>
+<li>オブジェクト指向が言語レベルでしっかりしている</li>
+<li>Android のアプリは Java / Kotlin で書かれる</li>
+</ul>
+<h2>2. 最初のプログラム</h2>
+<p>Java のプログラムは <strong>クラス</strong> の中に書きます。
+「クラス」はまだよくわからなくて大丈夫。今は「プログラムを入れる箱」だと思ってください。</p>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        System.out.println(&quot;こんにちは、ロボット犬の世界！&quot;);
+    }
+}
+</code></pre>
+<h3>解説</h3>
+<table>
+<thead>
+<tr>
+<th>部分</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>public class Main</code></td>
+<td>クラス宣言。Main という名前の箱</td>
+</tr>
+<tr>
+<td><code>public static void main(String[] args)</code></td>
+<td>プログラムの入口。ここから実行が始まる</td>
+</tr>
+<tr>
+<td><code>System.out.println(...)</code></td>
+<td>画面に文字を表示する命令</td>
+</tr>
+<tr>
+<td><code>//</code></td>
+<td>コメント。プログラムの説明を書く（実行はされない）</td>
+</tr>
+</tbody></table>
+<h2>3. プレイグラウンドで動かしてみよう</h2>
+<ol>
+<li><a href="https://bonsai.github.io/ros-kids/playground/">https://bonsai.github.io/ros-kids/playground/</a> を開く</li>
+<li>左のテキストエリアに上のコードを書く</li>
+<li>「実行」ボタンを押す</li>
+<li>右側に結果が表示される</li>
+</ol>
+<h2>4. 変数とデータ型</h2>
+<p>プログラムは <strong>変数</strong> を使ってデータを扱います。</p>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        // 変数の宣言と代入
+        String name = &quot;ポチ&quot;;
+        int age = 3;
+        double weight = 12.5;
+        boolean isRobot = false;
+
+        System.out.println(&quot;名前: &quot; + name);
+        System.out.println(&quot;年齢: &quot; + age);
+        System.out.println(&quot;体重: &quot; + weight);
+        System.out.println(&quot;ロボット？: &quot; + isRobot);
+    }
+}
+</code></pre>
+<h3>Java の主なデータ型</h3>
+<table>
+<thead>
+<tr>
+<th>型</th>
+<th>意味</th>
+<th>例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>int</code></td>
+<td>整数</td>
+<td><code>42</code>, <code>-3</code>, <code>0</code></td>
+</tr>
+<tr>
+<td><code>double</code></td>
+<td>小数</td>
+<td><code>3.14</code>, <code>-0.5</code></td>
+</tr>
+<tr>
+<td><code>String</code></td>
+<td>文字列</td>
+<td><code>&quot;こんにちは&quot;</code></td>
+</tr>
+<tr>
+<td><code>boolean</code></td>
+<td>真偽値</td>
+<td><code>true</code>, <code>false</code></td>
+</tr>
+</tbody></table>
+<h2>まとめ</h2>
+<ul>
+<li>Java は「一度書けばどこでも動く」言語</li>
+<li>プログラムは <code>main</code> メソッドから始まる</li>
+<li><code>System.out.println()</code> で画面に表示する</li>
+<li>変数を使うとデータを名前で扱える</li>
+</ul>
+<h2>キーワード</h2>
+<p><code>クラス</code> <code>main メソッド</code> <code>変数</code> <code>データ型</code> <code>String</code> <code>int</code> <code>boolean</code></p>
+<h2>演習問題</h2>
+<ol>
+<li>自分の名前を表示するプログラムを書いてください。</li>
+<li>ロボット犬の名前・バッテリー残量（%・整数）・稼働時間（時間・小数）を変数で宣言し、表示するプログラムを書いてください。</li>
+<li><code>println</code> と <code>print</code> の違いを調べてください（ヒント：改行の有無）。</li>
+</ol>
+
+<h1>第1課：クラスとオブジェクト</h1>
+<h2>学習目標</h2>
+<ul>
+<li>クラスとオブジェクトの違いを説明できる</li>
+<li>自分のクラスを定義できる</li>
+<li>クラスからオブジェクト（インスタンス）を作れる</li>
+<li>メソッドを呼び出せる</li>
+</ul>
+<h2>1. ストーリー：研究所にロボット犬が届いた</h2>
+<p>きみはロボット研究所の新人エンジニア。
+今日、段ボール箱が届いた。中には <strong>ロボット犬「Aibo-X」</strong> が入っている。</p>
+<p>「よし、このロボット犬を動かしてみよう！」
+でも…何から始めればいい？</p>
+<p>ロボット犬を動かすには、<strong>設計図（クラス）</strong> が必要だ。</p>
+<h2>2. クラスってなに？</h2>
+<p><strong>クラス</strong> は <strong>設計図</strong> です。
+オブジェクト（実際のモノ）を作るための型紙のようなもの。</p>
+<pre><code>クラス＝設計図
+オブジェクト＝設計図から作った実際のモノ（インスタンス）
+</code></pre>
+<pre><code class="language-java">// これは設計図（クラス）
+public class RobotDog {
+
+    // プロパティ（状態）
+    String name;
+    int battery;
+
+    // メソッド（動作）
+    void bark() {
+        System.out.println(name + &quot;：ワンワン！&quot;);
+    }
+
+    void walk() {
+        if (battery &gt;= 10) {
+            System.out.println(name + &quot;：歩いている…&quot;);
+            battery -= 10;
+        } else {
+            System.out.println(name + &quot;：バッテリー切れ！&quot;);
+        }
+    }
+}
+</code></pre>
+<h2>3. オブジェクトを作る</h2>
+<p>設計図ができたら、実際に <strong>オブジェクト（インスタンス）</strong> を作ります。</p>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+
+        // オブジェクトを作る（インスタンス化）
+        RobotDog myDog = new RobotDog();
+
+        // プロパティに値を設定
+        myDog.name = &quot;Aibo-X&quot;;
+        myDog.battery = 100;
+
+        // メソッドを呼び出す
+        myDog.bark();  // Aibo-X：ワンワン！
+        myDog.walk();  // Aibo-X：歩いている…
+        myDog.walk();  // Aibo-X：歩いている…
+        myDog.walk();  // Aibo-X：歩いている…
+        myDog.walk();  // Aibo-X：歩いている…
+        myDog.walk();  // Aibo-X：歩いている…
+        myDog.walk();  // Aibo-X：歩いている…
+        myDog.walk();  // Aibo-X：歩いている…
+        myDog.walk();  // Aibo-X：歩いている…
+        myDog.walk();  // Aibo-X：歩いている…
+        myDog.walk();  // Aibo-X：バッテリー切れ！
+    }
+}
+</code></pre>
+<h3>インスタンス化のしくみ</h3>
+<pre><code class="language-java">RobotDog myDog = new RobotDog();
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>部分</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>RobotDog</code></td>
+<td>型（クラス名）</td>
+</tr>
+<tr>
+<td><code>myDog</code></td>
+<td>変数名</td>
+</tr>
+<tr>
+<td><code>new RobotDog()</code></td>
+<td>新しいオブジェクトを作る</td>
+</tr>
+</tbody></table>
+<h2>4. 同じクラスから複数のオブジェクトを作れる</h2>
+<p>設計図が1枚あれば、何体でもロボット犬を作れます。</p>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+
+        RobotDog dog1 = new RobotDog();
+        dog1.name = &quot;Aibo-X&quot;;
+        dog1.battery = 100;
+
+        RobotDog dog2 = new RobotDog();
+        dog2.name = &quot;ポチ&quot;;
+        dog2.battery = 80;
+
+        dog1.bark();  // Aibo-X：ワンワン！
+        dog2.bark();  // ポチ：ワンワン！
+    }
+}
+</code></pre>
+<p><code>dog1</code> と <code>dog2</code> は <strong>別々のオブジェクト</strong> です。
+名前もバッテリーも独立しています。</p>
+<h2>まとめ</h2>
+<ul>
+<li>クラスは設計図、オブジェクトは実際のモノ</li>
+<li><code>new クラス名()</code> でオブジェクトを作る</li>
+<li>同じクラスからたくさんのオブジェクトを作れる</li>
+<li>オブジェクトはそれぞれ独立した状態を持つ</li>
+</ul>
+<h2>キーワード</h2>
+<p><code>クラス</code> <code>オブジェクト</code> <code>インスタンス</code> <code>インスタンス化</code> <code>new</code> <code>プロパティ</code> <code>メソッド</code></p>
+<h2>演習問題</h2>
+<ol>
+<li>ロボット犬に <code>charge()</code> メソッドを追加してください（バッテリーを満タンにする）。</li>
+<li><code>bark()</code> を呼ぶたびにバッテリーが 5 減るように変更してください。</li>
+<li>3 体のロボット犬を作り、それぞれ別の名前をつけて吠えさせてください。</li>
+</ol>
+
+<h1>第2課：カプセル化</h1>
+<h2>学習目標</h2>
+<ul>
+<li>カプセル化の概念を説明できる</li>
+<li><code>private</code> と <code>public</code> を使い分けられる</li>
+<li>getter / setter を実装できる</li>
+<li>カプセル化がなぜ重要なのかを説明できる</li>
+</ul>
+<h2>1. ストーリー：ロボット犬が壊れた</h2>
+<p>研究室で、新人エンジニアの田中くんが叫んだ。</p>
+<p>「ロボット犬のバッテリーがマイナスになってる！」</p>
+<p>どうやら誰かが直接 <code>dog.battery = -999;</code> と書いたらしい。</p>
+<p>こんなことを防ぐにはどうすればいいだろう？</p>
+<h2>2. カプセル化とは</h2>
+<p><strong>カプセル化（Encapsulation）</strong> は、
+「中身を隠して、外から触れるところだけ見せる」仕組みです。</p>
+<pre><code>カプセル化 ＝ データ（プロパティ）を private で保護する
+           ＋ 必要な操作だけ public メソッドで公開する
+</code></pre>
+<h3>カプセル化の前（悪い例）</h3>
+<pre><code class="language-java">class RobotDog {
+    String name;
+    int battery; // どこからでも直接書き換え可能！
+}
+</code></pre>
+<p>誰でも <code>dog.battery = -999;</code> とできてしまう。</p>
+<h3>カプセル化の後（良い例）</h3>
+<pre><code class="language-java">public class RobotDog {
+    private String name;
+    private int battery; // private → このクラスの中からしか触れない
+
+    public RobotDog(String name) {
+        this.name = name;
+        this.battery = 100;
+    }
+
+    // getter：値を取得するだけ
+    public String getName() {
+        return name;
+    }
+
+    public int getBattery() {
+        return battery;
+    }
+
+    // setter：条件つきで値を変更する
+    public void charge() {
+        battery = 100;
+    }
+
+    public void walk() {
+        if (battery &gt;= 10) {
+            System.out.println(name + &quot;：歩いている…&quot;);
+            battery -= 10;
+        } else {
+            System.out.println(name + &quot;：バッテリー切れ！充電してください&quot;);
+        }
+    }
+}
+</code></pre>
+<h2>3. private と public</h2>
+<table>
+<thead>
+<tr>
+<th>アクセス修飾子</th>
+<th>アクセスできる範囲</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>public</code></td>
+<td>どこからでも</td>
+</tr>
+<tr>
+<td><code>private</code></td>
+<td>同じクラスの中だけ</td>
+</tr>
+<tr>
+<td>（指定なし）</td>
+<td>同じパッケージの中だけ</td>
+</tr>
+</tbody></table>
+<h3>アクセス制御のイメージ</h3>
+<pre><code>public  = だれでも押せるボタン（操作パネル）
+private = 基板の中身、ふたを開けないと触れない
+</code></pre>
+<h2>4. getter と setter のデザインパターン</h2>
+<p><strong>getter</strong>：値を読み取るためのメソッド。名前の慣習は <code>getプロパティ名</code></p>
+<pre><code class="language-java">public String getName() {
+    return name;
+}
+</code></pre>
+<p><strong>setter</strong>：値を変更するためのメソッド。名前の慣習は <code>setプロパティ名</code></p>
+<pre><code class="language-java">public void setName(String name) {
+    if (name != null &amp;&amp; name.length() &gt; 0) {
+        this.name = name;
+    }
+}
+</code></pre>
+<p>setter の中に <strong>バリデーション（値の検証）</strong> を入れられるのがカプセル化の利点です。</p>
+<h2>5. カプセル化のメリット</h2>
+<ol>
+<li><p><strong>データの不正を防ぐ</strong></p>
+<ul>
+<li>バッテリーがマイナスになるのを防げる</li>
+</ul>
+</li>
+<li><p><strong>内部実装を変更しやすい</strong></p>
+<ul>
+<li>バッテリーの計算方法を変えても、外からの使い方は変わらない</li>
+</ul>
+</li>
+<li><p><strong>使い方がシンプルになる</strong></p>
+<ul>
+<li>「このメソッドを呼べばいい」とわかっていれば中身を知らなくてよい</li>
+</ul>
+</li>
+</ol>
+<h2>まとめ</h2>
+<ul>
+<li>カプセル化は「中身を隠して、必要な操作だけ公開する」</li>
+<li>プロパティは <code>private</code>、メソッドは原則 <code>public</code></li>
+<li>getter / setter で安全にデータを出入りさせる</li>
+<li>カプセル化によってプログラムは壊れにくくなる</li>
+</ul>
+<h2>キーワード</h2>
+<p><code>カプセル化</code> <code>private</code> <code>public</code> <code>アクセス修飾子</code> <code>getter</code> <code>setter</code> <code>バリデーション</code></p>
+<h2>演習問題</h2>
+<ol>
+<li>ロボット犬の <code>battery</code> が 0〜100 の範囲を超えないように setter を実装してください。</li>
+<li>ロボット犬に <code>run()</code>（走る）メソッドを追加してください。走るとバッテリーが 25 減ります。</li>
+<li>「バッテリー残量が 20 を切ったら充電を促す」機能を walk() に追加してください。</li>
+</ol>
+
+<h1>第3課：コンストラクタと初期化</h1>
+<h2>学習目標</h2>
+<ul>
+<li>コンストラクタを定義できる</li>
+<li><code>this</code> キーワードの役割を説明できる</li>
+<li>コンストラクタのオーバーロードができる</li>
+<li>初期化のベストプラクティスを理解する</li>
+</ul>
+<h2>1. ストーリー：ロボット犬を組み立てよう</h2>
+<p>研究所に新しいロボット犬のキットが届いた。
+組み立てるときに、最初から名前とバッテリーを設定したい。</p>
+<p>前回までは、オブジェクトを作ってからプロパティを設定していた。</p>
+<pre><code class="language-java">RobotDog dog = new RobotDog();
+dog.name = &quot;Aibo-X&quot;;   // あとから設定
+dog.battery = 100;     // あとから設定
+</code></pre>
+<p>「オブジェクトを作るときに、いっしょに初期設定できないかな？」</p>
+<h2>2. コンストラクタ</h2>
+<p><strong>コンストラクタ</strong> は、オブジェクトが作られるときに自動的に呼ばれる特殊なメソッドです。</p>
+<pre><code class="language-java">public class RobotDog {
+    private String name;
+    private int battery;
+
+    // コンストラクタ（クラス名と同じ名前）
+    public RobotDog(String name, int battery) {
+        this.name = name;
+        this.battery = battery;
+    }
+
+    public RobotDog(String name) {
+        this.name = name;
+        this.battery = 100; // デフォルト値
+    }
+}
+</code></pre>
+<h3>使い方</h3>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+
+        RobotDog dog1 = new RobotDog(&quot;Aibo-X&quot;, 80);   // 名前とバッテリーを指定
+        RobotDog dog2 = new RobotDog(&quot;ポチ&quot;);         // 名前だけ指定（バッテリーはデフォルト100）
+    }
+}
+</code></pre>
+<h2>3. this キーワード</h2>
+<p><code>this</code> は「自分自身のオブジェクト」を指します。</p>
+<pre><code class="language-java">public RobotDog(String name, int battery) {
+    this.name = name;    // this.name = プロパティ, name = 引数
+    this.battery = battery;
+}
+</code></pre>
+<p>これがないと、プロパティと引数が同じ名前のとき区別がつきません。</p>
+<h2>4. コンストラクタのオーバーロード</h2>
+<p>同じ名前でも、引数の種類や数が違うコンストラクタを複数定義できます。
+これを <strong>オーバーロード（overload）</strong> といいます。</p>
+<pre><code class="language-java">public class RobotDog {
+
+    private String name;
+    private int battery;
+    private String model;
+
+    // ① 全部指定
+    public RobotDog(String name, int battery, String model) {
+        this.name = name;
+        this.battery = battery;
+        this.model = model;
+    }
+
+    // ② 名前とモデルだけ（バッテリーはデフォルト）
+    public RobotDog(String name, String model) {
+        this(name, 100, model); // ①を呼び出す
+    }
+
+    // ③ 名前だけ（モデルは&quot;Standard&quot;）
+    public RobotDog(String name) {
+        this(name, 100, &quot;Standard&quot;); // ①を呼び出す
+    }
+
+    // ④ 引数なし（すべてデフォルト）
+    public RobotDog() {
+        this(&quot;名無しロボット&quot;, 100, &quot;Standard&quot;); // ①を呼び出す
+    }
+}
+</code></pre>
+<h3>使い方</h3>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+
+        RobotDog d1 = new RobotDog(&quot;Aibo-X&quot;, 80, &quot;RX-1000&quot;);
+        RobotDog d2 = new RobotDog(&quot;ポチ&quot;, &quot;RX-500&quot;);
+        RobotDog d3 = new RobotDog(&quot;タロウ&quot;);
+        RobotDog d4 = new RobotDog();
+    }
+}
+</code></pre>
+<h2>5. デフォルトコンストラクタ</h2>
+<p>コンストラクタを1つも書かないと、Java が自動的に <strong>デフォルトコンストラクタ</strong> を用意します。</p>
+<pre><code class="language-java">public RobotDog() {
+    // 何もしない（プロパティはデフォルト値）
+}
+</code></pre>
+<p>ただし、自分でコンストラクタを書くと、デフォルトコンストラクタは自動生成されなくなります。</p>
+<h2>まとめ</h2>
+<ul>
+<li>コンストラクタはオブジェクト生成時に自動実行される</li>
+<li><code>this</code> は自分自身を指す</li>
+<li>オーバーロードで複数の初期化パターンを提供できる</li>
+<li><code>this(...)</code> で別のコンストラクタを呼べる</li>
+</ul>
+<h2>キーワード</h2>
+<p><code>コンストラクタ</code> <code>this</code> <code>オーバーロード</code> <code>デフォルトコンストラクタ</code> <code>初期化</code></p>
+<h2>演習問題</h2>
+<ol>
+<li>ロボット犬に <code>color</code>（色）プロパティを追加し、コンストラクタで設定できるようにしてください。</li>
+<li>デフォルトコンストラクタで「名無しロボット・白・バッテリー50」をデフォルト値にするコードを書いてください。</li>
+<li>コンストラクタ内でバッテリーの値が 0〜100 の範囲であることをチェックし、範囲外なら例外を投げる処理を追加してください。</li>
+</ol>
+
+<h1>第4課：継承</h1>
+<h2>学習目標</h2>
+<ul>
+<li>継承の概念を説明できる</li>
+<li><code>extends</code> を使ってクラスを継承できる</li>
+<li>メソッドのオーバーライドができる</li>
+<li><code>super</code> で親クラスのメソッドを呼べる</li>
+<li>「is-a」関係を理解する</li>
+</ul>
+<h2>1. ストーリー：スーパーロボット犬の開発</h2>
+<p>研究所で新しいプロジェクトが始まった。
+「Aibo-X をベースに、もっとすごいロボット犬を作ろう！」</p>
+<p>でも、ゼロから作るのは大変…。
+そうだ、<strong>既存のロボット犬の機能を引き継いで、新しい機能を追加しよう</strong>。</p>
+<h2>2. 継承とは</h2>
+<p><strong>継承（Inheritance）</strong> は、既存のクラス（親クラス）の機能を引き継いで、
+新しいクラス（子クラス）を作る仕組みです。</p>
+<pre><code>親クラス（スーパークラス）＝ 基本的な機能
+          ↓ extends
+子クラス（サブクラス）    ＝ 基本機能 + 独自機能
+</code></pre>
+<h3>ロボット犬の継承</h3>
+<pre><code class="language-java">// 親クラス
+public class RobotDog {
+    protected String name;
+    protected int battery;
+
+    public RobotDog(String name) {
+        this.name = name;
+        this.battery = 100;
+    }
+
+    public void bark() {
+        System.out.println(name + &quot;：ワンワン！（標準音声）&quot;);
+    }
+
+    public void walk() {
+        if (battery &gt;= 10) {
+            System.out.println(name + &quot;：歩いている…&quot;);
+            battery -= 10;
+        }
+    }
+
+    public void charge() {
+        battery = 100;
+        System.out.println(name + &quot;：充電完了&quot;);
+    }
+}
+
+// 子クラス（スーパーロボット犬）
+public class SuperRobotDog extends RobotDog {
+
+    private boolean flyMode;
+
+    public SuperRobotDog(String name) {
+        super(name); // 親クラスのコンストラクタを呼ぶ
+        this.flyMode = false;
+    }
+
+    // 新しい機能：飛ぶ
+    public void fly() {
+        if (battery &gt;= 30) {
+            System.out.println(name + &quot;：飛行モード起動！&quot;);
+            battery -= 30;
+            flyMode = true;
+        } else {
+            System.out.println(name + &quot;：バッテリー不足で飛行できません&quot;);
+        }
+    }
+
+    // 親のメソッドをオーバーライド（上書き）
+    @Override
+    public void bark() {
+        System.out.println(name + &quot;：スーパーワンワン！（大音量）&quot;);
+    }
+}
+</code></pre>
+<h2>3. extends キーワード</h2>
+<p><code>extends</code> で親クラスを指定します。</p>
+<pre><code class="language-java">public class SuperRobotDog extends RobotDog {
+    // RobotDog のすべての機能 + 追加機能
+}
+</code></pre>
+<ul>
+<li>子クラスは親クラスの <code>public</code> / <code>protected</code> なメンバーを使える</li>
+<li><code>private</code> なメンバーは継承されない</li>
+</ul>
+<h2>4. メソッドのオーバーライド</h2>
+<p><strong>オーバーライド（override）</strong> は、親クラスのメソッドを子クラスで上書きすることです。</p>
+<pre><code class="language-java">@Override  // ← コンパイラに「オーバーライドしてるよ」と教える印
+public void bark() {
+    System.out.println(name + &quot;：スーパーワンワン！（大音量）&quot;);
+}
+</code></pre>
+<p><code>@Override</code> をつけると、間違って親クラスにないメソッド名を書いたときに
+コンパイルエラーになって教えてくれます。</p>
+<h2>5. super キーワード</h2>
+<p><code>super</code> は親クラスを指します。</p>
+<pre><code class="language-java">public SuperRobotDog(String name) {
+    super(name);  // 親クラスのコンストラクタを呼ぶ
+}
+
+public void charge() {
+    super.charge();  // 親のcharge()を呼ぶ
+    System.out.println(&quot;＋高速充電モード&quot;);
+}
+</code></pre>
+<h2>6. 継承のメリット</h2>
+<ol>
+<li><p><strong>コードの再利用</strong></p>
+<ul>
+<li>共通の機能は親クラスに一度書けばいい</li>
+</ul>
+</li>
+<li><p><strong>階層構造を作れる</strong></p>
+<ul>
+<li>RobotDog → SuperRobotDog → FlyingRobotDog のように拡張できる</li>
+</ul>
+</li>
+<li><p><strong>変更に強い</strong></p>
+<ul>
+<li>親クラスを修正すると、すべての子クラスに反映される</li>
+</ul>
+</li>
+</ol>
+<h2>7. protected アクセス修飾子</h2>
+<table>
+<thead>
+<tr>
+<th>修飾子</th>
+<th>同じクラス</th>
+<th>同じパッケージ</th>
+<th>子クラス</th>
+<th>どこからでも</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>private</code></td>
+<td>○</td>
+<td>×</td>
+<td>×</td>
+<td>×</td>
+</tr>
+<tr>
+<td>（なし）</td>
+<td>○</td>
+<td>○</td>
+<td>×</td>
+<td>×</td>
+</tr>
+<tr>
+<td><code>protected</code></td>
+<td>○</td>
+<td>○</td>
+<td>○</td>
+<td>×</td>
+</tr>
+<tr>
+<td><code>public</code></td>
+<td>○</td>
+<td>○</td>
+<td>○</td>
+<td>○</td>
+</tr>
+</tbody></table>
+<p>子クラスから親のプロパティにアクセスしたいときは <code>protected</code> を使います。</p>
+<h2>まとめ</h2>
+<ul>
+<li>継承は「既存のクラスをベースに新しいクラスを作る」</li>
+<li><code>extends</code> で親クラスを指定する</li>
+<li><code>@Override</code> でメソッドを上書きできる</li>
+<li><code>super</code> で親クラスのメソッドを呼べる</li>
+<li>「is-a」関係（スーパーロボット犬はロボット犬の一種）を表す</li>
+</ul>
+<h2>キーワード</h2>
+<p><code>継承</code> <code>extends</code> <code>スーパークラス</code> <code>サブクラス</code> <code>オーバーライド</code> <code>@Override</code> <code>super</code> <code>protected</code></p>
+<h2>演習問題</h2>
+<ol>
+<li><code>FlyingRobotDog</code> クラスを作成し、<code>SuperRobotDog</code> を継承して <code>hover()</code>（ホバリング）メソッドを追加してください。</li>
+<li><code>bark()</code> をオーバーライドして、飛行中は「フライト中は吠えられません」と表示するようにしてください。</li>
+<li>親クラスの <code>walk()</code> をオーバーライドして、飛行中は消費バッテリーが半分になるようにしてください。</li>
+</ol>
+
+<h1>第5課：インターフェースによる抽象化</h1>
+<h2>学習目標</h2>
+<ul>
+<li>インターフェースの概念を説明できる</li>
+<li><code>interface</code> を定義できる</li>
+<li><code>implements</code> でインターフェースを実装できる</li>
+<li>継承とインターフェースの違いを説明できる</li>
+</ul>
+<h2>1. ストーリー：リアル犬とロボット犬を同じに扱いたい</h2>
+<p>研究所には「Aibo-X（ロボット犬）」と「ポチ（本物の犬）」がいる。</p>
+<p>2匹はまったく違う——</p>
+<ul>
+<li>ポチは生物で、Aibo-X は機械</li>
+<li>ポチはご飯を食べ、Aibo-X は充電する</li>
+<li>ポチは散歩が必要、Aibo-X はプログラムで歩く</li>
+</ul>
+<p>でも、どちらも「犬」として <strong>同じ操作で扱いたい</strong>。</p>
+<p>ここで <strong>インターフェース</strong> が役立つ。</p>
+<h2>2. インターフェースとは</h2>
+<p><strong>インターフェース</strong> は「こんなメソッドを持っていること」を約束するものです。
+メソッドの「名前と引数と戻り値」だけを定義し、中身は書きません。</p>
+<pre><code class="language-java">// インターフェース：犬としての約束事
+public interface Dog {
+    void bark();
+    void walk();
+    void play();
+}
+</code></pre>
+<p>インターフェースの中のメソッドは、すべて <strong>抽象メソッド</strong>（中身のないメソッド）です。</p>
+<h2>3. implements で実装する</h2>
+<p>インターフェースの「約束」を守るには <code>implements</code> を使います。</p>
+<pre><code class="language-java">public class RealDog implements Dog {
+
+    private String name;
+
+    public RealDog(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void bark() {
+        System.out.println(name + &quot;：ワンワン！（本物の吠え声）&quot;);
+    }
+
+    @Override
+    public void walk() {
+        System.out.println(name + &quot;：とことこ散歩している…&quot;);
+    }
+
+    @Override
+    public void play() {
+        System.out.println(name + &quot;：ボールを追いかけている！&quot;);
+    }
+}
+</code></pre>
+<pre><code class="language-java">public class RobotDog implements Dog {
+
+    private String name;
+
+    public RobotDog(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void bark() {
+        System.out.println(name + &quot;：ピコーン！吠え音声再生&quot;);
+    }
+
+    @Override
+    public void walk() {
+        System.out.println(name + &quot;：モーター駆動で歩行中…&quot;);
+    }
+
+    @Override
+    public void play() {
+        System.out.println(name + &quot;：プログラムされた遊び動作を実行&quot;);
+    }
+}
+</code></pre>
+<h2>4. 多態性（ポリモーフィズム）への準備</h2>
+<p>インターフェースを使うと、異なるクラスを <strong>同じ型</strong> として扱えます。</p>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+
+        Dog[] dogs = {
+            new RealDog(&quot;ポチ&quot;),
+            new RobotDog(&quot;Aibo-X&quot;)
+        };
+
+        for (Dog d : dogs) {
+            d.bark();  // 同じ bark() でも中身が違う！
+            d.walk();
+            d.play();
+            System.out.println(&quot;---&quot;);
+        }
+    }
+}
+</code></pre>
+<p>これが <strong>多態性</strong> への第一歩です。
+（多態性は第6課で詳しく学びます）</p>
+<h2>5. 複数のインターフェースを実装する</h2>
+<p>Java のクラスは <strong>1つのクラスしか継承できない</strong> が、
+<strong>インターフェースは複数実装できる</strong>。</p>
+<pre><code class="language-java">public interface Charger {
+    void charge();
+}
+
+public interface GPS {
+    double[] getLocation();
+}
+
+public class SuperRobotDog implements Dog, Charger, GPS {
+    // Dog のメソッド + charge() + getLocation() をすべて実装する
+}
+</code></pre>
+<h2>6. 継承 vs インターフェース</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>継承（extends）</th>
+<th>インターフェース（implements）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>意味</td>
+<td>「is-a」関係</td>
+<td>「〜できる」能力</td>
+</tr>
+<tr>
+<td>中身</td>
+<td>実装を持てる</td>
+<td>抽象メソッドのみ</td>
+</tr>
+<tr>
+<td>複数</td>
+<td>1つだけ</td>
+<td>複数可能</td>
+</tr>
+<tr>
+<td>例</td>
+<td>RobotDog → SuperRobotDog</td>
+<td>Dog, Charger, GPS</td>
+</tr>
+</tbody></table>
+<h3>使い分けの指針</h3>
+<ul>
+<li><strong>継承</strong>：機能の再利用が目的。親子関係が明確なとき。</li>
+<li><strong>インターフェース</strong>：共通の操作を定義するのが目的。全く違うクラスを同じように扱いたいとき。</li>
+</ul>
+<h2>まとめ</h2>
+<ul>
+<li>インターフェースは「メソッドの約束事」を定義する</li>
+<li><code>implements</code> でインターフェースを実装する</li>
+<li>異なるクラスも同じインターフェース型として扱える</li>
+<li>複数のインターフェースを同時に実装できる</li>
+<li>継承は「is-a」、インターフェースは「〜できる」</li>
+</ul>
+<h2>キーワード</h2>
+<p><code>インターフェース</code> <code>implements</code> <code>抽象メソッド</code> <code>多態性</code> <code>複数実装</code> <code>能力</code></p>
+<h2>演習問題</h2>
+<ol>
+<li><code>Swimmable</code> インターフェースを作成し（<code>swim()</code> メソッド）、RobotDog に実装してください。</li>
+<li><code>Sensor</code> インターフェースを作成し（<code>double readDistance()</code>）、RobotDog に実装して距離を返すようにしてください。</li>
+<li>RealDog と RobotDog に、共通のインターフェースを通して「お手」をさせるプログラムを書いてください。</li>
+</ol>
+
+<h1>第6課：多態性（ポリモーフィズム）</h1>
+<h2>学習目標</h2>
+<ul>
+<li>多態性の概念を説明できる</li>
+<li>アップキャストとダウンキャストを理解する</li>
+<li>動的ディスパッチのしくみを説明できる</li>
+<li>多態性がコードをどうシンプルにするかを説明できる</li>
+</ul>
+<h2>1. ストーリー：同じリモコンで全部の犬を操作したい</h2>
+<p>研究所の机の上に、たくさんのリモコンが散らばっている。</p>
+<p>「ポチ用リモコン」
+「Aibo-X 用リモコン」
+「スーパーロボット犬用リモコン」</p>
+<p>「めんどくさい！どれも『犬』なんだから、1つのリモコンで全部操作したい！」</p>
+<p>これこそが <strong>多態性</strong> が解決する問題。</p>
+<h2>2. 多態性とは</h2>
+<p><strong>多態性（ポリモーフィズム / polymorphism）</strong> は、
+「同じ操作でも、相手のクラスによって振る舞いが変わる」仕組みです。</p>
+<pre><code>polymorphism = poly（多くの） + morph（形） = 多くの形
+</code></pre>
+<h3>アナロジー：「再生ボタン」</h3>
+<table>
+<thead>
+<tr>
+<th>アプリ</th>
+<th>ボタンを押す</th>
+<th>結果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>音楽アプリ</td>
+<td>再生ボタン</td>
+<td>音楽が流れる</td>
+</tr>
+<tr>
+<td>動画アプリ</td>
+<td>再生ボタン</td>
+<td>動画が再生される</td>
+</tr>
+<tr>
+<td>録音アプリ</td>
+<td>再生ボタン</td>
+<td>録音が再生される</td>
+</tr>
+</tbody></table>
+<p><strong>ボタンは同じ「再生」なのに、中身の動きはアプリによって違う。</strong>
+これが多態性。</p>
+<h2>3. コードで見る多態性</h2>
+<pre><code class="language-java">public interface Dog {
+    void bark();
+    void walk();
+    void play();
+}
+
+public class RealDog implements Dog {
+    public void bark() { System.out.println(&quot;ワンワン！&quot;); }
+    public void walk() { System.out.println(&quot;とことこ歩く&quot;); }
+    public void play() { System.out.println(&quot;ボールで遊ぶ&quot;); }
+}
+
+public class RobotDog implements Dog {
+    public void bark() { System.out.println(&quot;ピコーン！吠え音再生&quot;); }
+    public void walk() { System.out.println(&quot;モーター駆動で歩行&quot;); }
+    public void play() { System.out.println(&quot;プログラムされた遊び動作&quot;); }
+}
+</code></pre>
+<h3>多態性の力</h3>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+
+        Dog[] dogs = {
+            new RealDog(),
+            new RobotDog()
+        };
+
+        // 呼び出す側は「何の犬か」を気にしていない！
+        for (Dog d : dogs) {
+            d.bark();  // 勝手に正しい吠え方になる
+            d.walk();  // 勝手に正しい歩き方になる
+        }
+    }
+}
+</code></pre>
+<p><strong>呼び出す側（for 文）は Dog 型としか向き合っていない。</strong>
+それなのに、実際のオブジェクトに応じて正しい動作が選ばれる。</p>
+<h2>4. アップキャストと動的ディスパッチ</h2>
+<h3>アップキャスト</h3>
+<p><strong>アップキャスト</strong> は、子クラスのオブジェクトを親クラス（またはインターフェース）型の変数に代入すること。</p>
+<pre><code class="language-java">Dog dog = new RealDog();  // アップキャスト（RealDog → Dog）
+</code></pre>
+<p>「具体的な型を、より抽象的な型として扱う」こと。</p>
+<h3>動的ディスパッチ</h3>
+<p><strong>動的ディスパッチ（dynamic dispatch）</strong> は、
+<strong>実行時に</strong> どのメソッドを呼ぶかが決まる仕組み。</p>
+<pre><code class="language-java">Dog dog;
+
+if (isRealDog) {
+    dog = new RealDog();
+} else {
+    dog = new RobotDog();
+}
+
+dog.bark(); // 実行時に isRealDog の値によって呼ばれる bark() が変わる
+</code></pre>
+<p>コンパイル時には決まらず、<strong>実行時のオブジェクトの中身</strong> で動作が決まる。</p>
+<h2>5. 多態性がなかった世界（比較）</h2>
+<h3>多態性がない場合（if 文地獄）</h3>
+<pre><code class="language-java">void makeSound(Object animal) {
+    if (animal instanceof RealDog) {
+        ((RealDog) animal).bark();
+    } else if (animal instanceof RobotDog) {
+        ((RobotDog) animal).bark();
+    } else if (animal instanceof SuperRobotDog) {
+        ((SuperRobotDog) animal).bark();
+    }
+    // 新しい犬の種類が増えるたびにここを書き換える
+}
+</code></pre>
+<h3>多態性がある場合</h3>
+<pre><code class="language-java">void makeSound(Dog dog) {
+    dog.bark();  // 新しい犬が増えても修正不要！
+}
+</code></pre>
+<h2>6. 多態性の3つの条件</h2>
+<ol>
+<li><strong>継承またはインターフェース実装</strong> があること</li>
+<li><strong>メソッドがオーバーライド</strong> されていること</li>
+<li><strong>親クラス（インターフェース）型の変数</strong> で参照すること</li>
+</ol>
+<p>この3つがそろうと、多態性が発動します。</p>
+<h2>まとめ</h2>
+<ul>
+<li>多態性 ＝ 同じ操作でも相手によって動きが変わる</li>
+<li>アップキャスト：具体的な型 → 抽象的な型</li>
+<li>動的ディスパッチ：実行時にメソッドが決まる</li>
+<li>多態性で条件分岐が減り、コードがシンプルになる</li>
+<li>多態性の3条件：継承/実装 + オーバーライド + 親クラス型</li>
+</ul>
+<h2>キーワード</h2>
+<p><code>多態性</code> <code>ポリモーフィズム</code> <code>アップキャスト</code> <code>動的ディスパッチ</code> <code>instanceof</code> <code>オーバーライド</code></p>
+<h2>演習問題</h2>
+<ol>
+<li><code>Dog</code> インターフェースに <code>eat()</code> メソッドを追加し、RealDog と RobotDog で異なる実装をしてください。</li>
+<li>多態性を使わずに if-else で動物の種類を判別するコードを書き、その問題点を説明してください。</li>
+<li><code>List&lt;Dog&gt;</code> を使って 3 種類以上の犬を追加し、それぞれの <code>bark()</code> を一度のループで呼び出すコードを書いてください。</li>
+</ol>
+
+<h1>第7課：戦略パターン——頭脳の差し替え</h1>
+<h2>学習目標</h2>
+<ul>
+<li>戦略パターン（Strategy Pattern）を理解する</li>
+<li>多態性を使って「頭脳の差し替え」を実装できる</li>
+<li>依存性注入（Dependency Injection）の初歩を理解する</li>
+<li>「継承よりコンポジション」の意味を説明できる</li>
+</ul>
+<h2>1. ストーリー：ロボット犬の頭脳を交換したい</h2>
+<p>研究所で、ロボット犬の「性格」を変えたいという要望が出た。</p>
+<ul>
+<li>探索が好きな「好奇心旺盛モード」</li>
+<li>慎重に動く「安全第一モード」</li>
+<li>ランダムに動く「ランダムモード」</li>
+</ul>
+<p>でも、頭脳を変えるたびにクラスをまるごと書き換えるのは大変。
+<strong>「頭脳（Brain）」だけを差し替えられるようにしたい。</strong></p>
+<h2>2. 戦略パターンとは</h2>
+<p><strong>戦略パターン（Strategy Pattern）</strong> は、
+アルゴリズム（戦略）をクラスとしてカプセル化し、実行時に差し替えられるようにするデザインパターン。</p>
+<pre><code>エージェント（身体） → 固定
+戦略（頭脳） → 差し替え可能
+</code></pre>
+<h2>3. 頭脳を差し替えるコード</h2>
+<h3>Brain インターフェース</h3>
+<pre><code class="language-java">public interface Brain {
+    String decide(String situation);
+}
+</code></pre>
+<h3>3 種類の頭脳</h3>
+<pre><code class="language-java">public class CuriousBrain implements Brain {
+    @Override
+    public String decide(String situation) {
+        return &quot;未知の場所を探索しに行く！&quot;;
+    }
+}
+
+public class CautiousBrain implements Brain {
+    @Override
+    public String decide(String situation) {
+        return &quot;周囲を確認してから安全なルートを進む&quot;;
+    }
+}
+
+public class RandomBrain implements Brain {
+    @Override
+    public String decide(String situation) {
+        double r = Math.random();
+        if (r &lt; 0.33) return &quot;左に行く&quot;;
+        else if (r &lt; 0.66) return &quot;右に行く&quot;;
+        else return &quot;その場で待機する&quot;;
+    }
+}
+</code></pre>
+<h3>エージェント（頭脳を持ったロボット犬）</h3>
+<pre><code class="language-java">public class RobotDogAgent {
+
+    private String name;
+    private Brain brain;  // 頭脳（差し替え可能）
+
+    public RobotDogAgent(String name, Brain brain) {
+        this.name = name;
+        this.brain = brain;
+    }
+
+    // 頭脳を後から差し替え
+    public void setBrain(Brain brain) {
+        this.brain = brain;
+    }
+
+    public void act(String situation) {
+        System.out.println(name + &quot; は &quot; + situation + &quot; で &quot; +
+                           brain.decide(situation));
+    }
+}
+</code></pre>
+<h3>使ってみる</h3>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+
+        RobotDogAgent agent = new RobotDogAgent(&quot;Aibo-X&quot;, new CuriousBrain());
+
+        agent.act(&quot;見知らぬ部屋にいる&quot;); // 探索に行く
+
+        // 頭脳を差し替え！
+        agent.setBrain(new CautiousBrain());
+        agent.act(&quot;見知らぬ部屋にいる&quot;); // 安全ルートを進む
+
+        // さらに差し替え！
+        agent.setBrain(new RandomBrain());
+        agent.act(&quot;見知らぬ部屋にいる&quot;); // ランダムな行動
+    }
+}
+</code></pre>
+<h4>実行結果</h4>
+<pre><code>Aibo-X は 見知らぬ部屋にいる で 未知の場所を探索しに行く！
+Aibo-X は 見知らぬ部屋にいる で 周囲を確認してから安全なルートを進む
+Aibo-X は 見知らぬ部屋にいる で 右に行く
+</code></pre>
+<h2>4. 依存性注入（Dependency Injection）</h2>
+<p>上のコードでは、<code>RobotDogAgent</code> のコンストラクタで <code>Brain</code> を受け取っている。
+これが <strong>依存性注入（DI）</strong> の初歩的な形。</p>
+<pre><code class="language-java">// NG：エージェントが自分で頭脳を作る（密結合）
+public class RobotDogAgent {
+    private Brain brain = new CuriousBrain(); // ← 差し替えにくい
+}
+
+// OK：外から頭脳を受け取る（疎結合）
+public class RobotDogAgent {
+    private Brain brain;
+    public RobotDogAgent(Brain brain) {
+        this.brain = brain; // ← 外から注入される
+    }
+}
+</code></pre>
+<h2>5. 継承よりコンポジション</h2>
+<p>「継承よりコンポジション（composition over inheritance）」は、
+「機能を追加するときは、継承より部品を組み合わせるほうが柔軟」という設計原則。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>柔軟性</th>
+<th>例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>継承</td>
+<td>低い（親子関係が固定）</td>
+<td>SuperRobotDog extends RobotDog</td>
+</tr>
+<tr>
+<td>コンポジション</td>
+<td>高い（部品を差し替え可能）</td>
+<td>RobotDogAgent has-a Brain</td>
+</tr>
+</tbody></table>
+<p>AI エージェントの頭脳差し替えは、この原則の代表例。</p>
+<h2>まとめ</h2>
+<ul>
+<li>戦略パターンは「アルゴリズムを部品として差し替え可能にする」</li>
+<li>Brain インターフェースで頭脳を抽象化する</li>
+<li>依存性注入で外部から部品を受け取る</li>
+<li>「継承よりコンポジション」で柔軟な設計になる</li>
+<li>これは多態性の実践的な応用</li>
+</ul>
+<h2>キーワード</h2>
+<p><code>戦略パターン</code> <code>Strategy パターン</code> <code>依存性注入</code> <code>DI</code> <code>コンポジション</code> <code>継承よりコンポジション</code></p>
+<h2>演習問題</h2>
+<ol>
+<li>新しい <code>SleepyBrain</code> クラスを作成し、常に「眠いから寝る」と返すようにしてください。</li>
+<li>状況によって頭脳を自動的に切り替える <code>AdaptiveBrain</code> を作成してください（例：バッテリーが少ないときは CautiousBrain に切り替える）。</li>
+<li>RobotDogAgent に <code>battery</code> プロパティを追加し、行動ごとに消費する仕組みを実装してください。</li>
+</ol>
+
+<h1>第8課：ロボットの頭脳を入れ替える</h1>
+<h2>学習目標</h2>
+<ul>
+<li>AI エージェントの基本構造を理解する</li>
+<li>センサー入力 → 頭脳 → 行動出力の流れを実装できる</li>
+<li>複数の頭脳を切り替えながら実験できる</li>
+</ul>
+<h2>1. ストーリー：ロボット犬の頭脳研究所</h2>
+<p>研究所のメインプロジェクトは「頭脳の研究」。</p>
+<p>ロボット犬のハードウェアは同じでも、
+<strong>頭脳（アルゴリズム）を変えるだけでまったく違う振る舞いになる。</strong></p>
+<p>これは「世界モデル（World Model）」への第一歩。</p>
+<h2>2. AI エージェントの基本構造</h2>
+<p>AI エージェントは以下の3つの要素からなる。</p>
+<pre><code>センサー入力 → 頭脳（意思決定） → アクチュエータ（行動）
+</code></pre>
+<p>ロボット犬で言い換えると：</p>
+<pre><code>カメラ・マイク → Brain.decide() → モーター・スピーカー
+</code></pre>
+<h2>3. 完全なエージェントの実装</h2>
+<h3>状態（State）</h3>
+<pre><code class="language-java">public class State {
+    private int battery;
+    private boolean hasBall;
+    private String location;
+
+    public State(int battery, boolean hasBall, String location) {
+        this.battery = battery;
+        this.hasBall = hasBall;
+        this.location = location;
+    }
+
+    public int getBattery() { return battery; }
+    public boolean hasBall() { return hasBall; }
+    public String getLocation() { return location; }
+
+    public State withBattery(int battery) {
+        return new State(battery, hasBall, location);
+    }
+
+    @Override
+    public String toString() {
+        return &quot;State{battery=&quot; + battery + &quot;, hasBall=&quot; + hasBall +
+               &quot;, location=&#39;&quot; + location + &quot;&#39;}&quot;;
+    }
+}
+</code></pre>
+<h3>行動（Action）</h3>
+<pre><code class="language-java">public abstract class Action {
+    private String name;
+    public Action(String name) { this.name = name; }
+    public String getName() { return name; }
+    public abstract State execute(State current);
+}
+
+public class WalkAction extends Action {
+    public WalkAction() { super(&quot;歩く&quot;); }
+    @Override
+    public State execute(State current) {
+        return current.withBattery(current.getBattery() - 10);
+    }
+}
+
+public class PlayAction extends Action {
+    public PlayAction() { super(&quot;遊ぶ&quot;); }
+    @Override
+    public State execute(State current) {
+        return current.withBattery(current.getBattery() - 5);
+    }
+}
+
+public class ChargeAction extends Action {
+    public ChargeAction() { super(&quot;充電する&quot;); }
+    @Override
+    public State execute(State current) {
+        return current.withBattery(100);
+    }
+}
+
+public class SearchAction extends Action {
+    public SearchAction() { super(&quot;探索する&quot;); }
+    @Override
+    public State execute(State current) {
+        return current.withBattery(current.getBattery() - 15);
+    }
+}
+</code></pre>
+<h3>頭脳（Brain）インターフェース</h3>
+<pre><code class="language-java">public interface Brain {
+    Action decide(State currentState);
+}
+</code></pre>
+<h3>頭脳の実装：SimpleBrain</h3>
+<pre><code class="language-java">public class SimpleBrain implements Brain {
+    @Override
+    public Action decide(State state) {
+        if (state.getBattery() &lt; 20) {
+            return new ChargeAction();
+        }
+        if (state.hasBall()) {
+            return new PlayAction();
+        }
+        return new SearchAction();
+    }
+}
+</code></pre>
+<h3>エージェント本体</h3>
+<pre><code class="language-java">public class RobotDogAgent {
+
+    private String name;
+    private Brain brain;
+    private State state;
+
+    public RobotDogAgent(String name, Brain brain) {
+        this.name = name;
+        this.brain = brain;
+        this.state = new State(100, false, &quot;研究所&quot;);
+    }
+
+    public void setBrain(Brain brain) {
+        this.brain = brain;
+        System.out.println(name + &quot;：頭脳を交換しました&quot;);
+    }
+
+    public void step() {
+        System.out.println(&quot;現在の状態：&quot; + state);
+        Action action = brain.decide(state);
+        System.out.println(name + &quot; の選択：&quot; + action.getName());
+        state = action.execute(state);
+        System.out.println(&quot;実行後の状態：&quot; + state);
+        System.out.println(&quot;---&quot;);
+    }
+}
+</code></pre>
+<h3>実行</h3>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+
+        RobotDogAgent agent = new RobotDogAgent(&quot;Aibo-X&quot;, new SimpleBrain());
+
+        for (int i = 0; i &lt; 5; i++) {
+            agent.step();
+        }
+    }
+}
+</code></pre>
+<h4>実行結果の例</h4>
+<pre><code>現在の状態：State{battery=100, hasBall=false, location=&#39;研究所&#39;}
+Aibo-X の選択：探索する
+実行後の状態：State{battery=85, hasBall=false, location=&#39;研究所&#39;}
+---
+現在の状態：State{battery=85, hasBall=false, location=&#39;研究所&#39;}
+Aibo-X の選択：探索する
+実行後の状態：State{battery=70, hasBall=false, location=&#39;研究所&#39;}
+---
+...（繰り返し）...
+現在の状態：State{battery=15, hasBall=false, location=&#39;研究所&#39;}
+Aibo-X の選択：充電する
+実行後の状態：State{battery=100, hasBall=false, location=&#39;研究所&#39;}
+---
+</code></pre>
+<h2>4. 頭脳の差し替え実験</h2>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+
+        RobotDogAgent agent = new RobotDogAgent(&quot;Aibo-X&quot;, new SimpleBrain());
+
+        // シンプル頭脳で3ステップ
+        System.out.println(&quot;=== SimpleBrain ===&quot;);
+        for (int i = 0; i &lt; 3; i++) agent.step();
+
+        // ランダム頭脳に差し替え
+        agent.setBrain(new RandomBrain());
+        System.out.println(&quot;=== RandomBrain ===&quot;);
+        for (int i = 0; i &lt; 3; i++) agent.step();
+    }
+}
+</code></pre>
+<h2>5. これが世界モデルへの入り口</h2>
+<p>この「状態 → 判断 → 行動 → 状態変化」のループは、
+<strong>世界モデル（World Model）</strong> の最も単純な形。</p>
+<ul>
+<li>状態（State）＝ 世界の今の状況</li>
+<li>行動（Action）＝ ロボットの動作</li>
+<li>頭脳（Brain）＝ 状態から最適な行動を選ぶルール</li>
+</ul>
+<p>第9課では、これを「予測」に拡張する。</p>
+<h2>まとめ</h2>
+<ul>
+<li>AI エージェントは「センサー → 頭脳 → 行動」で構成される</li>
+<li>State で世界の状態を表現する</li>
+<li>Action でロボットの行動を表現する</li>
+<li>Brain が状態から最適な行動を選ぶ</li>
+<li>頭脳を差し替えるだけで振る舞いが変わる</li>
+</ul>
+<h2>キーワード</h2>
+<p><code>AI エージェント</code> <code>状態</code> <code>行動</code> <code>センサー</code> <code>アクチュエータ</code> <code>意思決定</code> <code>世界モデル</code></p>
+<h2>演習問題</h2>
+<ol>
+<li>新しい頭脳 <code>AggressiveBrain</code>（バッテリーが 50 以上なら常に探索、それ以下なら充電）を作成してください。</li>
+<li>State に <code>temperature</code>（温度）プロパティを追加し、温度が高いときは充電を控える頭脳を作成してください。</li>
+<li>頭脳が選んだ行動の履歴を保持する <code>LoggingBrain</code>（実際の頭脳をラップする）を作成してください。</li>
+</ol>
+
+<h1>第9課：世界モデル——状態と行動の予測</h1>
+<h2>学習目標</h2>
+<ul>
+<li>世界モデル（World Model）の概念を説明できる</li>
+<li>状態遷移の予測をコード化できる</li>
+<li>「予測 → 選択 → 実行」のループを実装できる</li>
+<li>多態性と世界モデルの関係を説明できる</li>
+</ul>
+<h2>1. ストーリー：未来を予測するロボット犬</h2>
+<p>これまでのロボット犬は「今の状態だけ」で行動を選んでいた。
+でも、本当に賢いロボットは <strong>「この行動をしたら、次はどうなるか」</strong> を予測して行動を選ぶ。</p>
+<p>今の Aibo-X の問題：</p>
+<pre><code>バッテリー残量：25
+↓
+バッテリーが少ないから「充電する」を選ぶ
+↓
+つまらない…
+</code></pre>
+<p>「充電したらその後どうなる？」を予測できれば、
+「充電してから探索に行こう」という計画が立てられる。</p>
+<h2>2. 世界モデルとは</h2>
+<p><strong>世界モデル（World Model）</strong> は、
+「行動すると世界（状態）がどう変わるか」を予測する仕組み。</p>
+<pre><code>現在の状態 + 行動 → 予測される未来の状態
+</code></pre>
+<h2>3. 世界モデルをコード化する</h2>
+<h3>世界モデルインターフェース</h3>
+<pre><code class="language-java">public interface WorldModel {
+    State predict(State current, Action action);
+    double evaluate(State predictedState);
+}
+</code></pre>
+<h3>シンプルな世界モデルの実装</h3>
+<pre><code class="language-java">public class SimpleWorldModel implements WorldModel {
+
+    @Override
+    public State predict(State current, Action action) {
+        // 行動を仮実行して結果を予測
+        return action.execute(current);
+    }
+
+    @Override
+    public double evaluate(State predictedState) {
+        double score = 0;
+        score += predictedState.getBattery() * 0.5;      // バッテリーは高いほうが良い
+        score += predictedState.hasBall() ? 30 : 0;       // ボールがあれば嬉しい
+        score += predictedState.getBattery() &gt;= 50 ? 20 : -20; // 50% 以上を維持したい
+        return score;
+    }
+}
+</code></pre>
+<h3>予測する頭脳（世界モデル搭載）</h3>
+<pre><code class="language-java">public class PredictiveBrain implements Brain {
+
+    private WorldModel model;
+    private List&lt;Action&gt; possibleActions;
+
+    public PredictiveBrain(WorldModel model) {
+        this.model = model;
+        this.possibleActions = Arrays.asList(
+            new WalkAction(),
+            new PlayAction(),
+            new ChargeAction(),
+            new SearchAction()
+        );
+    }
+
+    @Override
+    public Action decide(State currentState) {
+        Action bestAction = null;
+        double bestScore = Double.NEGATIVE_INFINITY;
+
+        System.out.println(&quot;【世界モデルによる予測】&quot;);
+        for (Action action : possibleActions) {
+            State predicted = model.predict(currentState, action);
+            double score = model.evaluate(predicted);
+
+            System.out.println(action.getName() + &quot; → &quot; + predicted + &quot; スコア:&quot; + score);
+
+            if (score &gt; bestScore) {
+                bestScore = score;
+                bestAction = action;
+            }
+        }
+
+        System.out.println(&quot;選択: &quot; + bestAction.getName());
+        return bestAction;
+    }
+}
+</code></pre>
+<h3>使ってみる</h3>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+
+        WorldModel model = new SimpleWorldModel();
+        RobotDogAgent agent = new RobotDogAgent(&quot;Aibo-X&quot;, new PredictiveBrain(model));
+
+        // バッテリー少ない状態でスタート
+        for (int i = 0; i &lt; 4; i++) {
+            agent.step();
+        }
+    }
+}
+</code></pre>
+<h4>実行結果（イメージ）</h4>
+<pre><code>【世界モデルによる予測】
+歩く → State{battery=15} スコア:7.5
+遊ぶ → State{battery=20} スコア:10.0
+充電する → State{battery=100} スコア:70.0
+探索する → State{battery=10} スコア:5.0
+選択: 充電する
+
+充電後の状態：State{battery=100}
+
+【世界モデルによる予測】
+歩く → State{battery=90} スコア:65.0
+遊ぶ → State{battery=95} スコア:67.5
+充電する → State{battery=100} スコア:70.0
+探索する → State{battery=85} スコア:62.5
+選択: 充電する（または遊ぶ）
+</code></pre>
+<h2>4. 多態性と世界モデルの関係</h2>
+<h3>対応関係</h3>
+<table>
+<thead>
+<tr>
+<th>OOP の多態性</th>
+<th>ロボティクスの世界モデル</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>speak()</code> の実装がクラスごとに違う</td>
+<td><code>grasp()</code> の動作が物体ごとに違う</td>
+</tr>
+<tr>
+<td>呼び出す側は相手の型を意識しない</td>
+<td>制御側は物体の種類を意識しない</td>
+</tr>
+<tr>
+<td>抽象化されたインターフェース</td>
+<td>抽象化された行動プリミティブ</td>
+</tr>
+<tr>
+<td>実装の違いを隠蔽</td>
+<td>物理的な違いをモデルが吸収</td>
+</tr>
+</tbody></table>
+<h3>本質</h3>
+<pre><code class="language-java">// 多態性：同じメソッド名、違う実装
+animals.forEach(animal -&gt; animal.speak());
+
+// 世界モデル：同じコマンド、違う動作
+objects.forEach(obj -&gt; robot.grasp(obj));
+</code></pre>
+<p>どちらも <strong>「抽象化された同じ操作が、具体的な対象に応じて変化する」</strong> という本質を持つ。</p>
+<h2>まとめ</h2>
+<ul>
+<li>世界モデルは「行動の結果を予測する」仕組み</li>
+<li><code>predict()</code> で未来の状態を予測</li>
+<li><code>evaluate()</code> で予測された状態を評価</li>
+<li>最適な行動を選択できる</li>
+<li>世界モデルは多態性の「現実世界版」</li>
+</ul>
+<h2>キーワード</h2>
+<p><code>世界モデル</code> <code>World Model</code> <code>予測</code> <code>評価</code> <code>状態遷移</code> <code>意思決定</code> <code>計画</code></p>
+<h2>演習問題</h2>
+<ol>
+<li><code>evaluate()</code> に「バッテリーが高いほど良い」だけでなく「変動が少ないほど良い」という評価軸を追加してください。</li>
+<li>2 ステップ先まで予測する頭脳 <code>TwoStepPredictiveBrain</code> を作成してください。</li>
+<li>ロボット犬に「お手」と「ふせ」の Action を追加し、それらを含めて世界モデルで評価するコードを書いてください。</li>
+</ol>
+
+<h1>第10課：publish / subscribe 通信</h1>
+<h2>学習目標</h2>
+<ul>
+<li>ROS のノードとトピックの概念を理解する</li>
+<li>publish（送信）と subscribe（受信）を実装できる</li>
+<li>インターフェースを使って疎結合な通信を設計できる</li>
+</ul>
+<h2>1. ストーリー：ロボット犬どうしが会話したい</h2>
+<p>研究所にロボット犬が増えてきた。
+Aibo-X、ポチ、そして新しい仲間「タロウ」。</p>
+<p>でも、それぞれがバラバラに動いている。
+「Aibo-X が吠えたことを、みんなに知らせたい！」</p>
+<p>ここで <strong>ROS（Robot Operating System）</strong> の考え方が役立つ。</p>
+<h2>2. ROS とは</h2>
+<p>ROS（Robot Operating System）は、ロボットソフトウェアを開発するためのフレームワーク。</p>
+<p>ROS の基本的な考え方：</p>
+<pre><code>ノード（Node） = ロボットの中のひとつの機能
+トピック（Topic） = メッセージの通り道
+publish = メッセージを送る
+subscribe = メッセージを受け取る
+</code></pre>
+<h2>3. Java で pub/sub を実装する</h2>
+<h3>購読者（Subscriber）インターフェース</h3>
+<pre><code class="language-java">public interface Subscriber {
+    void onMessage(String topicName, String message);
+}
+</code></pre>
+<h3>トピック（Topic）インターフェース</h3>
+<pre><code class="language-java">import java.util.ArrayList;
+import java.util.List;
+
+public interface Topic {
+    void publish(String message);
+    void subscribe(Subscriber sub);
+}
+</code></pre>
+<h3>ブロードキャストトピック</h3>
+<pre><code class="language-java">public class BroadcastTopic implements Topic {
+
+    private List&lt;Subscriber&gt; subs = new ArrayList&lt;&gt;();
+    private String name;
+
+    public BroadcastTopic(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void publish(String message) {
+        System.out.println(&quot;[&quot; + name + &quot;] publish: &quot; + message);
+        for (Subscriber sub : subs) {
+            sub.onMessage(name, message);
+        }
+    }
+
+    @Override
+    public void subscribe(Subscriber sub) {
+        subs.add(sub);
+    }
+}
+</code></pre>
+<h3>表示ノード</h3>
+<pre><code class="language-java">public class DisplayNode implements Subscriber {
+
+    private String name;
+
+    public DisplayNode(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void onMessage(String topic, String message) {
+        System.out.println(&quot;  [&quot; + name + &quot; 表示] &quot; + topic + &quot; → &quot; + message);
+    }
+}
+</code></pre>
+<h3>犬ノード：自分も購読する</h3>
+<pre><code class="language-java">public class DogNode implements Subscriber {
+
+    private String name;
+    private Topic barkTopic;
+    private Topic walkTopic;
+
+    public DogNode(String name, Topic barkTopic, Topic walkTopic) {
+        this.name = name;
+        this.barkTopic = barkTopic;
+        this.walkTopic = walkTopic;
+    }
+
+    public void bark() {
+        barkTopic.publish(name + &quot;：ワンワン！&quot;);
+    }
+
+    public void walk() {
+        walkTopic.publish(name + &quot;：とことこ歩く&quot;);
+    }
+
+    @Override
+    public void onMessage(String topic, String message) {
+        if (!message.contains(name)) {
+            System.out.println(&quot;  [&quot; + name + &quot; 聞いた] &quot; + topic +
+                               &quot;で「&quot; + message + &quot;」と言っている&quot;);
+        }
+    }
+}
+</code></pre>
+<h3>メイン</h3>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+
+        Topic barkTopic = new BroadcastTopic(&quot;bark&quot;);
+        Topic walkTopic = new BroadcastTopic(&quot;walk&quot;);
+
+        DogNode pochi = new DogNode(&quot;ポチ&quot;, barkTopic, walkTopic);
+        DogNode aiboX = new DogNode(&quot;Aibo-X&quot;, barkTopic, walkTopic);
+
+        // トピックに購読者を登録
+        barkTopic.subscribe(new DisplayNode(&quot;モニター&quot;));
+        barkTopic.subscribe(pochi);
+        barkTopic.subscribe(aiboX);
+        walkTopic.subscribe(pochi);
+        walkTopic.subscribe(aiboX);
+
+        System.out.println(&quot;=== ポチが吠える ===&quot;);
+        pochi.bark();
+
+        System.out.println(&quot;=== Aibo-X が歩く ===&quot;);
+        aiboX.walk();
+    }
+}
+</code></pre>
+<h4>実行結果</h4>
+<pre><code>=== ポチが吠える ===
+[bark] publish: ポチ：ワンワン！
+  [モニター 表示] bark → ポチ：ワンワン！
+  [Aibo-X 聞いた] barkで「ポチ：ワンワン！」と言っている
+=== Aibo-X が歩く ===
+[walk] publish: Aibo-X：とことこ歩く
+  [ポチ 聞いた] walkで「Aibo-X：とことこ歩く」と言っている
+</code></pre>
+<h2>4. なぜ publish / subscribe が重要なのか</h2>
+<ol>
+<li><p><strong>ノード同士が直接つながっていない（疎結合）</strong></p>
+<ul>
+<li>ポチは Aibo-X の存在を知らなくてよい</li>
+<li>トピックを通して間接的に通信する</li>
+</ul>
+</li>
+<li><p><strong>新しいノードを追加しやすい</strong></p>
+<ul>
+<li>DisplayNode を後から追加しても既存のコードは修正不要</li>
+</ul>
+</li>
+<li><p><strong>スケールする</strong></p>
+<ul>
+<li>10 匹でも 100 匹でも同じ仕組みで通信できる</li>
+</ul>
+</li>
+</ol>
+<h2>まとめ</h2>
+<ul>
+<li>ノードは独立した機能、トピックは通信路</li>
+<li>publish = メッセージを送る、subscribe = 受け取る</li>
+<li>pub/sub によってノード同士は疎結合になる</li>
+<li>新しいノードの追加が容易になる</li>
+<li>これは ROS の中心的な設計思想</li>
+</ul>
+<h2>キーワード</h2>
+<p><code>ROS</code> <code>ノード</code> <code>トピック</code> <code>publish</code> <code>subscribe</code> <code>疎結合</code> <code>ブロードキャスト</code></p>
+<h2>演習問題</h2>
+<ol>
+<li><code>play</code> トピックを追加し、犬が遊ぶときもメッセージを publish するようにしてください。</li>
+<li><code>LoggerNode</code>（すべてのトピックを購読してログに記録するノード）を作成してください。</li>
+<li>特定のメッセージだけフィルタリングする <code>FilterNode</code> を作成してください（例：「ワンワン」という文字列が含まれるメッセージだけを表示する）。</li>
+</ol>
+
+<h1>第11課：マルチエージェントと協調動作</h1>
+<h2>学習目標</h2>
+<ul>
+<li>マルチエージェントシステムの基本を理解する</li>
+<li>複数のノードが協調して動作する仕組みを実装できる</li>
+<li>メッセージを使ってエージェント間で情報を共有できる</li>
+<li>分散システムの考え方を理解する</li>
+</ul>
+<h2>1. ストーリー：3 匹のロボット犬で協力しよう</h2>
+<p>研究所に 3 匹のロボット犬がいる。</p>
+<ul>
+<li><strong>ポチ</strong>（探索担当）：新しい場所を探す</li>
+<li><strong>Aibo-X</strong>（運搬担当）：見つけたものを運ぶ</li>
+<li><strong>タロウ</strong>（警備担当）：危険を知らせる</li>
+</ul>
+<p>この 3 匹が協力すれば、1 匹ではできないことができる。</p>
+<h2>2. マルチエージェントシステム</h2>
+<p><strong>マルチエージェントシステム（MAS）</strong> は、
+複数の独立したエージェントが協調して問題を解決するシステム。</p>
+<p>ロボティクスでは、複数のロボットが協力するときに使われる。</p>
+<h3>メッセージの設計</h3>
+<p>まず、犬同士がやりとりするメッセージの型を定義する。</p>
+<pre><code class="language-java">public class DogMessage {
+    private String sender;
+    private String type;    // &quot;bark&quot;, &quot;found_ball&quot;, &quot;danger&quot;, &quot;help&quot;
+    private String content;
+
+    public DogMessage(String sender, String type, String content) {
+        this.sender = sender;
+        this.type = type;
+        this.content = content;
+    }
+
+    public String getSender() { return sender; }
+    public String getType() { return type; }
+    public String getContent() { return content; }
+
+    @Override
+    public String toString() {
+        return &quot;[&quot; + sender + &quot;] &quot; + type + &quot;: &quot; + content;
+    }
+}
+</code></pre>
+<h3>メッセージキューつきトピック</h3>
+<pre><code class="language-java">import java.util.concurrent.ConcurrentLinkedQueue;
+
+public class MessageQueueTopic implements Topic {
+
+    private List&lt;Subscriber&gt; subs = new ArrayList&lt;&gt;();
+    private ConcurrentLinkedQueue&lt;DogMessage&gt; queue = new ConcurrentLinkedQueue&lt;&gt;();
+    private String name;
+
+    public MessageQueueTopic(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void publish(String message) {
+        System.out.println(&quot;[&quot; + name + &quot;] publish: &quot; + message);
+        for (Subscriber sub : subs) {
+            sub.onMessage(name, message);
+        }
+    }
+
+    public void publishDogMessage(DogMessage msg) {
+        queue.add(msg);
+        System.out.println(&quot;[&quot; + name + &quot;] メッセージ: &quot; + msg);
+        for (Subscriber sub : subs) {
+            if (sub instanceof DogAgent) {
+                ((DogAgent) sub).onDogMessage(msg);
+            }
+        }
+    }
+
+    @Override
+    public void subscribe(Subscriber sub) {
+        subs.add(sub);
+    }
+
+    public boolean hasMessage() {
+        return !queue.isEmpty();
+    }
+
+    public DogMessage pollMessage() {
+        return queue.poll();
+    }
+}
+</code></pre>
+<h3>DogAgent（高度な犬エージェント）</h3>
+<pre><code class="language-java">public interface DogAgent extends Subscriber {
+    void onDogMessage(DogMessage msg);
+    void act();
+    String getName();
+}
+</code></pre>
+<h3>探索担当：ポチ</h3>
+<pre><code class="language-java">public class ExplorerDog implements DogAgent {
+
+    private String name;
+    private MessageQueueTopic commTopic;
+    private int battery = 100;
+
+    public ExplorerDog(String name, MessageQueueTopic commTopic) {
+        this.name = name;
+        this.commTopic = commTopic;
+    }
+
+    @Override
+    public String getName() { return name; }
+
+    @Override
+    public void act() {
+        // 探索する
+        System.out.println(name + &quot;：探索中…&quot;);
+        battery -= 15;
+
+        // ボールを発見！
+        if (Math.random() &gt; 0.7) {
+            DogMessage found = new DogMessage(name, &quot;found_ball&quot;,
+                &quot;ボールを発見！位置は (12, 34)&quot;);
+            commTopic.publishDogMessage(found);
+        }
+
+        // バッテリー残量が少ない
+        if (battery &lt; 20) {
+            DogMessage help = new DogMessage(name, &quot;help&quot;,
+                &quot;バッテリー切れ寸前！場所は (15, 20)&quot;);
+            commTopic.publishDogMessage(help);
+        }
+    }
+
+    @Override
+    public void onDogMessage(DogMessage msg) {
+        if (msg.getType().equals(&quot;danger&quot;)) {
+            System.out.println(name + &quot;：危険！逃げろ！！&quot;);
+        }
+    }
+
+    @Override
+    public void onMessage(String topic, String message) {
+        // 通常のテキストメッセージ
+    }
+}
+</code></pre>
+<h3>運搬担当：Aibo-X</h3>
+<pre><code class="language-java">public class CarrierDog implements DogAgent {
+
+    private String name;
+    private MessageQueueTopic commTopic;
+    private boolean carrying = false;
+    private int battery = 100;
+
+    public CarrierDog(String name, MessageQueueTopic commTopic) {
+        this.name = name;
+        this.commTopic = commTopic;
+    }
+
+    @Override
+    public String getName() { return name; }
+
+    @Override
+    public void act() {
+        if (carrying) {
+            System.out.println(name + &quot;：荷物を運搬中…&quot;);
+            battery -= 10;
+        } else {
+            System.out.println(name + &quot;：待機中…&quot;);
+            battery += 5;
+        }
+    }
+
+    @Override
+    public void onDogMessage(DogMessage msg) {
+        if (msg.getType().equals(&quot;found_ball&quot;)) {
+            System.out.println(name + &quot;：ボールを回収に向かう！&quot;);
+            carrying = true;
+            DogMessage reply = new DogMessage(name, &quot;going_to_pickup&quot;,
+                &quot;ボールを回収に行きます&quot;);
+            commTopic.publishDogMessage(reply);
+        }
+    }
+
+    @Override
+    public void onMessage(String topic, String message) {}
+}
+</code></pre>
+<h3>警備担当：タロウ</h3>
+<pre><code class="language-java">public class GuardDog implements DogAgent {
+
+    private String name;
+    private MessageQueueTopic commTopic;
+
+    public GuardDog(String name, MessageQueueTopic commTopic) {
+        this.name = name;
+        this.commTopic = commTopic;
+    }
+
+    @Override
+    public String getName() { return name; }
+
+    @Override
+    public void act() {
+        // 警戒中
+        System.out.println(name + &quot;：周囲を警戒中…&quot;);
+
+        // 異常を検知
+        if (Math.random() &gt; 0.8) {
+            DogMessage danger = new DogMessage(name, &quot;danger&quot;,
+                &quot;不審な動きを検知！&quot;);
+            commTopic.publishDogMessage(danger);
+        }
+    }
+
+    @Override
+    public void onDogMessage(DogMessage msg) {
+        if (msg.getType().equals(&quot;help&quot;)) {
+            System.out.println(name + &quot;：&quot; + msg.getSender() +
+                               &quot; が助けを求めている！向かう！&quot;);
+        }
+    }
+
+    @Override
+    public void onMessage(String topic, String message) {}
+}
+</code></pre>
+<h3>メイン：3 匹の協調動作</h3>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+
+        MessageQueueTopic commTopic = new MessageQueueTopic(&quot;communication&quot;);
+
+        DogAgent pochi = new ExplorerDog(&quot;ポチ&quot;, commTopic);
+        DogAgent aiboX = new CarrierDog(&quot;Aibo-X&quot;, commTopic);
+        DogAgent taro = new GuardDog(&quot;タロウ&quot;, commTopic);
+
+        commTopic.subscribe(pochi);
+        commTopic.subscribe(aiboX);
+        commTopic.subscribe(taro);
+
+        // 10 ステップのシミュレーション
+        for (int step = 1; step &lt;= 10; step++) {
+            System.out.println(&quot;\n=== ステップ &quot; + step + &quot; ===&quot;);
+
+            pochi.act();
+            aiboX.act();
+            taro.act();
+
+            try { Thread.sleep(500); } catch (Exception e) {}
+        }
+    }
+}
+</code></pre>
+<h2>3. マルチエージェントシステムの設計原則</h2>
+<ol>
+<li><p><strong>各エージェントは独立している</strong></p>
+<ul>
+<li>ポチが止まっても Aibo-X は動き続けられる</li>
+</ul>
+</li>
+<li><p><strong>エージェントはメッセージを通してのみ通信する</strong></p>
+<ul>
+<li>直接メソッドを呼ばない。トピック経由で情報を共有</li>
+</ul>
+</li>
+<li><p><strong>エージェントは自分の役割だけに集中する</strong></p>
+<ul>
+<li>ポチは探索だけ、Aibo-X は運搬だけ、タロウは警備だけ</li>
+</ul>
+</li>
+<li><p><strong>メッセージは非同期で届く</strong></p>
+<ul>
+<li>送信と受信のタイミングは独立している</li>
+</ul>
+</li>
+</ol>
+<h2>まとめ</h2>
+<ul>
+<li>マルチエージェントシステムは複数のエージェントが協調する</li>
+<li>各エージェントは自分の役割を持ち、独立して動く</li>
+<li>メッセージ（トピック通信）で情報を共有する</li>
+<li>イベント駆動で他のエージェントの行動に反応できる</li>
+<li>これは ROS を使った実世界のロボットシステムと同じ設計</li>
+</ul>
+<h2>キーワード</h2>
+<p><code>マルチエージェント</code> <code>協調動作</code> <code>メッセージ通信</code> <code>イベント駆動</code> <code>役割分担</code> <code>ROS</code></p>
+<h2>演習問題</h2>
+<ol>
+<li>新しい役割を持つ犬エージェント「医療担当（MedicDog）」を作成してください（バッテリーが切れかけのエージェントに充電スポットの場所を知らせる）。</li>
+<li>各エージェントの行動ログを収集する <code>LoggingAgent</code> を作成し、すべての通信を監視できるようにしてください。</li>
+<li>3 匹のエージェントが協力して「ボールを探す → 回収する → 拠点に戻す」という一連のタスクを完了するシミュレーションを完成させてください。</li>
+</ol>
+
+<h1>用語集</h1>
+<table>
+<thead>
+<tr>
+<th>用語</th>
+<th>英語</th>
+<th>意味</th>
+<th>登場課</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>クラス</td>
+<td>class</td>
+<td>オブジェクトの設計図。プロパティとメソッドを定義する</td>
+<td>1</td>
+</tr>
+<tr>
+<td>オブジェクト</td>
+<td>object</td>
+<td>クラスから作られた実際のデータのかたまり（インスタンス）</td>
+<td>1</td>
+</tr>
+<tr>
+<td>インスタンス</td>
+<td>instance</td>
+<td>クラスから生成されたオブジェクトのこと</td>
+<td>1</td>
+</tr>
+<tr>
+<td>インスタンス化</td>
+<td>instantiation</td>
+<td><code>new</code> を使ってオブジェクトを作ること</td>
+<td>1</td>
+</tr>
+<tr>
+<td>プロパティ</td>
+<td>property</td>
+<td>オブジェクトが持つデータ（属性）</td>
+<td>1</td>
+</tr>
+<tr>
+<td>メソッド</td>
+<td>method</td>
+<td>オブジェクトが持つ処理（関数）</td>
+<td>1</td>
+</tr>
+<tr>
+<td>カプセル化</td>
+<td>encapsulation</td>
+<td>データを隠して必要な操作だけ公開する設計思想</td>
+<td>2</td>
+</tr>
+<tr>
+<td>アクセス修飾子</td>
+<td>access modifier</td>
+<td>アクセス範囲を制御するキーワード（private, public など）</td>
+<td>2</td>
+</tr>
+<tr>
+<td>private</td>
+<td>private</td>
+<td>同じクラスの中からしかアクセスできない</td>
+<td>2</td>
+</tr>
+<tr>
+<td>public</td>
+<td>public</td>
+<td>どこからでもアクセスできる</td>
+<td>2</td>
+</tr>
+<tr>
+<td>protected</td>
+<td>protected</td>
+<td>同じパッケージと子クラスからアクセスできる</td>
+<td>4</td>
+</tr>
+<tr>
+<td>getter</td>
+<td>getter</td>
+<td>プロパティの値を取得するメソッド</td>
+<td>2</td>
+</tr>
+<tr>
+<td>setter</td>
+<td>setter</td>
+<td>プロパティの値を設定するメソッド</td>
+<td>2</td>
+</tr>
+<tr>
+<td>バリデーション</td>
+<td>validation</td>
+<td>値が正しい範囲かどうかをチェックすること</td>
+<td>2</td>
+</tr>
+<tr>
+<td>コンストラクタ</td>
+<td>constructor</td>
+<td>オブジェクト生成時に自動実行されるメソッド</td>
+<td>3</td>
+</tr>
+<tr>
+<td>this</td>
+<td>this</td>
+<td>自分自身のオブジェクトを指すキーワード</td>
+<td>3</td>
+</tr>
+<tr>
+<td>オーバーロード</td>
+<td>overload</td>
+<td>同じ名前で引数の異なるメソッドを複数定義すること</td>
+<td>3</td>
+</tr>
+<tr>
+<td>継承</td>
+<td>inheritance</td>
+<td>既存のクラスの機能を引き継いで新しいクラスを作ること</td>
+<td>4</td>
+</tr>
+<tr>
+<td>extends</td>
+<td>extends</td>
+<td>継承を宣言するキーワード</td>
+<td>4</td>
+</tr>
+<tr>
+<td>スーパークラス</td>
+<td>superclass</td>
+<td>親クラス（継承の元になるクラス）</td>
+<td>4</td>
+</tr>
+<tr>
+<td>サブクラス</td>
+<td>subclass</td>
+<td>子クラス（継承して作られたクラス）</td>
+<td>4</td>
+</tr>
+<tr>
+<td>オーバーライド</td>
+<td>override</td>
+<td>親クラスのメソッドを子クラスで上書きすること</td>
+<td>4</td>
+</tr>
+<tr>
+<td>super</td>
+<td>super</td>
+<td>親クラスを指すキーワード</td>
+<td>4</td>
+</tr>
+<tr>
+<td>インターフェース</td>
+<td>interface</td>
+<td>メソッドのシグネチャだけを定義した抽象的な型</td>
+<td>5</td>
+</tr>
+<tr>
+<td>implements</td>
+<td>implements</td>
+<td>インターフェースを実装することを宣言するキーワード</td>
+<td>5</td>
+</tr>
+<tr>
+<td>抽象メソッド</td>
+<td>abstract method</td>
+<td>中身（実装）がないメソッド</td>
+<td>5</td>
+</tr>
+<tr>
+<td>多態性</td>
+<td>polymorphism</td>
+<td>同じ操作でもオブジェクトによって振る舞いが変わる仕組み</td>
+<td>6</td>
+</tr>
+<tr>
+<td>アップキャスト</td>
+<td>upcast</td>
+<td>子クラスの型を親クラスの型に変換すること</td>
+<td>6</td>
+</tr>
+<tr>
+<td>動的ディスパッチ</td>
+<td>dynamic dispatch</td>
+<td>実行時にどのメソッドが呼ばれるかが決まる仕組み</td>
+<td>6</td>
+</tr>
+<tr>
+<td>戦略パターン</td>
+<td>strategy pattern</td>
+<td>アルゴリズムをクラス化して差し替え可能にするデザインパターン</td>
+<td>7</td>
+</tr>
+<tr>
+<td>依存性注入</td>
+<td>dependency injection</td>
+<td>外部から依存オブジェクトを受け取る設計手法</td>
+<td>7</td>
+</tr>
+<tr>
+<td>コンポジション</td>
+<td>composition</td>
+<td>オブジェクトを部品として組み合わせること</td>
+<td>7</td>
+</tr>
+<tr>
+<td>AI エージェント</td>
+<td>AI agent</td>
+<td>環境を認識し、意思決定して行動するプログラム</td>
+<td>8</td>
+</tr>
+<tr>
+<td>状態</td>
+<td>state</td>
+<td>ある時点におけるシステムの状況</td>
+<td>8</td>
+</tr>
+<tr>
+<td>行動</td>
+<td>action</td>
+<td>エージェントが実行する動作</td>
+<td>8</td>
+</tr>
+<tr>
+<td>世界モデル</td>
+<td>world model</td>
+<td>行動が状態をどう変えるかを予測するモデル</td>
+<td>9</td>
+</tr>
+<tr>
+<td>ROS</td>
+<td>Robot Operating System</td>
+<td>ロボットソフトウェア開発のためのフレームワーク</td>
+<td>10</td>
+</tr>
+<tr>
+<td>ノード</td>
+<td>node</td>
+<td>ROS における独立した機能モジュール</td>
+<td>10</td>
+</tr>
+<tr>
+<td>トピック</td>
+<td>topic</td>
+<td>ノード間でメッセージをやりとりする通信路</td>
+<td>10</td>
+</tr>
+<tr>
+<td>publish</td>
+<td>publish</td>
+<td>トピックにメッセージを送信すること</td>
+<td>10</td>
+</tr>
+<tr>
+<td>subscribe</td>
+<td>subscribe</td>
+<td>トピックからメッセージを受信すること</td>
+<td>10</td>
+</tr>
+<tr>
+<td>疎結合</td>
+<td>loose coupling</td>
+<td>モジュール間の依存関係が弱い設計</td>
+<td>10</td>
+</tr>
+<tr>
+<td>マルチエージェント</td>
+<td>multi-agent</td>
+<td>複数のエージェントが協調して動作するシステム</td>
+<td>11</td>
+</tr>
+<tr>
+<td>イベント駆動</td>
+<td>event-driven</td>
+<td>イベントの発生に応じて処理を実行する方式</td>
+<td>11</td>
+</tr>
+</tbody></table>
+
+<h1>演習問題解答</h1>
+<h2>第0課：Java にようこそ</h2>
+<p><strong>1. 自分の名前を表示するプログラム</strong></p>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        System.out.println(&quot;私の名前はロボット研究所の田中です&quot;);
+    }
+}
+</code></pre>
+<p><strong>2. ロボット犬の状態を変数で宣言</strong></p>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        String name = &quot;Aibo-X&quot;;
+        int battery = 85;
+        double hours = 3.5;
+        System.out.println(&quot;名前: &quot; + name);
+        System.out.println(&quot;バッテリー: &quot; + battery + &quot;%&quot;);
+        System.out.println(&quot;稼働時間: &quot; + hours + &quot;時間&quot;);
+    }
+}
+</code></pre>
+<p><strong>3. println と print の違い</strong></p>
+<ul>
+<li><code>println</code>: 表示したあと改行する</li>
+<li><code>print</code>: 表示したあと改行しない</li>
+</ul>
+<pre><code class="language-java">System.out.print(&quot;改行&quot;);  System.out.print(&quot;なし&quot;);    // 改行なし
+System.out.println(&quot;改行&quot;); System.out.println(&quot;あり&quot;);  // 改行あり
+</code></pre>
+<h2>第1課：クラスとオブジェクト</h2>
+<p><strong>1. charge() メソッドを追加</strong></p>
+<pre><code class="language-java">void charge() {
+    battery = 100;
+    System.out.println(name + &quot;：充電完了！&quot;);
+}
+</code></pre>
+<p><strong>2. bark() でバッテリー消費</strong></p>
+<pre><code class="language-java">void bark() {
+    if (battery &gt;= 5) {
+        System.out.println(name + &quot;：ワンワン！&quot;);
+        battery -= 5;
+    } else {
+        System.out.println(name + &quot;：バッテリー切れで吠えられません&quot;);
+    }
+}
+</code></pre>
+<p><strong>3. 3体のロボット犬を作る</strong></p>
+<pre><code class="language-java">RobotDog d1 = new RobotDog();
+d1.name = &quot;Aibo-X&quot;;
+RobotDog d2 = new RobotDog();
+d2.name = &quot;ポチ&quot;;
+RobotDog d3 = new RobotDog();
+d3.name = &quot;タロウ&quot;;
+d1.bark(); d2.bark(); d3.bark();
+</code></pre>
+<h2>第2課：カプセル化</h2>
+<p><strong>1. バッテリーの範囲チェック setter</strong></p>
+<pre><code class="language-java">public void setBattery(int battery) {
+    if (battery &lt; 0) {
+        this.battery = 0;
+    } else if (battery &gt; 100) {
+        this.battery = 100;
+    } else {
+        this.battery = battery;
+    }
+}
+</code></pre>
+<p><strong>2. run() メソッド</strong></p>
+<pre><code class="language-java">public void run() {
+    if (battery &gt;= 25) {
+        System.out.println(name + &quot;：走っている！&quot;);
+        battery -= 25;
+    } else {
+        System.out.println(name + &quot;：バッテリー不足で走れません&quot;);
+    }
+}
+</code></pre>
+<p><strong>3. バッテリー残量警告</strong></p>
+<pre><code class="language-java">public void walk() {
+    if (battery &gt;= 10) {
+        System.out.println(name + &quot;：歩いている…&quot;);
+        battery -= 10;
+        if (battery &lt; 20) {
+            System.out.println(&quot;⚠ バッテリー残量が&quot; + battery + &quot;%です。充電してください&quot;);
+        }
+    } else {
+        System.out.println(name + &quot;：バッテリー切れ！&quot;);
+    }
+}
+</code></pre>
+<h2>第3課：コンストラクタと初期化</h2>
+<p><strong>1. color プロパティとコンストラクタ</strong></p>
+<pre><code class="language-java">private String color;
+
+public RobotDog(String name, int battery, String color) {
+    this.name = name;
+    setBattery(battery);
+    this.color = color;
+}
+</code></pre>
+<p><strong>2. デフォルトコンストラクタ</strong></p>
+<pre><code class="language-java">public RobotDog() {
+    this(&quot;名無しロボット&quot;, 50, &quot;白&quot;);
+}
+</code></pre>
+<p><strong>3. コンストラクタでのバリデーション</strong></p>
+<pre><code class="language-java">public RobotDog(String name, int battery, String color) {
+    this.name = name;
+    if (battery &lt; 0 || battery &gt; 100) {
+        throw new IllegalArgumentException(&quot;バッテリーは0〜100の範囲で指定してください&quot;);
+    }
+    this.battery = battery;
+    this.color = color;
+}
+</code></pre>
+<h2>第4課：継承</h2>
+<p><strong>1. FlyingRobotDog</strong></p>
+<pre><code class="language-java">public class FlyingRobotDog extends SuperRobotDog {
+    public FlyingRobotDog(String name) {
+        super(name);
+    }
+    public void hover() {
+        if (getBattery() &gt;= 20) {
+            System.out.println(getName() + &quot;：ホバリング中…&quot;);
+            setBattery(getBattery() - 20);
+        }
+    }
+}
+</code></pre>
+<p><strong>2. 飛行中の bark() オーバーライド</strong></p>
+<pre><code class="language-java">@Override
+public void bark() {
+    if (flyMode) {
+        System.out.println(getName() + &quot;：フライト中は吠えられません&quot;);
+    } else {
+        super.bark();
+    }
+}
+</code></pre>
+<p><strong>3. 飛行中の消費バッテリー半減</strong></p>
+<pre><code class="language-java">@Override
+public void walk() {
+    if (flyMode) {
+        if (getBattery() &gt;= 5) {
+            System.out.println(getName() + &quot;：飛行しながら移動中…&quot;);
+            setBattery(getBattery() - 5);
+        }
+    } else {
+        super.walk();
+    }
+}
+</code></pre>
+<h2>第5課：インターフェース</h2>
+<p><strong>1. Swimmable インターフェース</strong></p>
+<pre><code class="language-java">public interface Swimmable {
+    void swim();
+}
+
+public class RobotDog implements Dog, Swimmable {
+    public void swim() {
+        System.out.println(name + &quot;：防水モードで泳ぐ&quot;);
+    }
+}
+</code></pre>
+<p><strong>2. Sensor インターフェース</strong></p>
+<pre><code class="language-java">public interface Sensor {
+    double readDistance();
+}
+
+public class RobotDog implements Dog, Sensor {
+    public double readDistance() {
+        return Math.random() * 500; // 0〜500cm
+    }
+}
+</code></pre>
+<p><strong>3. 「お手」を共通インターフェースで</strong></p>
+<p>インターフェースに <code>hand()</code> を追加し、両方のクラスで実装する。</p>
+<pre><code class="language-java">void hand(); // インターフェースに追加
+
+// RealDog
+public void hand() {
+    System.out.println(name + &quot;：お手！（本物の犬）&quot;);
+}
+</code></pre>
+<h2>第6課：多態性</h2>
+<p><strong>1. eat() の追加</strong></p>
+<pre><code class="language-java">public interface Dog {
+    void eat();
+}
+
+// RealDog
+public void eat() {
+    System.out.println(name + &quot;：ご飯を食べる&quot;);
+}
+
+// RobotDog
+public void eat() {
+    System.out.println(name + &quot;：充電ドックに接続&quot;);
+}
+</code></pre>
+<p><strong>2. if-else 地獄とその問題</strong></p>
+<pre><code class="language-java">void makeSound(Object animal) {
+    if (animal instanceof RealDog) ((RealDog)animal).bark();
+    else if (animal instanceof RobotDog) ((RobotDog)animal).bark();
+    // 新しい種類が増えるたびに修正が必要
+}
+// 問題: 拡張性が低い、コードが読みにくい、バグが入りやすい
+</code></pre>
+<p><strong>3. List で多態性</strong></p>
+<pre><code class="language-java">List&lt;Dog&gt; dogs = new ArrayList&lt;&gt;();
+dogs.add(new RealDog(&quot;ポチ&quot;));
+dogs.add(new RobotDog(&quot;Aibo-X&quot;));
+dogs.add(new SuperRobotDog(&quot;タロウ&quot;));
+for (Dog d : dogs) {
+    d.bark();
+}
+</code></pre>
+<h2>第7課：戦略パターン</h2>
+<p><strong>1. SleepyBrain</strong></p>
+<pre><code class="language-java">public class SleepyBrain implements Brain {
+    public String decide(String situation) {
+        return &quot;眠いから寝る&quot;;
+    }
+}
+</code></pre>
+<p><strong>2. AdaptiveBrain</strong></p>
+<pre><code class="language-java">public class AdaptiveBrain implements Brain {
+    private RobotDogAgent agent;
+    public AdaptiveBrain(RobotDogAgent agent) { this.agent = agent; }
+    public String decide(String situation) {
+        if (agent.getBattery() &lt; 30) {
+            return new CautiousBrain().decide(situation);
+        }
+        return new CuriousBrain().decide(situation);
+    }
+}
+</code></pre>
+<h2>第8課：頭脳差し替え</h2>
+<p><strong>1. AggressiveBrain</strong></p>
+<pre><code class="language-java">public class AggressiveBrain implements Brain {
+    public Action decide(State state) {
+        if (state.getBattery() &gt;= 50) return new SearchAction();
+        return new ChargeAction();
+    }
+}
+</code></pre>
+<p><strong>2. temperature の追加と頭脳</strong></p>
+<p>State に <code>int temperature</code> を追加。温度が 35 度以上のときは充電を控える。</p>
+<p><strong>3. LoggingBrain</strong></p>
+<pre><code class="language-java">public class LoggingBrain implements Brain {
+    private Brain wrapped;
+    private List&lt;String&gt; history = new ArrayList&lt;&gt;();
+    public LoggingBrain(Brain wrapped) { this.wrapped = wrapped; }
+    public Action decide(State state) {
+        Action a = wrapped.decide(state);
+        history.add(state + &quot; → &quot; + a.getName());
+        return a;
+    }
+}
+</code></pre>
+<h2>第9課：世界モデル</h2>
+<p><strong>1. 安定性の評価軸を追加</strong></p>
+<pre><code class="language-java">public double evaluate(State predicted) {
+    double score = predicted.getBattery() * 0.5;
+    score -= Math.abs(predicted.getBattery() - 50) * 0.3; // 50% 付近を安定と評価
+    return score;
+}
+</code></pre>
+<p><strong>2. TwoStepPredictiveBrain</strong></p>
+<pre><code class="language-java">public Action decide(State current) {
+    Action bestAction = null;
+    double bestScore = Double.NEGATIVE_INFINITY;
+    for (Action first : actions) {
+        State afterFirst = model.predict(current, first);
+        for (Action second : actions) {
+            State afterSecond = model.predict(afterFirst, second);
+            double score = model.evaluate(afterSecond);
+            if (score &gt; bestScore) { bestScore = score; bestAction = first; }
+        }
+    }
+    return bestAction;
+}
+</code></pre>
+<h2>第10課：pub/sub</h2>
+<p><strong>1. play トピックの追加</strong></p>
+<pre><code class="language-java">Topic playTopic = new BroadcastTopic(&quot;play&quot;);
+// DogNode に play メソッド追加
+public void play() {
+    playTopic.publish(name + &quot;：遊んでいる！&quot;);
+}
+</code></pre>
+<p><strong>2. LoggerNode</strong></p>
+<pre><code class="language-java">public class LoggerNode implements Subscriber {
+    private List&lt;String&gt; log = new ArrayList&lt;&gt;();
+    public void onMessage(String topic, String msg) {
+        String entry = &quot;[&quot; + java.time.LocalTime.now() + &quot;] &quot; + topic + &quot;: &quot; + msg;
+        log.add(entry);
+        System.out.println(&quot;  [ログ] &quot; + entry);
+    }
+}
+</code></pre>
+<h2>第11課：マルチエージェント</h2>
+<p><strong>1. MedicDog</strong></p>
+<pre><code class="language-java">public class MedicDog implements DogAgent {
+    public void onDogMessage(DogMessage msg) {
+        if (msg.getType().equals(&quot;help&quot;)) {
+            System.out.println(name + &quot;：充電スポットの場所を案内します！&quot;);
+            commTopic.publishDogMessage(new DogMessage(name, &quot;info&quot;,
+                &quot;充電スポットは座標 (0, 0) にあります&quot;));
+        }
+    }
+}
+</code></pre>
+<p><strong>2. LoggingAgent</strong></p>
+<pre><code class="language-java">public class LoggingAgent implements Subscriber {
+    private List&lt;String&gt; log = new ArrayList&lt;&gt;();
+    public void onMessage(String topic, String msg) {
+        log.add(topic + &quot;: &quot; + msg);
+    }
+    public void printLog() {
+        log.forEach(System.out::println);
+    }
+}
+</code></pre>
+
+<h1>コード索引</h1>
+<p>この索引は、教科書に登場するすべてのコード例をクラス名・ファイル名から検索できます。</p>
+<h2>主要クラス一覧</h2>
+<table>
+<thead>
+<tr>
+<th>クラス/インターフェース</th>
+<th>課</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Dog</code> (interface)</td>
+<td>5, 6</td>
+<td>犬の共通インターフェース</td>
+</tr>
+<tr>
+<td><code>RobotDog</code></td>
+<td>1, 2, 3, 5</td>
+<td>ロボット犬クラス</td>
+</tr>
+<tr>
+<td><code>RealDog</code></td>
+<td>5, 6</td>
+<td>本物の犬クラス</td>
+</tr>
+<tr>
+<td><code>SuperRobotDog</code></td>
+<td>4</td>
+<td>スーパーロボット犬（継承）</td>
+</tr>
+<tr>
+<td><code>FlyingRobotDog</code></td>
+<td>4 (演習)</td>
+<td>飛行ロボット犬</td>
+</tr>
+<tr>
+<td><code>Brain</code> (interface)</td>
+<td>7, 8</td>
+<td>頭脳インターフェース</td>
+</tr>
+<tr>
+<td><code>CuriousBrain</code></td>
+<td>7</td>
+<td>好奇心旺盛な頭脳</td>
+</tr>
+<tr>
+<td><code>CautiousBrain</code></td>
+<td>7</td>
+<td>慎重な頭脳</td>
+</tr>
+<tr>
+<td><code>RandomBrain</code></td>
+<td>7</td>
+<td>ランダムな頭脳</td>
+</tr>
+<tr>
+<td><code>SimpleBrain</code></td>
+<td>8</td>
+<td>シンプルなルールベース頭脳</td>
+</tr>
+<tr>
+<td><code>PredictiveBrain</code></td>
+<td>9</td>
+<td>世界モデル搭載の予測頭脳</td>
+</tr>
+<tr>
+<td><code>State</code></td>
+<td>8, 9</td>
+<td>ロボットの状態を表す</td>
+</tr>
+<tr>
+<td><code>Action</code></td>
+<td>8, 9</td>
+<td>ロボットの行動を表す</td>
+</tr>
+<tr>
+<td><code>WorldModel</code> (interface)</td>
+<td>9</td>
+<td>世界モデルインターフェース</td>
+</tr>
+<tr>
+<td><code>SimpleWorldModel</code></td>
+<td>9</td>
+<td>シンプルな世界モデル</td>
+</tr>
+<tr>
+<td><code>RobotDogAgent</code></td>
+<td>7, 8</td>
+<td>頭脳を持ったエージェント</td>
+</tr>
+<tr>
+<td><code>Subscriber</code> (interface)</td>
+<td>10</td>
+<td>購読者インターフェース</td>
+</tr>
+<tr>
+<td><code>Topic</code> (interface)</td>
+<td>10</td>
+<td>トピックインターフェース</td>
+</tr>
+<tr>
+<td><code>BroadcastTopic</code></td>
+<td>10</td>
+<td>ブロードキャストトピック</td>
+</tr>
+<tr>
+<td><code>MessageQueueTopic</code></td>
+<td>11</td>
+<td>メッセージキューつきトピック</td>
+</tr>
+<tr>
+<td><code>DogNode</code></td>
+<td>10</td>
+<td>犬ノード（pub/sub）</td>
+</tr>
+<tr>
+<td><code>DisplayNode</code></td>
+<td>10</td>
+<td>表示ノード</td>
+</tr>
+<tr>
+<td><code>DogAgent</code> (interface)</td>
+<td>11</td>
+<td>高度な犬エージェント</td>
+</tr>
+<tr>
+<td><code>ExplorerDog</code></td>
+<td>11</td>
+<td>探索担当エージェント</td>
+</tr>
+<tr>
+<td><code>CarrierDog</code></td>
+<td>11</td>
+<td>運搬担当エージェント</td>
+</tr>
+<tr>
+<td><code>GuardDog</code></td>
+<td>11</td>
+<td>警備担当エージェント</td>
+</tr>
+<tr>
+<td><code>DogMessage</code></td>
+<td>11</td>
+<td>エージェント間メッセージ</td>
+</tr>
+</tbody></table>
+<h2>設計パターン一覧</h2>
+<table>
+<thead>
+<tr>
+<th>パターン</th>
+<th>課</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>getter / setter</td>
+<td>2</td>
+<td>カプセル化の基本パターン</td>
+</tr>
+<tr>
+<td>コンストラクタオーバーロード</td>
+<td>3</td>
+<td>複数の初期化パターン</td>
+</tr>
+<tr>
+<td>継承（extends）</td>
+<td>4</td>
+<td>既存クラスの機能拡張</td>
+</tr>
+<tr>
+<td>メソッドオーバーライド</td>
+<td>4</td>
+<td>親のメソッドを上書き</td>
+</tr>
+<tr>
+<td>インターフェース実装（implements）</td>
+<td>5</td>
+<td>能力の約束</td>
+</tr>
+<tr>
+<td>アップキャスト</td>
+<td>6</td>
+<td>具象型→抽象型への変換</td>
+</tr>
+<tr>
+<td>動的ディスパッチ</td>
+<td>6</td>
+<td>実行時のメソッド解決</td>
+</tr>
+<tr>
+<td>戦略パターン（Strategy）</td>
+<td>7</td>
+<td>頭脳の差し替え</td>
+</tr>
+<tr>
+<td>依存性注入（DI）</td>
+<td>7</td>
+<td>外部からの部品注入</td>
+</tr>
+<tr>
+<td>コンポジション</td>
+<td>7</td>
+<td>部品の組み合わせ</td>
+</tr>
+<tr>
+<td>pub/sub パターン</td>
+<td>10</td>
+<td>メッセージ通信</td>
+</tr>
+<tr>
+<td>マルチエージェント</td>
+<td>11</td>
+<td>複数エージェントの協調</td>
+</tr>
+</tbody></table>
+<h2>コードカテゴリ（学習目的別）</h2>
+<h3>Java 文法を学びたい</h3>
+<ul>
+<li>変数と型 → 第0課</li>
+<li>クラス定義 → 第1課</li>
+<li>メソッド → 第1課</li>
+<li>コンストラクタ → 第3課</li>
+<li>アクセス修飾子 → 第2課</li>
+</ul>
+<h3>OOP 三大要素を学びたい</h3>
+<ul>
+<li>カプセル化 → 第2課</li>
+<li>継承 → 第4課</li>
+<li>多態性 → 第6課</li>
+</ul>
+<h3>設計力を高めたい</h3>
+<ul>
+<li>インターフェース設計 → 第5課</li>
+<li>戦略パターン → 第7課</li>
+<li>pub/sub アーキテクチャ → 第10課</li>
+<li>マルチエージェント設計 → 第11課</li>
+</ul>
+<h3>ロボティクスを学びたい</h3>
+<ul>
+<li>AI エージェント → 第8課</li>
+<li>世界モデル → 第9課</li>
+<li>ROS 風通信 → 第10課</li>
+<li>マルチエージェント協調 → 第11課</li>
+</ul>
+
+<h1>教師用ガイド</h1>
+<h2>教科書の設計思想</h2>
+<p>本書は「ロボット犬」という身近で具体的な題材を通じて、
+Java とオブジェクト指向プログラミング（OOP）を学ぶ教科書です。</p>
+<h3>3 つの学習レイヤー</h3>
+<pre><code>レイヤー3：ロボティクス設計（世界モデル・ROS・マルチエージェント）
+レイヤー2：OOP 設計（継承・インターフェース・多態性・戦略パターン）
+レイヤー1：Java 文法（クラス・変数・メソッド・コンストラクタ）
+</code></pre>
+<p>各課はこの3層を同時に学べるように設計されています。</p>
+<h2>授業進行の提案</h2>
+<h3>標準カリキュラム（全15回）</h3>
+<table>
+<thead>
+<tr>
+<th>回</th>
+<th>課</th>
+<th>授業の進め方</th>
+<th>準備物</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>0</td>
+<td>Java 環境の説明、プレイグラウンドの使い方</td>
+<td>ブラウザ</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
+<td>クラスとオブジェクトの概念、実際にコードを書かせる</td>
+<td>IDE or プレイグラウンド</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2</td>
+<td>「バッテリーがマイナスになる」問題を提示 → カプセル化を導入</td>
+<td>前回のコード</td>
+</tr>
+<tr>
+<td>4</td>
+<td>3</td>
+<td>コンストラクタの便利さを実感させる演習</td>
+<td>—</td>
+</tr>
+<tr>
+<td>5</td>
+<td>4</td>
+<td>「スーパーロボット犬」のストーリーで継続を導入</td>
+<td>—</td>
+</tr>
+<tr>
+<td>6</td>
+<td>5</td>
+<td>リアル犬とロボット犬の違いからインターフェースへ</td>
+<td>—</td>
+</tr>
+<tr>
+<td>7</td>
+<td>6</td>
+<td>多態性のデモ（if-else 地獄を見せてから）</td>
+<td>スライドがあると効果的</td>
+</tr>
+<tr>
+<td>8</td>
+<td>7</td>
+<td>戦略パターン、頭脳差し替えのライブコーディング</td>
+<td>—</td>
+</tr>
+<tr>
+<td>9</td>
+<td>8</td>
+<td>AI エージェント完全実装、グループ演習</td>
+<td>—</td>
+</tr>
+<tr>
+<td>10</td>
+<td>9</td>
+<td>世界モデルの概念、予測のコード</td>
+<td>—</td>
+</tr>
+<tr>
+<td>11</td>
+<td>10</td>
+<td>pub/sub、ROS の概念説明</td>
+<td>図解があると良い</td>
+</tr>
+<tr>
+<td>12</td>
+<td>11</td>
+<td>マルチエージェント、3匹の協調デモ</td>
+<td>—</td>
+</tr>
+<tr>
+<td>13</td>
+<td>—</td>
+<td>総合演習（自由課題の着手）</td>
+<td>—</td>
+</tr>
+<tr>
+<td>14</td>
+<td>—</td>
+<td>自由課題発表準備</td>
+<td>—</td>
+</tr>
+<tr>
+<td>15</td>
+<td>—</td>
+<td>発表会・まとめ</td>
+<td>—</td>
+</tr>
+</tbody></table>
+<h3>短縮カリキュラム（全8回）</h3>
+<table>
+<thead>
+<tr>
+<th>回</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>第0課 + 第1課（Java 導入 + クラスとオブジェクト）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>第2課 + 第3課（カプセル化 + コンストラクタ）</td>
+</tr>
+<tr>
+<td>3</td>
+<td>第4課（継承）</td>
+</tr>
+<tr>
+<td>4</td>
+<td>第5課 + 第6課（インターフェース + 多態性）</td>
+</tr>
+<tr>
+<td>5</td>
+<td>第7課（戦略パターン）</td>
+</tr>
+<tr>
+<td>6</td>
+<td>第8課（AI エージェント）</td>
+</tr>
+<tr>
+<td>7</td>
+<td>第9課（世界モデル）</td>
+</tr>
+<tr>
+<td>8</td>
+<td>第10課 + 第11課（ROS + マルチエージェント）</td>
+</tr>
+</tbody></table>
+<h2>各課の指導ポイント</h2>
+<h3>第0課：Java にようこそ</h3>
+<ul>
+<li><strong>最重要ポイント</strong>: プレイグラウンドで「動いた！」という体験をさせる</li>
+<li><strong>注意点</strong>: 環境構築でつまずくとやる気が下がる。最初はブラウザ上のプレイグラウンドを使うのが安全</li>
+<li><strong>発展課題</strong>: System.out.println で ASCII アートのロボット犬を描く</li>
+</ul>
+<h3>第1課：クラスとオブジェクト</h3>
+<ul>
+<li><strong>最重要ポイント</strong>: 「設計図」と「実物」の違いを物理的な例えで理解させる</li>
+<li><strong>注意点</strong>: <code>new</code> キーワードの意味が抽象的なので、繰り返し説明する</li>
+<li><strong>アクティビティ</strong>: 教室で「人間クラス」から「生徒オブジェクト」を作るロールプレイ</li>
+</ul>
+<h3>第2課：カプセル化</h3>
+<ul>
+<li><strong>最重要ポイント</strong>: 「なぜ隠す必要があるのか」を実感させる</li>
+<li><strong>注意点</strong>: getter/setter の「おまじない感」を減らすために、ないと何が困るかを先に体験させる</li>
+<li><strong>アクティビティ</strong>: 悪意のあるコードでバッテリーを -999 にする「攻撃」をやってみせる</li>
+</ul>
+<h3>第3課：コンストラクタ</h3>
+<ul>
+<li><strong>最重要ポイント</strong>: 「忘れずに初期化する」ための仕組み</li>
+<li><strong>発展課題</strong>: コンストラクタ内でファイル読み込みやネットワーク接続を行う例</li>
+</ul>
+<h3>第4課：継承</h3>
+<ul>
+<li><strong>最重要ポイント</strong>: 「is-a」関係の理解</li>
+<li><strong>アクティビティ</strong>: クラスの階層構造をホワイトボードに書かせる</li>
+<li><strong>落とし穴</strong>: 継承よりコンポジションの話はここでは深入りしない（第7課で扱う）</li>
+</ul>
+<h3>第5課：インターフェース</h3>
+<ul>
+<li><strong>最重要ポイント</strong>: 「約束事」としてのインターフェース</li>
+<li><strong>注意点</strong>: 継承との違いが曖昧になりがちなので、表で比較する</li>
+<li><strong>アクティビティ</strong>: 犬以外の動物（Cat, Bird）でも Dog インターフェースを実装させてみる</li>
+</ul>
+<h3>第6課：多態性</h3>
+<ul>
+<li><strong>最重要ポイント</strong>: この課が OOP のクライマックス</li>
+<li><strong>アクティビティ</strong>: if-else で書いたコードを多態性で書き換えるリファクタリング演習</li>
+<li><strong>発展課題</strong>: <code>instanceof</code> を使うべきでない理由を議論する</li>
+</ul>
+<h3>第7課：戦略パターン</h3>
+<ul>
+<li><strong>最重要ポイント</strong>: 「継承よりコンポジション」の実践</li>
+<li><strong>アクティビティ</strong>: グループごとに異なる頭脳を実装して、同じエージェントで動かす</li>
+<li><strong>発展課題</strong>: デコレーターパターン（LoggingBrain）への発展</li>
+</ul>
+<h3>第8課：AI エージェント</h3>
+<ul>
+<li><strong>最重要ポイント</strong>: 状態・行動・頭脳の3要素</li>
+<li><strong>アクティビティ</strong>: ロボット掃除機（Roomba）を例にしたエージェント設計</li>
+<li><strong>発展課題</strong>: 強化学習とのつながりを紹介</li>
+</ul>
+<h3>第9課：世界モデル</h3>
+<ul>
+<li><strong>最重要ポイント</strong>: 「予測」という思考の導入</li>
+<li><strong>注意点</strong>: ここで挫折する生徒が出ないよう、シンプルな評価関数から始める</li>
+<li><strong>発展課題</strong>: 複数ステップの先読み、MinMax アルゴリズムへの発展</li>
+</ul>
+<h3>第10課：pub/sub</h3>
+<ul>
+<li><strong>最重要ポイント</strong>: 疎結合の価値</li>
+<li><strong>アクティビティ</strong>: 実際の ROS の画面を見せる（rviz など）</li>
+<li><strong>発展課題</strong>: MQTT などの他のメッセージングシステムとの比較</li>
+</ul>
+<h3>第11課：マルチエージェント</h3>
+<ul>
+<li><strong>最重要ポイント</strong>: 「協調」と「役割分担」</li>
+<li><strong>アクティビティ</strong>: クラス全体で一つのシミュレーションを動かす</li>
+<li><strong>発展課題</strong>: 競合（リソースの取り合い）の実装</li>
+</ul>
+<h2>自由課題のアイデア</h2>
+<ol>
+<li><p><strong>ロボット犬シミュレータ</strong>
+複数の頭脳・複数の犬・複数のトピックを組み合わせた完全なシミュレータ</p>
+</li>
+<li><p><strong>迷路探索ロボット</strong>
+壁センサーと世界モデルを使って迷路を探索するロボット</p>
+</li>
+<li><p><strong>犬のしつけシミュレータ</strong>
+報酬と罰を使って犬の行動を学習させる（Q-learning の導入）</p>
+</li>
+<li><p><strong>災害救助チーム</strong>
+複数のロボット犬が協力して被災者を探すシミュレーション</p>
+</li>
+</ol>
+<h2>評価のポイント</h2>
+<table>
+<thead>
+<tr>
+<th>評価項目</th>
+<th>割合</th>
+<th>評価基準</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>演習問題</td>
+<td>40%</td>
+<td>各課末の問題。コードが正しく動作すること</td>
+</tr>
+<tr>
+<td>総合演習</td>
+<td>30%</td>
+<td>自由課題。完成度 + 工夫 + コードの品質</td>
+</tr>
+<tr>
+<td>発表</td>
+<td>30%</td>
+<td>プレゼンテーション + 質疑応答</td>
+</tr>
+</tbody></table>
+<h3>コード品質の評価基準</h3>
+<ul>
+<li>カプセル化が適切に使われているか</li>
+<li>継承・インターフェースが適切に使われているか</li>
+<li>多態性を活用できているか</li>
+<li>無駄な重複コードがないか</li>
+<li>わかりやすい名前が使われているか</li>
+</ul>
+<h2>トラブルシューティング</h2>
+<h3>よくあるつまずき</h3>
+<table>
+<thead>
+<tr>
+<th>症状</th>
+<th>原因</th>
+<th>対処</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>static</code> がわからない</td>
+<td>静的メソッドとインスタンスメソッドの混同</td>
+<td>「クラスに属する vs オブジェクトに属する」の図解</td>
+</tr>
+<tr>
+<td><code>this</code> の意味がわからない</td>
+<td>自分自身の参照概念が難しい</td>
+<td>「クラスの中から自分を見る」という比喩</td>
+</tr>
+<tr>
+<td>継承とインターフェースの違いがわからない</td>
+<td>抽象概念のオーバーロード</td>
+<td>表で比較、具体例を増やす</td>
+</tr>
+<tr>
+<td>コンパイルエラーが直せない</td>
+<td>エラーメッセージが読めない</td>
+<td>代表的なエラーと対処法の一覧表を配布</td>
+</tr>
+</tbody></table>
+
+</body></html>

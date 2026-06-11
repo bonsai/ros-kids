@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>捨てロボット犬を拾った話 — Java & ロボティクス 物語教科書</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+    font-size: 11pt;
+    line-height: 2.0;
+    color: #1e1e2e;
+    max-width: 210mm;
+    margin: 0 auto;
+    padding: 20mm 15mm;
+  }
+  .cover {
+    text-align: center; padding: 60mm 0;
+    page-break-after: always;
+  }
+  .cover h1 { font-size: 28pt; border: none; margin: 0 0 16px; }
+  .cover .sub { font-size: 14pt; color: #666; margin-bottom: 40px; }
+  .cover .desc { font-size: 11pt; color: #888; line-height: 1.8; }
+  h1 { font-size: 20pt; border-bottom: 3px solid #e06c75; padding-bottom: 6px; margin-top: 48px; page-break-before: always; }
+  h1:first-of-type { page-break-before: avoid; }
+  h2 { font-size: 14pt; color: #1e1e2e; margin-top: 28px; border-left: 4px solid #e06c75; padding-left: 10px; }
+  h3 { font-size: 12pt; color: #45475a; margin-top: 20px; }
+  pre {
+    background: #1e1e2e; color: #cdd6f4;
+    padding: 12px; border-radius: 6px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 9pt; line-height: 1.5;
+    overflow-x: auto;
+    page-break-inside: avoid;
+  }
+  code { font-family: 'Fira Code', 'Consolas', monospace; font-size: 9pt; background: #e6e9ef; padding: 1px 4px; border-radius: 3px; }
+  pre code { background: transparent; padding: 0; }
+  table { border-collapse: collapse; width: 100%; margin: 16px 0; page-break-inside: avoid; }
+  th, td { border: 1px solid #ccc; padding: 6px 10px; text-align: left; font-size: 10pt; }
+  th { background: #e6e9ef; }
+  blockquote { border-left: 4px solid #e06c75; margin: 16px 0; padding: 8px 16px; background: #fafafa; }
+  @media print { body { padding: 0; } }
+</style>
+</head>
+<body>
+<div class="cover">
+  <h1>捨てロボット犬を<br>拾った話</h1>
+  <p class="sub">Java & ロボティクス 物語教科書</p>
+  <p class="desc">
+    粗大ゴミの山で動かないロボット犬を拾った。<br>
+    直したい。動かしたい。もっと賢くしたい。<br>
+    これは——プログラムでロボットを育てる物語。
+  </p>
+</div>
+
+<div style="page-break-after:always"><h2>目次</h2><ul>
+<li style="padding:6px 0;border-bottom:1px dotted #ddd">第1話　拾った</li>
+<li style="padding:6px 0;border-bottom:1px dotted #ddd">第2話　電源を入れた</li>
+<li style="padding:6px 0;border-bottom:1px dotted #ddd">第3話　名前をつけた</li>
+<li style="padding:6px 0;border-bottom:1px dotted #ddd">第4話　蓋を開けた</li>
+<li style="padding:6px 0;border-bottom:1px dotted #ddd">第5話　部品を交換した</li>
+<li style="padding:6px 0;border-bottom:1px dotted #ddd">第6話　新しい友達</li>
+<li style="padding:6px 0;border-bottom:1px dotted #ddd">第7話　友達を増やした</li>
+<li style="padding:6px 0;border-bottom:1px dotted #ddd">第8話　頭脳を作り替えた</li>
+<li style="padding:6px 0;border-bottom:1px dotted #ddd">第9話　考えられるようになった</li>
+<li style="padding:6px 0;border-bottom:1px dotted #ddd">第10話　仲間と会話する</li>
+<li style="padding:6px 0;border-bottom:1px dotted #ddd">第11話　チームで動く</li>
+</ul></div>
+<h1>第1話　拾った</h1>
+<h2>あらすじ</h2>
+<p>夏休みの最終日。主人公のタクミ（中学2年）は、粗大ゴミの集積所で
+一匹のロボット犬を見つける。</p>
+<p>ボロボロだった。片耳は取れかけ、塗装は剥げ、動かない。</p>
+<p>でも——目があった気がした。</p>
+<p>タクミはそのロボット犬を家に持ち帰ることを決意する。</p>
+<hr>
+<h2>本文</h2>
+<p>粗大ゴミの山のてっぺんに、それは横向きに倒れていた。</p>
+<p>「なんだこれ…」</p>
+<p>タクミは自転車を停めて、近づいた。</p>
+<p>犬だった。いや、ロボットの犬だ。
+全身が銀色のプラスチック製で、ところどころに「AIBO」の文字が見える。
+片方の耳は根元から折れそうになっていて、塗装はあちこち剥げている。</p>
+<p>——動かない。</p>
+<p>タクミはそっと触った。冷たい金属の感触。
+目を閉じたままのロボット犬は、まるで眠っているように見えた。</p>
+<p>「…捨てるなら、もらっていこう」</p>
+<p>タクミはロボット犬を抱え上げた。思ったより軽い。
+自転車の荷台に無理やり縛りつけて、家まで漕いだ。</p>
+<hr>
+<p>部屋に運び込んで、タクミはロボット犬を机の上に置いた。</p>
+<p>よく見ると、首の後ろにシリアル番号っぽい刻印がある。
+その下に、小さな文字でこう書いてあった。</p>
+<pre><code>ION-CORP  RS-01
+Java Platform Ready
+</code></pre>
+<p>「Java…？」</p>
+<p>学校の情報の時間に聞いたことがある。
+プログラムを書く言語のひとつだ。</p>
+<p>タクミはノートパソコンを開いて、検索した。</p>
+<p>「ロボット犬　RS-01　修理」</p>
+<p>出てきたのは、たった一つのページ。
+製造元のサイトのアーカイブだった。</p>
+<p>そこにはこう書いてあった。</p>
+<hr>
+<p><strong>RS-01 サービスマニュアル（抜粋）</strong></p>
+<p>本機は Java で制御されています。
+電源投入後、シリアル経由で JVM が起動し、
+/internal/system/Main.class が実行されます。</p>
+<p><strong>初期起動に必要なもの</strong></p>
+<ul>
+<li>Java 21</li>
+<li>シリアル通信環境</li>
+<li>本体に電源を供給できる USB-C ケーブル</li>
+</ul>
+<hr>
+<p>「Java……授業でちょっとやっただけだけど」</p>
+<p>タクミはリュックから USB-C ケーブルを取り出して、
+ロボット犬の首の横にあるポートに差し込んだ。</p>
+<p>ノートPCが「デバイスを認識しました」と表示した。</p>
+<p>——そして、ロボット犬の耳がピクリと動いた。</p>
+<p>「うわっ！」</p>
+<p>タクミは思わずのけぞった。</p>
+<p>目が開いた。青いLEDの光が、タクミを映している。</p>
+<p>ロボット犬はゆっくりと首を動かして、部屋の中を見回した。
+そして——。</p>
+<p>耳を倒した。しょんぼりした表情に、見えた。</p>
+<p>「バッテリー切れっぽいな…」</p>
+<p>画面には、シリアルモニタからのメッセージが表示されていた。</p>
+<pre><code>Booting RS-01…
+JVM loaded.
+Main class not found: /internal/system/Main.class
+System halted.
+</code></pre>
+<p>「プログラムが……ない？」</p>
+<hr>
+<h2>この話で出てきたこと</h2>
+<ul>
+<li>ロボット犬「RS-01」を拾った</li>
+<li>動かない理由は「プログラムがないから」</li>
+<li>Java でプログラムを書けば動くかもしれない</li>
+<li>「Main.class が見つからない」というエラーメッセージ</li>
+</ul>
+<p>次回：「電源は入った。でも、プログラムがなかった。」</p>
+
+<h1>第2話　電源を入れた</h1>
+<h2>あらすじ</h2>
+<p>ロボット犬にはプログラムが必要だ。
+タクミは Java の基本を調べながら、最初のプログラムを書く。</p>
+<p>「Hello, World」ならぬ「Hello, Robot」。</p>
+<p>目指せ——起動。</p>
+<hr>
+<h2>本文</h2>
+<p>「Main.class がない……」</p>
+<p>タクミは検索しまくった。</p>
+<p>Java のプログラムは <code>.java</code> というファイルに書いて、
+<code>javac</code> という道具でコンパイルすると <code>.class</code> ファイルができる。</p>
+<p>つまり、<code>Main.java</code> を書けばいいんだ。</p>
+<p>タクミはテキストエディタを開いて、打ち込んだ。</p>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        System.out.println(&quot;起動します&quot;);
+    }
+}
+</code></pre>
+<p>意味はよくわからない。でも、とにかく「起動します」って表示するプログラムらしい。</p>
+<p>コンパイルした。</p>
+<pre><code>javac Main.java
+</code></pre>
+<p>エラーは出なかった。カレントディレクトリに <code>Main.class</code> ができている。</p>
+<p>「これをロボット犬の中に送り込む…？」</p>
+<p>サービスマニュアルをもう一度読むと、こう書いてあった。</p>
+<pre><code>ファイル転送:
+シリアル接続後、 internal/ ディレクトリに Main.class を配置してください。
+</code></pre>
+<p>タクミは言われた通りに、<code>Main.class</code> をロボット犬に転送した。</p>
+<pre><code>transferred: Main.class → /internal/system/Main.class
+</code></pre>
+<p>「…よし、起動してみよう」</p>
+<p>USB-C ケーブルを抜いて、もう一度差し込んだ。</p>
+<p>ロボット犬の耳がピクリ。</p>
+<p>目が開く。</p>
+<p>シリアルモニタに文字が流れた。</p>
+<pre><code>Booting RS-01…
+JVM loaded.
+Main class found.
+Executing…
+
+--- 起動します ---
+
+System: 起動完了。音声モジュール未初期化。
+</code></pre>
+<p>ロボット犬が立ち上がった。</p>
+<p>そして——</p>
+<p>「……」</p>
+<p>こっちを見ている。</p>
+<p>「あ、あの……こんにちは？」</p>
+<p>ロボット犬は首をかしげた。</p>
+<p>「そうか。喋るプログラムもないんだな……」</p>
+<hr>
+<p>タクミはもう一度エディタを開いた。</p>
+<p>「喋らせたい。…どう書くんだ？」</p>
+<p>検索すると、メソッドというものを使うらしい。
+「メソッド」は「動き」のこと。ロボット犬に「動き」を教えてやればいい。</p>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        greet();
+    }
+
+    static void greet() {
+        System.out.println(&quot;こんにちは&quot;);
+        System.out.println(&quot;ぼくはRS-01です&quot;);
+        System.out.println(&quot;よろしく&quot;);
+    }
+}
+</code></pre>
+<p>コンパイルして転送して再起動。</p>
+<pre><code>---
+こんにちは
+ぼくはRS-01です
+よろしく
+---
+</code></pre>
+<p>「喋った……！」</p>
+<p>ロボット犬が「こんにちは」と言った——少なくとも、シリアルモニタに表示された。</p>
+<p>ロボット犬は青い目をぱちぱちさせて、また首をかしげた。</p>
+<h2>この話で出てきた概念</h2>
+<h3>クラス</h3>
+<pre><code class="language-java">public class Main {
+</code></pre>
+<p>プログラムを入れる「箱」。箱の名前は <code>Main</code>。</p>
+<h3>main メソッド</h3>
+<pre><code class="language-java">public static void main(String[] args) {
+</code></pre>
+<p>プログラムの「入口」。ここから実行が始まる。</p>
+<h3>メソッド呼び出し</h3>
+<pre><code class="language-java">greet();
+</code></pre>
+<p>他の「動き」を呼び出すこと。</p>
+<h3>println</h3>
+<pre><code class="language-java">System.out.println(&quot;こんにちは&quot;);
+</code></pre>
+<p>文字を表示する命令。</p>
+<h2>次回予告</h2>
+<p>ロボット犬に名前をつけたい。
+でも、プログラムを直すたびに <code>Main.java</code> を書き換えるのはめんどうだ。</p>
+<p>「名前を変えるには、毎回コンパイルし直さないといけないの？」</p>
+<p>新しいアイデアが必要だ。</p>
+
+<h1>第3話　名前をつけた</h1>
+<h2>あらすじ</h2>
+<p>毎回プログラムを書き換えて名前を変えるのに疲れたタクミは、
+「名前を外から変えられる仕組み」を調べる。</p>
+<p>そこで出会ったのが——<strong>変数</strong>と<strong>クラス</strong>の本当の意味。</p>
+<hr>
+<h2>本文</h2>
+<p>「毎回 <code>Main.java</code> を書き換えるの、めんどくさい…」</p>
+<p>タクミは3回目の名前変更でそう思った。</p>
+<p>最初は「RS-01」。
+次に「シロ」。
+そして「クロ」にしようとして——プログラムを直すのが面倒になった。</p>
+<p>タクミは検索した。</p>
+<p>「プログラム　値を変える　直さずに」</p>
+<p>出てきたのは「変数（へんすう）」という言葉。</p>
+<pre><code class="language-java">String name = &quot;シロ&quot;;
+</code></pre>
+<p>「String name」……文字列を入れる箱？
+「= &quot;シロ&quot;」で中身を入れている？
+これなら、この一行だけ書き換えれば名前が変わる。</p>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        String name = &quot;シロ&quot;;
+        greet(name);
+    }
+
+    static void greet(String dogName) {
+        System.out.println(&quot;こんにちは&quot;);
+        System.out.println(&quot;ぼくは&quot; + dogName + &quot;です&quot;);
+    }
+}
+</code></pre>
+<p>コンパイルして転送。</p>
+<pre><code>---
+こんにちは
+ぼくはシロです
+---
+</code></pre>
+<p>「できた……！ これで名前を変えるときは <code>String name = &quot;シロ&quot;;</code> のとこだけ直せばいい」</p>
+<p>でも。タクミは気づいた。</p>
+<p>「これ、Main っていうクラスが『プログラム全体』になってて、
+ロボット犬自体がどこにもいない……。</p>
+<p>ロボット犬を——『モノ』としてプログラムで表現できないかな？」</p>
+<hr>
+<p>検索してたどり着いたのは、「クラスとオブジェクト」という考え方。</p>
+<p>クラスは「設計図」。
+オブジェクトは「設計図から作った実物」。</p>
+<pre><code class="language-java">// 設計図
+class RobotDog {
+    String name;
+}
+</code></pre>
+<pre><code class="language-java">// 実物を作る
+RobotDog myDog = new RobotDog();
+myDog.name = &quot;シロ&quot;;
+</code></pre>
+<p>タクミはひらめいた。</p>
+<p>「ロボット犬を『クラス』として設計すれば、
+いくらでも実物を作ったり、改造したりできるんだ！」</p>
+<p>タクミはコードを全部書き直した。</p>
+<pre><code class="language-java">class RobotDog {
+    String name;
+
+    void greet() {
+        System.out.println(&quot;こんにちは&quot;);
+        System.out.println(&quot;ぼくは&quot; + name + &quot;です&quot;);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        RobotDog myDog = new RobotDog();
+        myDog.name = &quot;シロ&quot;;
+        myDog.greet();
+    }
+}
+</code></pre>
+<p>コンパイル。転送。起動。</p>
+<pre><code>---
+こんにちは
+ぼくはシロです
+---
+</code></pre>
+<p>タクミは画面を見て、にやけた。</p>
+<p>「これで……シロが『プログラムの中』に生きてるみたいになった」</p>
+<p>シロ（ロボット犬本体）は、首をかしげたままタクミを見ている。</p>
+<p>「お前、今プログラムの中で『オブジェクト』になってるんだぞ」</p>
+<p>シロは——わかってないような顔をした。</p>
+<h2>知ったこと</h2>
+<ul>
+<li><strong>変数</strong>：値を入れる箱。<code>String name = &quot;シロ&quot;;</code></li>
+<li><strong>クラス</strong>：設計図。<code>class RobotDog { ... }</code></li>
+<li><strong>オブジェクト（インスタンス）</strong>：設計図から作った実物</li>
+<li><strong>new</strong>：実物を作る命令。<code>new RobotDog()</code></li>
+<li><strong>プロパティ</strong>：オブジェクトが持つデータ。<code>name</code></li>
+<li><strong>メソッド</strong>：オブジェクトが持つ動き。<code>greet()</code></li>
+</ul>
+<h2>次回予告</h2>
+<p>動くようになったシロだけど、触ってみるとガタガタだ。
+「中身、めっちゃ壊れてる……！」</p>
+<p>タクミはシロのハードウェアを分解し始める。
+そこで見たのは——「隠された設計図」と「触ってはいけない場所」。</p>
+
+<h1>第4話　蓋を開けた</h1>
+<h2>あらすじ</h2>
+<p>シロの調子が悪い。片耳は取れかけ、バッテリーはすぐ切れる。
+タクミはシロを修理しようと分解する。</p>
+<p>そこで見たのは——保護カバーと、触ってはいけない基板。</p>
+<p>「外から触っていい場所と、触っちゃダメな場所があるんだ…」</p>
+<hr>
+<h2>本文</h2>
+<p>「シロ、お手」</p>
+<p>シロはゆっくりと前脚を上げた。
+——が、途中でガクンと下げた。片耳も取れかけのままぶら下がっている。</p>
+<p>「こりゃあ、ハードウェアから直さないと」</p>
+<p>タクミはドライバーセットを取り出した。
+シロを机の上に寝かせて、背中のネジを外し始める。</p>
+<p>カバーを開けると、中にはぎっしりと基板と配線が詰まっていた。</p>
+<p>「すげえ……本格的だ……」</p>
+<p>でも、どうやって直せばいいんだろう？
+タクミはサービスマニュアルを開いた。</p>
+<hr>
+<h2>カプセル化（ハードウェア版）</h2>
+<p>サービスマニュアルにはこう書いてあった。</p>
+<pre><code>【警告】
+- 基盤A-3（バッテリー制御モジュール）は保護カバーで覆われています
+- このカバーを外すと保証対象外になります
+- 基板A-3に直接アクセスする必要は通常ありません
+- 充電は外側のUSB-Cポートから行ってください
+</code></pre>
+<p>つまり——</p>
+<ul>
+<li>充電するだけなら、外側のポートにケーブルを差せばOK</li>
+<li>基板A-3の中身を知らなくても、ロボット犬は使える</li>
+<li>保護カバーは「触ってはいけない場所」の印</li>
+</ul>
+<p>「これ、プログラムも同じじゃないか？」</p>
+<p>タクミは昨日書いたコードを見直した。</p>
+<pre><code class="language-java">class RobotDog {
+    String name;
+    int battery;
+}
+</code></pre>
+<p>「今、<code>battery</code> ってプログラムのどこからでも触れるようになってる。
+でも、バッテリーの管理って、外から適当に触られたら困るはず…」</p>
+<p>Java には「アクセス修飾子」というものがある。
+<code>private</code> をつけると、そのクラスの外からは触れなくなる。</p>
+<pre><code class="language-java">class RobotDog {
+    private String name;
+    private int battery;
+
+    void charge() {
+        battery = 100;
+        System.out.println(&quot;充電したよ！&quot;);
+    }
+
+    int getBattery() {
+        return battery;
+    }
+}
+</code></pre>
+<p>「これで、<code>battery</code> は外から直接触れなくなった。
+バッテリーを操作したかったら <code>charge()</code> っていうメソッドを通すしかない」</p>
+<p>それが——<strong>カプセル化</strong>。</p>
+<hr>
+<p>タクミは物理的にもシロを修理した。
+取れかけの耳を接着剤で固定し、バッテリーの接点を清掃した。</p>
+<p>カバーを閉める。</p>
+<p>「さて、動くか？」</p>
+<p>電源投入。</p>
+<p>シロが立ち上がった。耳も落ちなくなっている。</p>
+<p>「ワン！」</p>
+<p>シロの口から——初めて音声が出た。</p>
+<p>「えっ！？」</p>
+<p>「ワン！」</p>
+<p>「しゃべった！？ いや、吠えた！？ 音声モジュール、直ったの！？」</p>
+<p>シロはしっぽを振った——いや、しっぽはなかった。代わりに、背中のアンテナがぷるぷる震えている。</p>
+<p>タクミは笑った。シロは首をかしげた。</p>
+<hr>
+<h2>知ったこと</h2>
+<ul>
+<li><strong>private</strong>：自分のクラスの中からしか触れない</li>
+<li><strong>カプセル化</strong>：データを隠して、必要な操作だけ公開すること<ul>
+<li>ハードウェアでは「保護カバー」</li>
+<li>ソフトウェアでは「private」</li>
+</ul>
+</li>
+<li><strong>getter</strong>：値を取得するためのメソッド（<code>getBattery()</code>）</li>
+<li><strong>メリット</strong>：中身を壊されない、後で中身を変えても外に影響しない</li>
+</ul>
+<h2>次回予告</h2>
+<p>シロが吠えられるようになった！
+でも、吠え声はいつも同じ。「ワン」しか言わない。</p>
+<p>「他の鳴き方もさせたいな…」
+「でも、いちいちプログラムを書き換えるのもな…」</p>
+<p>そこでタクミは「ベースの機能を引き継いで、新しい機能を追加する」方法を調べる。</p>
+
+<h1>第5話　部品を交換した</h1>
+<h2>あらすじ</h2>
+<p>シロの吠え声は「ワン」だけ。
+もっと色々なバリエーションが欲しい。</p>
+<p>タクミは「スーパーロボット犬」へのアップグレードを決意する。
+ベースはそのままに、新しい機能だけを追加したい——<strong>継承</strong>の登場。</p>
+<hr>
+<h2>本文</h2>
+<p>「ワン！」</p>
+<p>シロが吠えた。元気いっぱいだ。</p>
+<p>でも、それだけだ。いつも「ワン」。</p>
+<p>「もう少しバリエーションが欲しいな…」
+「日に何度も同じ『ワン』だと、さすがに…」</p>
+<p>タクミは考える。</p>
+<p>「シロの基本機能はそのままに、『声のバリエーション』だけ追加したい」
+「でも、シロのクラスを直接書き換えるのは——なんか違う気がする」</p>
+<p>サービスマニュアルの、さらに奥のページに、こんな記載があった。</p>
+<pre><code>RS-01 は拡張モジュールに対応しています。
+専用ドーターボードを接続することで、
+音声出力のバリエーションを増やすことができます。
+</code></pre>
+<p>「ドーターボード……拡張基板か！」</p>
+<p>タクミはネットで中古の拡張基板を探した。
+幸い、互換品が安く出ていた。</p>
+<p>基板をシロの背中にある拡張スロットに差し込む。
+カチッ、と音がした。</p>
+<p>「これでハードウェアはOK。次はソフトウェアだ…」</p>
+<hr>
+<h2>継承</h2>
+<p>Java には <strong>継承</strong> という仕組みがある。
+既存のクラスをベースに、新しいクラスを作る。</p>
+<pre><code class="language-java">// ベースのロボット犬
+class RobotDog {
+    private String name;
+    private int battery;
+
+    RobotDog(String name) {
+        this.name = name;
+        this.battery = 100;
+    }
+
+    void bark() {
+        System.out.println(name + &quot;：ワン！&quot;);
+    }
+}
+
+// 拡張版：継承で作る
+class SuperRobotDog extends RobotDog {
+
+    SuperRobotDog(String name) {
+        super(name);  // ベースの初期化を呼ぶ
+    }
+
+    // 新しい機能を追加
+    void barkLoudly() {
+        System.out.println(&quot;ガウォーン！！&quot;);
+    }
+
+    void barkSoftly() {
+        System.out.println(&quot;……ぅ&quot;);
+    }
+}
+</code></pre>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        SuperRobotDog shiro = new SuperRobotDog(&quot;シロ&quot;);
+        shiro.bark();        // ベースの機能（ワン！）
+        shiro.barkLoudly();  // 新しい機能（ガウォーン！！）
+        shiro.barkSoftly();  // 新しい機能（……ぅ）
+    }
+}
+</code></pre>
+<p>「ベースの機能はそのままに、新しい機能が追加できた！」</p>
+<p>タクミはコンパイルして転送した。</p>
+<p>「シロ、試しに」</p>
+<p>「ワン！」</p>
+<p>「うん。次、大声で」</p>
+<p>「ガウォーン！！」</p>
+<p>タクミは隣の部屋を気にした。</p>
+<p>「……今のはデカすぎた。小さい声で」</p>
+<p>「……ぅ」</p>
+<p>「完璧だ……！」</p>
+<hr>
+<h2>オーバーライド（上書き）</h2>
+<p>「でも待てよ。bark() 自体を変えたいときはどうするんだ？」</p>
+<p>Java では、親クラスのメソッドを <strong>オーバーライド（上書き）</strong> できる。</p>
+<pre><code class="language-java">class SuperRobotDog extends RobotDog {
+
+    @Override
+    void bark() {
+        System.out.println(getName() + &quot;：ワンワンワン！（元気いっぱい）&quot;);
+    }
+}
+</code></pre>
+<p><code>@Override</code> って書くと、「親のメソッドを上書きしてるよ」という意味になる。</p>
+<hr>
+<p>タクミは机に突っ伏したシロの頭を撫でた。</p>
+<p>「すごいぞシロ。お前、『継承』と『拡張』ができるようになったんだ」</p>
+<p>シロは——撫でられていることには気づいてないようだった。
+バッテリー残量が少なかったからだ。</p>
+<h2>知ったこと</h2>
+<ul>
+<li><strong>継承（extends）</strong>：既存のクラスをベースに新クラスを作る</li>
+<li><strong>super</strong>：親クラスを指す。コンストラクタは <code>super()</code> で呼ぶ</li>
+<li><strong>オーバーライド</strong>：親のメソッドを子クラスで上書きする</li>
+<li><strong>@Override</strong>：コンパイラに「上書きしてるよ」と伝える印</li>
+</ul>
+<h2>次回予告</h2>
+<p>スーパーロボット犬になったシロ。
+でも、タクミの友達が「うちのペットロボットも動かしたい」と言い出した。
+別のメーカーの、別の設計のロボットだ。</p>
+<p>「全部『ロボット犬』として同じ操作で動かせないかな…」</p>
+
+<h1>第6話　新しい友達</h1>
+<h2>あらすじ</h2>
+<p>友達のアユムが「俺のロボット犬も動かしてくれ」と持ち込んだ。
+でも、それはシロとはまったく別のメーカーの、別の設計のロボットだった。</p>
+<p>「シロと同じ『犬』として扱いたいのに、クラスが違う…」
+そこで登場するのが——<strong>インターフェース</strong>。</p>
+<hr>
+<h2>本文</h2>
+<p>「タクミ——！」</p>
+<p>夏休みも終わりに近づいたある日、友達のアユムがタクミの家に飛び込んできた。</p>
+<p>腕に抱えているのは、——</p>
+<p>「それ、ロボット犬？」</p>
+<p>「そう！ うちの物置にあったんだけど、動かなくて！」</p>
+<p>アユムが机に置いたのは、シロよりひと回り小さいロボット犬だった。
+赤いボディ。丸い目。シロとは似ても似つかないデザイン。</p>
+<p>「何ていう機種？」</p>
+<p>「わかんない。裏になんか書いてある」</p>
+<p>裏返すと、刻印があった。</p>
+<pre><code>PET-101
+by WAN-WAN Robotics
+</code></pre>
+<p>「WAN-WAN Robotics……聞いたことないメーカーだ」
+「シロは ION-CORP 製で、こっちは WAN-WAN 製…」
+「設計がぜんぜん違う」</p>
+<hr>
+<p>タクミは PET-101 を PC に接続した。</p>
+<p>シリアルモニタに表示された：</p>
+<pre><code>PET-101 bootloader v2.3
+Waiting for program…
+</code></pre>
+<p>「プログラムなし……シロと同じだ」</p>
+<p>でも、問題があった。</p>
+<p>シロのクラス設計と、PET-101 のクラス設計。
+別の設計だから、同じメソッド名かどうかもわからない。</p>
+<p>「例えばシロは <code>bark()</code> だけど、PET-101 は <code>sound()</code> かもしれない」
+「操作方法がバラバラだと、プログラムを書くのが大変だ…」</p>
+<hr>
+<h2>インターフェース</h2>
+<p><strong>インターフェース</strong> は、「こんなメソッドを持っていること」を約束するもの。</p>
+<pre><code class="language-java">interface RobotPet {
+    void bark();
+    void walk();
+    void greet();
+}
+</code></pre>
+<p>このインターフェースを「約束」として、シロにもPET-101にも守らせる。</p>
+<pre><code class="language-java">class ION_RS01 implements RobotPet {
+    public void bark() { System.out.println(&quot;ワン！&quot;); }
+    public void walk() { System.out.println(&quot;歩く&quot;); }
+    public void greet() { System.out.println(&quot;こんにちは！&quot;); }
+}
+
+class WAN_PET101 implements RobotPet {
+    private boolean happy = true;
+
+    public void bark() {
+        if (happy) {
+            System.out.println(&quot;キャンキャン！&quot;);
+        } else {
+            System.out.println(&quot;……&quot;);
+        }
+    }
+
+    public void walk() { System.out.println(&quot;ちょこちょこ歩く&quot;); }
+    public void greet() { System.out.println(&quot;ピー！（挨拶音）&quot;); }
+}
+</code></pre>
+<p>そうすると——こんなことができる。</p>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        RobotPet[] pets = {
+            new ION_RS01(),
+            new WAN_PET101()
+        };
+
+        for (RobotPet p : pets) {
+            p.greet();
+            p.bark();
+            p.walk();
+            System.out.println(&quot;---&quot;);
+        }
+    }
+}
+</code></pre>
+<p>「両方とも <code>RobotPet</code> っていう同じ型として扱えるんだ！」</p>
+<hr>
+<p>コンパイルして転送。</p>
+<p>「動け！」</p>
+<p>シリアルモニタに結果が流れた。</p>
+<pre><code>こんにちは！
+ワン！
+歩く
+---
+ピー！（挨拶音）
+キャンキャン！
+ちょこちょこ歩く
+---
+」
+
+「動いた…！ 2匹とも！」
+
+アユムが拍手した。
+
+シロと赤いロボット犬が、机の上で向かい合っている。
+シロのほうが大きくて、赤いほうが小さい。
+お互いをじっと見つめている。
+
+「……喧嘩しないといいけど」
+
+「大丈夫だって。どっちもペットだろ」
+
+## 知ったこと
+
+- **インターフェース（interface）**：メソッドの「約束事」だけを定義する
+- **implements**：「このインターフェースを守ります」という宣言
+- インターフェースを使うと、違うクラスも同じ型として扱える
+- 継承は「is-a」（〜の一種）、インターフェースは「〜できる」（能力）
+
+## 次回予告
+
+シロと赤いロボット犬（アユムが「ベニ」と名付けた）は仲良さそうだ。
+
+でも、タクミは気づく。
+「シロに『吠えろ』って命令したときの動きと、ベニに『吠えろ』って命令したときの動き——結果が違う」
+
+同じ命令なのに、動きが違う。
+これって——すごいことじゃないか？
+</code></pre>
+
+<h1>第7話　友達を増やした</h1>
+<h2>あらすじ</h2>
+<p>シロとベニは「同じ命令なのに、違う動き」をする。
+これが、もっとたくさんのロボットになるとどうなる？</p>
+<p>3匹目、4匹目……どんどん増えていくロボット犬たち。
+タクミは気づく。</p>
+<p>「呼び出す側は『何のロボットか』をぜんぜん気にしてない！」</p>
+<hr>
+<h2>本文</h2>
+<p>ベニが来てから、タクミの部屋は賑やかになった。</p>
+<p>シロ（ION-CORP RS-01）
+ベニ（WAN-WAN PET-101）</p>
+<p>そして3匹目。
+今度はタクミ自身がネットオークションで見つけた。</p>
+<p>「ジャンク品・動作未確認・現状渡し」</p>
+<p>送料込みで500円。</p>
+<p>届いた箱を開けると、中から現れたのは——</p>
+<p>「……でっかい」</p>
+<p>シロの1.5倍はある。脚は4本とも独立駆動っぽい。カメラアイが2つ。
+背面に刻印。</p>
+<pre><code>HEAVY-DUTY  RT-5000
+by TATSUMI HEAVY INDUSTRY
+</code></pre>
+<p>「タツミ重工……軍用？ それとも工業用？」</p>
+<p>シリアル接続すると、独自プロトコルだった。しかし、よく見ると——同じ <code>RobotPet</code> インターフェースで動かせるように設計されていた。タツミ重工も、この業界標準に従っていたのだ。</p>
+<pre><code class="language-java">class TATSUMI_RT5000 implements RobotPet {
+
+    public void bark() {
+        System.out.println(&quot;ヴォン！ （低周波警報音）&quot;);
+    }
+
+    public void walk() {
+        System.out.println(&quot;ドシン… ドシン… （重量歩行）&quot;);
+    }
+
+    public void greet() {
+        System.out.println(&quot;【起動完了】 RT-5000 運用を開始します&quot;);
+    }
+}
+</code></pre>
+<p>タクミはコードを書いた——この大きなロボットを動かすために。</p>
+<hr>
+<p>「3匹になった。せっかくだから、全部同時に動かしてみよう」</p>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        RobotPet[] pets = {
+            new ION_RS01(),     // シロ
+            new WAN_PET101(),   // ベニ
+            new TATSUMI_RT5000() // ???（まだ名前がない）
+        };
+
+        String[] names = {&quot;シロ&quot;, &quot;ベニ&quot;, &quot;ゴウ&quot;};
+
+        for (int i = 0; i &lt; pets.length; i++) {
+            System.out.println(&quot;--- &quot; + names[i] + &quot; ---&quot;);
+            pets[i].greet();
+            pets[i].bark();
+            pets[i].walk();
+        }
+    }
+}
+</code></pre>
+<p>コンパイル。転送。実行。</p>
+<pre><code>--- シロ ---
+こんにちは！
+ワン！
+歩く
+--- ベニ ---
+ピー！（挨拶音）
+キャンキャン！
+ちょこちょこ歩く
+--- ゴウ ---
+【起動完了】 RT-5000 運用を開始します
+ヴォン！ （低周波警報音）
+ドシン… ドシン… （重量歩行）
+</code></pre>
+<p>タクミは声を出して笑った。</p>
+<p>「すげえ……3匹とも違う動きしてる……！」</p>
+<p><strong>呼び出しているプログラムは同じなのに。</strong></p>
+<p><code>pets[i].bark()</code> の一行で、シロは「ワン」、ベニは「キャンキャン」、ゴウは「ヴォン」。</p>
+<p>これが——<strong>多態性（ポリモーフィズム）</strong>。</p>
+<hr>
+<p>ゴウ（RT-5000）が動き出した。重い足音を立てて、部屋の中を2歩、3歩。
+シロとベニは、その巨体を見上げている。</p>
+<p>「……これは、もっと面白くなりそうだ」</p>
+<h2>知ったこと</h2>
+<ul>
+<li><p><strong>多態性（ポリモーフィズム）</strong>：
+同じメソッド呼び出しでも、オブジェクトによって動きが違う</p>
+</li>
+<li><p><strong>アップキャスト</strong>：
+<code>RobotPet p = new ION_RS01();</code> のように、具体的な型を抽象型に入れること</p>
+</li>
+<li><p><strong>動的ディスパッチ</strong>：
+実行時に「どのメソッドを呼ぶか」が決まる仕組み</p>
+</li>
+<li><p><strong>多態性の3条件</strong>：</p>
+<ol>
+<li>継承orインターフェース実装がある</li>
+<li>メソッドがオーバーライドされている</li>
+<li>親クラス/インターフェース型で参照する</li>
+</ol>
+</li>
+<li><p><strong>多態性がなかった世界</strong>：</p>
+<pre><code class="language-java">// 多態性がないと、ロボットの種類ごとにif文が必要
+if (p instanceof ION_RS01) ((ION_RS01)p).bark();
+else if (p instanceof WAN_PET101) ((WAN_PET101)p).bark();
+// 新しい機種が増えるたびにこのif文を書き換える…
+</code></pre>
+</li>
+</ul>
+<h2>次回予告</h2>
+<p>シロとベニとゴウ。3匹のロボット犬がタクミの部屋に揃った。</p>
+<p>でも——どれも「同じ動き」しかできない。
+賢くない。自分で考えない。プログラムに書かれた通りにしか動かない。</p>
+<p>「もっと『自分で考えて動く』ロボットにできないかな…」</p>
+<p>タクミは「頭脳」を作り替えることを決意する。</p>
+
+<h1>第8話　頭脳を作り替えた</h1>
+<h2>あらすじ</h2>
+<p>「プログラム通りにしか動かない」ロボットたち。
+タクミは「自分で判断する頭脳」を作ろうとする。</p>
+<p>でも——性格はひとつじゃない。
+好奇心旺盛な子、慎重な子、やんちゃな子。</p>
+<p>「頭脳だけ、取り替えられたら…？」
+——<strong>戦略パターン</strong>の始まり。</p>
+<hr>
+<h2>本文</h2>
+<p>「シロ、お手」</p>
+<p>シロは前脚を上げた。
+「ベニ、お手」
+ベニも前脚を上げた。
+「ゴウ、お手」</p>
+<p>ゴウの重い前脚が、机の上にドンと置かれた。</p>
+<p>「みんな『お手』できる。でもさ——」</p>
+<p>タクミは考えた。</p>
+<p>「自分で『何をするか』を決められたら、もっとロボットらしくない？
+もっと——『生きてる』みたいに」</p>
+<hr>
+<h2>Brain（頭脳）の設計</h2>
+<p>タクミは新しい設計図を描き始めた。</p>
+<p>「ロボット犬は『身体』と『頭脳』に分けよう」
+「身体は固定。頭脳は差し替え可能に——」</p>
+<pre><code class="language-java">interface Brain {
+    String decide(String situation);
+}
+</code></pre>
+<p>「『状況を伝えるから、何をするか決めて』——それが頭脳」</p>
+<p>3種類の頭脳を作った。</p>
+<pre><code class="language-java">class CuriousBrain implements Brain {
+    public String decide(String s) {
+        return &quot;探索する！&quot;;
+    }
+}
+
+class CautiousBrain implements Brain {
+    public String decide(String s) {
+        return &quot;周囲を確認する&quot;;
+    }
+}
+
+class RandomBrain implements Brain {
+    public String decide(String s) {
+        double r = Math.random();
+        return r &lt; 0.33 ? &quot;右に行く&quot; :
+               r &lt; 0.66 ? &quot;左に行く&quot; : &quot;その場で待つ&quot;;
+    }
+}
+</code></pre>
+<p>次に、頭脳を受け取る「身体」を作る。</p>
+<pre><code class="language-java">class RobotDogBody {
+    private String name;
+    private Brain brain;
+
+    RobotDogBody(String name, Brain brain) {
+        this.name = name;
+        this.brain = brain;
+    }
+
+    void setBrain(Brain brain) {
+        this.brain = brain;
+        System.out.println(name + &quot;：頭脳を交換しました&quot;);
+    }
+
+    void act(String situation) {
+        String action = brain.decide(situation);
+        System.out.println(name + &quot; は &quot; + situation + &quot; で &quot; + action);
+    }
+}
+</code></pre>
+<hr>
+<p>「動け！」</p>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        RobotDogBody shiro = new RobotDogBody(&quot;シロ&quot;, new CuriousBrain());
+
+        shiro.act(&quot;見知らぬ部屋にいる&quot;);
+        shiro.act(&quot;物音がした&quot;);
+
+        System.out.println(&quot;--- 頭脳交換 ---&quot;);
+        shiro.setBrain(new CautiousBrain());
+
+        shiro.act(&quot;見知らぬ部屋にいる&quot;);
+        shiro.act(&quot;物音がした&quot;);
+    }
+}
+</code></pre>
+<p>実行結果：</p>
+<pre><code>シロ は 見知らぬ部屋にいる で 探索する！
+シロ は 物音がした で 探索する！
+--- 頭脳交換 ---
+シロ は 見知らぬ部屋にいる で 周囲を確認する
+シロ は 物音がした で 周囲を確認する
+</code></pre>
+<p>「頭脳を変えただけで——行動が変わった……」</p>
+<p>タクミはしばらく、そのログを眺めた。
+シロを抱き上げて、目をのぞき込む。</p>
+<p>「お前、今どっちの頭脳だ？」</p>
+<p>シロは——やっぱりわかってない顔をした。</p>
+<hr>
+<h2>依存性注入</h2>
+<p>この「外部から頭脳を受け取る」設計を <strong>依存性注入（DI）</strong> という。</p>
+<pre><code class="language-java">// 悪い例：自分で頭脳を作る（交換できない）
+class RobotDogBody {
+    private Brain brain = new CuriousBrain(); // 固定！
+}
+
+// 良い例：外から頭脳を受け取る（交換できる）
+class RobotDogBody {
+    private Brain brain;
+    RobotDogBody(Brain brain) {
+        this.brain = brain; // 外から注入
+    }
+}
+</code></pre>
+<h2>継承よりコンポジション</h2>
+<p>「頭脳を差し替える」設計は、<strong>「継承よりコンポジション」</strong> の原則を体現している。</p>
+<ul>
+<li>継承：親子関係が固定 → 後から変えられない</li>
+<li>コンポジション：部品を差し替え → 柔軟</li>
+</ul>
+<h2>知ったこと</h2>
+<ul>
+<li><strong>戦略パターン</strong>：アルゴリズム（頭脳）をクラス化して差し替え可能にする</li>
+<li><strong>依存性注入（DI）</strong>：外部から部品を受け取る設計</li>
+<li><strong>コンポジション</strong>：部品を組み合わせて機能を作る</li>
+<li><strong>「継承よりコンポジション」</strong>：固定より柔軟</li>
+</ul>
+<h2>次回予告</h2>
+<p>頭脳を作り替えたシロは「自分で判断」できるようになった。
+でも、判断の基準は「今の状況だけ」。</p>
+<p>「未来を予測できたら——もっと賢くなるんじゃないか？」</p>
+<p>タクミは次のステージへ進む。
+<strong>世界モデル</strong>の構築。</p>
+
+<h1>第9話　考えられるようになった</h1>
+<h2>あらすじ</h2>
+<p>「今の状況」だけじゃなくて「この行動をしたら、次どうなるか」を
+予測できたら——本当に賢いロボットになる。</p>
+<p>タクミは「世界モデル」を作り始める。</p>
+<hr>
+<h2>本文</h2>
+<p>頭脳を交換できるようになったシロ。でも、どこか物足りない。</p>
+<p>「シロは『今』のことしか考えてないんだよな…」</p>
+<p>シロがバッテリー残量25%で「探索！」を選ぶ。
+探索中にバッテリーが切れて、動けなくなる。
+そんなことが何度かあった。</p>
+<p>「未来を予測できればいいのに。
+『探索したらバッテリーが10になって、動けなくなる』って
+あらかじめわかってたら——」</p>
+<p>タクミはノートに書き始めた。</p>
+<hr>
+<h2>State（状態）とAction（行動）</h2>
+<p>「まず、シロの『状態』をプログラムで表そう」
+「そして『行動』もプログラムで表す」
+「行動すると状態が変わる——これをプログラムにしたい」</p>
+<pre><code class="language-java">class State {
+    int battery;
+    boolean hasBall;
+
+    State(int battery, boolean hasBall) {
+        this.battery = battery;
+        this.hasBall = hasBall;
+    }
+
+    public String toString() {
+        return &quot;{battery=&quot; + battery + &quot;, hasBall=&quot; + hasBall + &quot;}&quot;;
+    }
+}
+
+abstract class Action {
+    abstract State execute(State current);
+}
+
+class WalkAction extends Action {
+    State execute(State current) {
+        return new State(current.battery - 10, current.hasBall);
+    }
+}
+
+class ChargeAction extends Action {
+    State execute(State current) {
+        return new State(100, current.hasBall);
+    }
+}
+</code></pre>
+<p>「行動を『仮に実行』すると、未来の状態がわかる」</p>
+<hr>
+<h2>世界モデル</h2>
+<p>「予測する仕組み」を <strong>世界モデル（World Model）</strong> という。</p>
+<pre><code class="language-java">class WorldModel {
+
+    State predict(State current, Action action) {
+        return action.execute(current);
+    }
+
+    int evaluate(State state) {
+        int score = 0;
+        score += state.battery * 2;           // バッテリーは多いほどいい
+        score += state.hasBall ? 30 : 0;      // ボールがあれば嬉しい
+        if (state.battery &lt; 15) score -= 50;  // バッテリー少なすぎはダメ
+        return score;
+    }
+}
+</code></pre>
+<p>「<code>predict</code> で未来を予測、<code>evaluate</code> で未来を評価。
+そして『一番評価の高い行動』を選べば——最適な行動になる！」</p>
+<pre><code class="language-java">class PredictiveBrain implements Brain {
+
+    WorldModel model = new WorldModel();
+    Action[] actions = {new WalkAction(), new ChargeAction()};
+
+    public String decide(String situation) {
+        State current = new State(getBattery(), false);
+
+        Action best = null;
+        int bestScore = -999;
+
+        for (Action a : actions) {
+            State future = model.predict(current, a);
+            int score = model.evaluate(future);
+            System.out.println(&quot;予測: &quot; + a.getClass().getSimpleName()
+                + &quot; -&gt; &quot; + future + &quot; 評価=&quot; + score);
+            if (score &gt; bestScore) {
+                bestScore = score;
+                best = a;
+            }
+        }
+        return best.getClass().getSimpleName() + &quot; を選択&quot;;
+    }
+}
+</code></pre>
+<hr>
+<p>「よし、動かしてみよう！」</p>
+<p>シロのバッテリーは25%。</p>
+<pre><code>予測: WalkAction -&gt; {battery=15, hasBall=false} 評価=-20
+予測: ChargeAction -&gt; {battery=100, hasBall=false} 評価=200
+選択: ChargeAction
+</code></pre>
+<p>「充電を選んだ……！」
+「予測してる！未来を！」</p>
+<p>シロは充電ドックに向かった。
+——いや、ロボット犬本体は相変わらずただの筐体で、
+動いているのはプログラム上の「判断」だけなんだけど。</p>
+<p>でも、タクミにはシロが「考えている」ように見えた。</p>
+<h2>知ったこと</h2>
+<ul>
+<li><strong>世界モデル（World Model）</strong>：「行動すると状態がどう変わるか」を予測する</li>
+<li><strong>predict</strong>：未来の状態を予測する</li>
+<li><strong>evaluate</strong>：未来の状態を評価（点数をつける）する</li>
+<li><strong>予測→評価→選択</strong>：3ステップで最適な行動を選べる</li>
+<li>世界モデルは「多態性の現実世界版」——同じコマンドでも状況によって最適な動きが変わる</li>
+</ul>
+<h2>次回予告</h2>
+<p>シロは「考える」ことができるようになった。
+でも——1匹だとできることに限りがある。</p>
+<p>もし、シロとベニとゴウが「会話」できたら？
+情報を共有できたら？
+「お互いの存在を知らなくても、メッセージを介して協力できる」</p>
+<p>——そんな仕組みを作りたい。</p>
+
+<h1>第10話　仲間と会話する</h1>
+<h2>あらすじ</h2>
+<p>シロ、ベニ、ゴウ。3匹のロボット犬は、それぞれ別々に動いている。
+「もし——会話できたら？」</p>
+<p>タクミは「ROS（Robot Operating System）」の考え方を調べ始める。
+<strong>ノード</strong>と<strong>トピック</strong>。 publish と subscribe。</p>
+<p>「お互いの存在を知らなくても、情報を共有できる——」</p>
+<hr>
+<h2>本文</h2>
+<p>「シロが『ボール見つけた』って思っても、ベニとゴウには伝わらないんだよな」</p>
+<p>タクミは3匹のロボット犬を見ながらつぶやいた。</p>
+<p>シロは探索中。ベニは充電中。ゴウは待機中。
+それぞれが別々のことをやっている。</p>
+<p>「人間で言えば——同じ部屋にいるのに、口をきかないで家具の方向だけ見てるようなものだ」</p>
+<p>ネットで調べていると、タクミは「ROS」という言葉に行き着いた。</p>
+<p>「Robot Operating System……ロボット用のOS？」
+「ノード……トピック……publish……subscribe……」</p>
+<hr>
+<h2>publish / subscribe</h2>
+<p>ROS の基本はシンプルだ。</p>
+<ul>
+<li><strong>ノード</strong>：情報を発信したり受信したりする「役割」</li>
+<li><strong>トピック</strong>：情報の通り道</li>
+<li><strong>publish</strong>：トピックに情報を送る</li>
+<li><strong>subscribe</strong>：トピックから情報を受け取る</li>
+</ul>
+<p>「要するに——掲示板みたいなものか」
+「『bark』っていう掲示板に『吠えたよ！』って書く」
+「見たい人はその掲示板を見てる——」</p>
+<p>タクミはコードを書き始めた。</p>
+<pre><code class="language-java">import java.util.ArrayList;
+
+interface Subscriber {
+    void onMessage(String topic, String msg);
+}
+
+interface Topic {
+    void publish(String msg);
+    void subscribe(Subscriber sub);
+}
+</code></pre>
+<pre><code class="language-java">class BroadcastTopic implements Topic {
+    ArrayList&lt;Subscriber&gt; subs = new ArrayList&lt;&gt;();
+    String name;
+
+    BroadcastTopic(String name) { this.name = name; }
+
+    public void publish(String msg) {
+        System.out.println(&quot;[&quot; + name + &quot;] &quot; + msg);
+        for (Subscriber s : subs) {
+            s.onMessage(name, msg);
+        }
+    }
+
+    public void subscribe(Subscriber sub) {
+        subs.add(sub);
+    }
+}
+</code></pre>
+<p>次に、「しゃべれる犬ノード」を作る。</p>
+<pre><code class="language-java">class DogNode implements Subscriber {
+    String name;
+    Topic barkTopic;
+    Topic walkTopic;
+
+    DogNode(String name, Topic barkTopic, Topic walkTopic) {
+        this.name = name;
+        this.barkTopic = barkTopic;
+        this.walkTopic = walkTopic;
+    }
+
+    void bark() {
+        barkTopic.publish(name + &quot;：ワンワン！&quot;);
+    }
+
+    void walk() {
+        walkTopic.publish(name + &quot;：とことこ歩く&quot;);
+    }
+
+    public void onMessage(String topic, String msg) {
+        if (!msg.contains(name)) {
+            System.out.println(&quot;  [&quot; + name + &quot; 聞こえた] &quot; + msg);
+        }
+    }
+}
+</code></pre>
+<hr>
+<p>「よし、試そう！」</p>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        Topic barkTopic = new BroadcastTopic(&quot;bark&quot;);
+        Topic walkTopic = new BroadcastTopic(&quot;walk&quot;);
+
+        DogNode shiro = new DogNode(&quot;シロ&quot;, barkTopic, walkTopic);
+        DogNode beni  = new DogNode(&quot;ベニ&quot;, barkTopic, walkTopic);
+        DogNode gou   = new DogNode(&quot;ゴウ&quot;, barkTopic, walkTopic);
+
+        // 全員が購読する
+        barkTopic.subscribe(shiro);
+        barkTopic.subscribe(beni);
+        barkTopic.subscribe(gou);
+        walkTopic.subscribe(shiro);
+        walkTopic.subscribe(beni);
+        walkTopic.subscribe(gou);
+
+        shiro.bark();
+        beni.walk();
+    }
+}
+</code></pre>
+<p>実行結果：</p>
+<pre><code>[bark] シロ：ワンワン！
+  [ベニ 聞こえた] シロ：ワンワン！
+  [ゴウ 聞こえた] シロ：ワンワン！
+[walk] ベニ：とことこ歩く
+  [シロ 聞こえた] ベニ：とことこ歩く
+  [ゴウ 聞こえた] ベニ：とことこ歩く
+</code></pre>
+<p>「聞こえてる……！ シロが吠えたら、ベニとゴウが『聞こえた』って表示された！」</p>
+<p>タクミは感激した。</p>
+<p>「シロはベニのことを知らなくていい」
+「ベニもシロのことを知らなくていい」
+「ただ『bark』っていうトピックを見てるだけで、情報が届く」</p>
+<p><strong>これが——疎結合（そけつごう）。</strong></p>
+<hr>
+<p>タクミはさらに <code>DisplayNode</code> という、
+「とにかく全部表示する係」も追加した。</p>
+<pre><code class="language-java">class DisplayNode implements Subscriber {
+    String name;
+    DisplayNode(String name) { this.name = name; }
+    public void onMessage(String topic, String msg) {
+        System.out.println(&quot;  [&quot; + name + &quot; 表示] &quot; + topic + &quot;: &quot; + msg);
+    }
+}
+</code></pre>
+<p>シロとベニとゴウが「会話」し始めた。
+少なくとも——タクミのプログラムの中では。</p>
+<h2>知ったこと</h2>
+<ul>
+<li><strong>ROS</strong>：ロボット用の通信フレームワーク</li>
+<li><strong>ノード</strong>：ひとつの役割を持つプログラム</li>
+<li><strong>トピック</strong>：メッセージの通り道</li>
+<li><strong>publish</strong>：トピックにメッセージを送る</li>
+<li><strong>subscribe</strong>：トピックからメッセージを受け取る</li>
+<li><strong>疎結合</strong>：お互いの存在を知らなくても通信できる設計</li>
+</ul>
+<h2>次回予告</h2>
+<p>3匹は会話できるようになった。
+でも、「会話するだけ」では意味がない。
+「会話して、協力して、ひとつの目的を達成する」
+それが本当のチーム。</p>
+<p>次は——マルチエージェント。複数のロボットが協調して動く世界へ。</p>
+
+<h1>第11話　チームで動く</h1>
+<h2>あらすじ</h2>
+<p>会話できるようになった3匹。
+でも、まだ「協力」はしていない。</p>
+<p>「シロがボールを見つけた」
+「ベニがそれを知る」
+「ベニがそれを拾いに行く」</p>
+<p>この連携が、プログラムで実現できたら——
+そこに「チーム」が生まれる。</p>
+<hr>
+<h2>本文</h2>
+<p>「会話はできるようになった。でも——」</p>
+<p>タクミは3匹のロボット犬を見渡した。</p>
+<p>「まだ『協力』はしてないんだよな」
+「ただ『聞こえた』って表示してるだけだ」</p>
+<p>タクミが欲しかったのは——
+「シロがボールを見つけた」
+「ベニがそれを知って、回収に行く」
+「ゴウがその間、安全を確保する」</p>
+<p>そんな連携だ。</p>
+<hr>
+<h2>DogMessage</h2>
+<p>まず、ロボット犬同士でやりとりする「メッセージ」の型を決める。</p>
+<pre><code class="language-java">class DogMessage {
+    String sender;      // だれが
+    String type;        // どんな種類のメッセージ
+    String content;     // 何を伝えたいか
+
+    DogMessage(String sender, String type, String content) {
+        this.sender = sender;
+        this.type = type;
+        this.content = content;
+    }
+
+    public String toString() {
+        return &quot;[&quot; + sender + &quot;] &quot; + type + &quot;: &quot; + content;
+    }
+}
+</code></pre>
+<p>メッセージの種類は：</p>
+<ul>
+<li><code>found_ball</code>：ボールを見つけた</li>
+<li><code>going_to_pickup</code>：回収に向かう</li>
+<li><code>danger</code>：危険を検知</li>
+<li><code>help</code>：助けて</li>
+</ul>
+<hr>
+<h2>3匹の役割</h2>
+<pre><code class="language-java">interface DogAgent {
+    void act();
+    void onMessage(DogMessage msg);
+    String getName();
+}
+</code></pre>
+<h3>シロ（探索担当）</h3>
+<pre><code class="language-java">class Explorer implements DogAgent {
+    String name;
+    Topic comm;
+
+    Explorer(String name, Topic comm) {
+        this.name = name; this.comm = comm;
+    }
+
+    public String getName() { return name; }
+
+    public void act() {
+        System.out.println(name + &quot;：探索中…&quot;);
+        if (Math.random() &gt; 0.6) {
+            DogMessage msg = new DogMessage(name, &quot;found_ball&quot;,
+                &quot;ボールを発見！位置は (12, 34)&quot;);
+            comm.publish(msg.toString());
+        }
+    }
+
+    public void onMessage(DogMessage msg) {
+        // シロは探索に集中。メッセージは受け取るだけ
+    }
+}
+</code></pre>
+<h3>ベニ（運搬担当）</h3>
+<pre><code class="language-java">class Carrier implements DogAgent {
+    String name;
+    Topic comm;
+    boolean going = false;
+
+    Carrier(String name, Topic comm) {
+        this.name = name; this.comm = comm;
+    }
+
+    public String getName() { return name; }
+
+    public void act() {
+        if (going) {
+            System.out.println(name + &quot;：荷物を運搬中…&quot;);
+            going = false;
+        } else {
+            System.out.println(name + &quot;：待機中…&quot;);
+        }
+    }
+
+    public void onMessage(DogMessage msg) {
+        if (msg.type.equals(&quot;found_ball&quot;)) {
+            System.out.println(name + &quot;：ボールを回収に向かう！&quot;);
+            going = true;
+            DogMessage reply = new DogMessage(name, &quot;going_to_pickup&quot;,
+                &quot;回収に向かっています&quot;);
+            comm.publish(reply.toString());
+        }
+    }
+}
+</code></pre>
+<h3>ゴウ（警備担当）</h3>
+<pre><code class="language-java">class Guard implements DogAgent {
+    String name;
+    Topic comm;
+
+    Guard(String name, Topic comm) {
+        this.name = name; this.comm = comm;
+    }
+
+    public String getName() { return name; }
+
+    public void act() {
+        System.out.println(name + &quot;：周囲を警戒中…&quot;);
+        if (Math.random() &gt; 0.7) {
+            DogMessage alert = new DogMessage(name, &quot;danger&quot;,
+                &quot;異常なし。継続監視中&quot;);
+            comm.publish(alert.toString());
+        }
+    }
+
+    public void onMessage(DogMessage msg) {
+        if (msg.type.equals(&quot;help&quot;)) {
+            System.out.println(name + &quot;：救援に向かう！&quot;);
+        }
+    }
+}
+</code></pre>
+<hr>
+<h2>チーム始動</h2>
+<p>タクミは3匹を動かした。</p>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+
+        Topic commTopic = new BroadcastTopic(&quot;team_channel&quot;);
+
+        DogAgent[] team = {
+            new Explorer(&quot;シロ&quot;, commTopic),
+            new Carrier(&quot;ベニ&quot;, commTopic),
+            new Guard(&quot;ゴウ&quot;, commTopic)
+        };
+
+        for (int step = 1; step &lt;= 5; step++) {
+            System.out.println(&quot;\n=== ステップ &quot; + step + &quot; ===&quot;);
+            for (DogAgent agent : team) {
+                agent.act();
+            }
+        }
+    }
+}
+</code></pre>
+<hr>
+<p>実行が流れた。</p>
+<pre><code>=== ステップ 1 ===
+シロ：探索中…
+ベニ：待機中…
+ゴウ：周囲を警戒中…
+[team_channel] ゴウ: 異常なし。継続監視中
+
+=== ステップ 2 ===
+シロ：探索中…
+[team_channel] [シロ] found_ball: ボールを発見！位置は (12, 34)
+ベニ：ボールを回収に向かう！
+[team_channel] [ベニ] going_to_pickup: 回収に向かっています
+ゴウ：周囲を警戒中…
+
+=== ステップ 3 ===
+シロ：探索中…
+ベニ：荷物を運搬中…
+ゴウ：周囲を警戒中…
+</code></pre>
+<p>「協力してる……！」</p>
+<p>タクミはモニタに映るログを見ながら、声が出た。</p>
+<p>シロが見つけた。
+ベニが受け取って動いた。
+ゴウがその間、警戒を続けている。</p>
+<p>「3匹が——ひとつのチームになってる」</p>
+<hr>
+<p>タクミは椅子の背にもたれた。</p>
+<p>机の上にはシロ。
+その隣でベニが充電中。
+床にはゴウが鎮座している。</p>
+<p>どれも、最初は動かなかったロボットたちだ。
+拾ってきて、直して、プログラムを書いて——今、ここで、
+3匹のロボット犬が「チーム」として協力している。</p>
+<p>「プログラムって——すごいな」</p>
+<p>シロの青い目が、タクミを見ている。
+何かを言いたそうに、口を開けて——閉じた。</p>
+<p>「……今、何か言おうとした？」</p>
+<p>シロは首をかしげた。</p>
+<p>タクミは笑った。</p>
+<p>「よし、もっとすごいプログラムを書こう」</p>
+<hr>
+<h2>この物語で学んだこと</h2>
+<p>すべては、粗大ゴミの山で動かないロボット犬を拾ったことから始まった。</p>
+<table>
+<thead>
+<tr>
+<th>話</th>
+<th>タイトル</th>
+<th>学んだこと</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>拾った</td>
+<td>Java プログラムが必要だと知った</td>
+</tr>
+<tr>
+<td>2</td>
+<td>電源を入れた</td>
+<td>クラスと main メソッド、println</td>
+</tr>
+<tr>
+<td>3</td>
+<td>名前をつけた</td>
+<td>変数、クラスとオブジェクト</td>
+</tr>
+<tr>
+<td>4</td>
+<td>蓋を開けた</td>
+<td>カプセル化、private</td>
+</tr>
+<tr>
+<td>5</td>
+<td>部品を交換した</td>
+<td>継承、オーバーライド</td>
+</tr>
+<tr>
+<td>6</td>
+<td>新しい友達</td>
+<td>インターフェース</td>
+</tr>
+<tr>
+<td>7</td>
+<td>友達を増やした</td>
+<td>多態性（ポリモーフィズム）</td>
+</tr>
+<tr>
+<td>8</td>
+<td>頭脳を作り替えた</td>
+<td>戦略パターン、DI</td>
+</tr>
+<tr>
+<td>9</td>
+<td>考えられるようになった</td>
+<td>世界モデル</td>
+</tr>
+<tr>
+<td>10</td>
+<td>仲間と会話する</td>
+<td>pub/sub、ROS</td>
+</tr>
+<tr>
+<td>11</td>
+<td>チームで動く</td>
+<td>マルチエージェント</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>おわり</strong></p>
+<hr>
+<p>この後も、物語は続く。
+新しいロボット。新しい機能。新しい仲間。</p>
+<p>プログラムは——無限に広がっている。</p>
+
+</body></html>
