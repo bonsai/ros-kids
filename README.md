@@ -1,9 +1,17 @@
 # ロボット犬で学ぶ Java & ロボティクス
 
-**コンピュータ授業のための教科書 + 物語**
+**コンピュータ授業のための教科書 + 物語 + クイズゲーム**
 
 このリポジトリは、「捨てロボット犬を拾って直す」物語を通じて
 Java と OOP（カプセル化・継承・多態性）とロボティクス（ROS 風 pub/sub・世界モデル・マルチエージェント）を学ぶ教材です。
+
+## 🎮 クイズゲーム
+
+物語を読み進めながら知識を試せるクイズゲーム。
+
+👉 https://bonsai.github.io/ros-kids/quiz/
+
+全11ステージ。各章のストーリー + Java の知識問題。クリアで次の章が解放されます。
 
 ## 📖 2つの教科書
 
@@ -36,37 +44,26 @@ ros-kids/
 │  ├─ vol04_robotics_world/
 │  ├─ vol05_ros_communication/
 │  └─ appendix/             用語集・解答・索引・教師用ガイド
+├─ quiz/                   クイズゲーム
+│  └─ index.html           全11ステージ
 ├─ playground/
 │  ├─ index.html            ブラウザで動く Java 実行環境
 │  ├─ main.js               TeaVM 差し替えポイント付き
 │  └─ style.css
-├─ 物語_捨てロボット犬を拾った話.pdf    ← PDF
-└─ 教科書_Java_ロボティクス.pdf         ← PDF
+├─ 物語_捨てロボット犬を拾った話.pdf
+└─ 教科書_Java_ロボティクス.pdf
 ```
 
-## 🎮 プレイグラウンド
+## 🔧 リンク
 
-ブラウザで Java コードを実行できます。
-
-👉 https://bonsai.github.io/ros-kids/playground/
-
-## 🔧 使い方
-
-### PDF を読む
-リポジトリルートの PDF をダウンロードするか、GitHub 上で直接開いてください。
-
-### プレイグラウンドで動かす
-`playground/index.html` を GitHub Pages で開き、サンプルを選んで「実行」。
-
-### 自分でビルドする
-```bash
-cd textbook
-npm install
-node build-html.js    # 体系教科書の HTML
-node build-story.js   # 物語教科書の HTML
-# Edge headless で PDF 変換
-```
+| ページ | URL |
+|--------|-----|
+| クイズゲーム | https://bonsai.github.io/ros-kids/quiz/ |
+| Java プレイグラウンド | https://bonsai.github.io/ros-kids/playground/ |
 
 ## 📜 ライセンス
 
-MIT
+All Rights Reserved.
+
+本教材（コード・テキスト・デザインのすべて）は著作権により保護されています。
+許可なく複製・再配布・販売・改変することを禁じます。
