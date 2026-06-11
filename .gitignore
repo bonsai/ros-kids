@@ -1,0 +1,6 @@
+target/
+*.class
+*.jar
+node_modules/
+.DS_Store
+Thumbs.db
